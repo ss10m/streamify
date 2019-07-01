@@ -60,11 +60,7 @@ class NavBar extends React.Component {
           <ul className="navbar-nav mr-auto">
             
             <NavItem path="/" name="Home" />
-            <NavItem path="/streamers" name="Streamers" />
             <NavItem path="/add" name="Add" />
-            <NavItem path="/api/random" name="Random" />
-            
-            <NavItem path="/page3" name="Disabled" disabled="true" />
             
             <NavDropdown name="Dropdown">
               <a className="dropdown-item" href="/">Action</a>
