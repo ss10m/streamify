@@ -1,0 +1,42 @@
+div.topStreamers {
+    background-color: #122941;
+    position: fixed;
+    width: 250px;
+    height: 100%;
+    overflow: auto;
+  
+    
+  }
+  
+  div.streamers {
+    margin-left: 250px;
+    position: fixed;
+    height: 100%;
+    width: auto;
+    position: fixed;
+    overflow: auto;
+    z-index: 1;
+    
+  }
+  
+  ::-webkit-scrollbar { 
+    display: none; 
+  }
+
+  h3 {
+    padding-left: 10 em;
+    color: white;
+ }
+  
+  div.divHeading {
+    text-align: center;
+    padding-top: 5px;
+  }
+  
+  hr.split {
+    background-color: grey;
+    margin-top: 10px;
+    margin-bottom: 1px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }

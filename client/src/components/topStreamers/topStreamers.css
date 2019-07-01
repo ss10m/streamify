@@ -1,0 +1,33 @@
+a.topStreamers { 
+    background-color: #122941;
+
+}
+
+a:hover.topStreamers {
+    background-color: #1c4269;
+}
+
+.list-group { 
+    margin: 0; 
+    min-width: 250px;
+    width: 100%;
+ }
+
+ h7.names {
+    padding-left: 10 em;
+    color: white;
+ }
+
+
+ small {    
+     color: text-light;
+ }
+
+ .img {
+     padding-right: 10%
+ }
+
+ img.topStreamers {
+    border-radius: 50%;
+  }
+
