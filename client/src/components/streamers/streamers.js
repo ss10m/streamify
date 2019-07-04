@@ -24,7 +24,7 @@ class Streamers extends Component {
 
         return (
             <div>
-                <ul>
+                <ul className="stList">
                     {this.state.streamers.map(streamer =>
                         <li className="sList" key={streamer.name}>
                             <a href={'/streamer/' + streamer.name} >

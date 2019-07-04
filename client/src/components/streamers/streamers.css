@@ -1,20 +1,20 @@
 * {margin: 0; padding: 0;}
  
-ul {
+ul.stList {
   list-style-type: none;
   width: 700px;
 }
 
 h3 {
-  font: bold 20px/1.5 Helvetica, Verdana, sans-serif;
+  font: bold 15px Helvetica, Verdana, sans-serif;
 }
  
-li img {
+li.sList img {
   float: left;
   margin: 0 15px 0 0;
 }
  
-li p {
+li.sList p {
   font: 200 12px/1.5 Georgia, Times New Roman, serif;
   float: left;
 }

@@ -9,12 +9,20 @@ var config = require('./config.js');
 
 function getStreamers() {
     var ret = [];
-    for (var streamer of Object.entries(streamers)) {
-        if (streamer[1]['data']['stream']) {
-            ret.push({ name: streamer[1]['name'], game: streamer[1]['data']['stream']['game'], viewers: streamer[1]['data']['stream']['viewers'], logo: streamer[1]['data']['stream']['channel']['logo'] });
-        } else {
-            ret.push({ name: streamer[1]['name'], game: 'Offline', viewers: 0, logo: 'default' });
+    for (var [name, streamer] of Object.entries(streamers)) {
+        var streamerData = {};
+        var streamerChannel = streamer.getChannel();
+        streamerData['logo'] = streamerChannel['logo'];
+        streamerData['name'] = streamerChannel['display_name'];
+        streamerData['viewers'] = '0';
+        streamerData['game'] = 'Offline';
+        streamerData['preview'] = streamerChannel['logo'];
+
+        if (streamer['data']['stream']) {
+            streamerData['viewers'] = streamer['data']['stream']['viewers'];
+            streamerData['game'] = streamer['data']['stream']['game'];
         }
+        ret.push(streamerData);
     }
 
     return ret;
@@ -73,6 +81,14 @@ function getStreamer(name, callback) {
         //console.log('response');
         //console.log(response);
         var body = JSON.parse(body);
+        
+
+
+        if(!body['stream']) {
+            getChannel(name, callback);
+            return;
+        }
+
         var streamerData = {};
         streamerData['logo'] = body['stream']['channel']['logo'];
         streamerData['name'] = body['stream']['channel']['display_name'];
@@ -80,6 +96,40 @@ function getStreamer(name, callback) {
         streamerData['game'] = body['stream']['game'];
         streamerData['preview'] = body['stream']['preview']['large'];
         callback(streamerData);
+
+    });
+}
+
+function getChannel(name, callback) {
+    console.log(name);
+
+    var options = {
+        method: 'GET',
+        url: 'https://api.twitch.tv/kraken/channels/' + name,
+        //qs: { offset: '0', limit: '2' },
+        headers:
+        {
+            'Client-ID': config.clientid
+        }
+    };
+
+    request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+        //console.log('response');
+        //console.log(response);
+        var body = JSON.parse(body);
+
+        if(callback) {
+            var streamerData = {};
+            streamerData['logo'] = body['logo'];
+            streamerData['name'] = body['display_name'];
+            streamerData['viewers'] = '0';
+            streamerData['game'] = body['game'];
+            streamerData['preview'] = body['profile_banner:'];
+            callback(streamerData);
+        } else {
+            streamers[name].setChannel(body);
+        }
 
     });
 }
@@ -122,19 +172,30 @@ function getTopStreamers() {
 
 
 function addStreamers() {
-    streamers['summit1g'] = new Streamer('summit1g');
-    streamers['kitboga'] = new Streamer('kitboga');
+    addStreamer('summit1g');
+    addStreamer('kitboga');
+}
+
+function follows(name) {
+    return streamers[name] !== undefined;
 }
 
 function addStreamer(name) {
+    if(follows(name)) {
+        return;
+    }
+
     streamers[name] = new Streamer(name);
     updateStreamers();
+    getChannel(name);
+    console.log(streamers[name].getChannel());
 }
 
 class Streamer {
     constructor(name) {
         this.name = name;
         this.data = '';
+        this.channel = '';
     }
 
     getName() {
@@ -143,6 +204,14 @@ class Streamer {
 
     setData(data) {
         this.data = data;
+    }
+
+    setChannel(channel) {
+        this.channel = channel;
+    }
+
+    getChannel() {
+        return this.channel;
     }
 
     getData() {
