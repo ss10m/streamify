@@ -71,7 +71,6 @@ app.post('/api/login', (request, response) => {
 });
 
 app.post('/api/follow', (request, response) => {
-	console.log(request.body['name']);
 	twitchify.addStreamer(request.body['name']);
 	response.redirect('/');
 });

@@ -9,7 +9,6 @@ class Streamer extends Component {
         };
 
     }
-
     componentDidMount() {
         fetch("/api/streamer/"+ this.state.name)
             .then(res => res.json())
@@ -25,12 +24,12 @@ class Streamer extends Component {
             },
             body: JSON.stringify({ name: this.state.data['name'] }),
         }).then(response => {
-            // HTTP 301 response
-            window.location.href = response['url'];
+            var url = response['url'].replace('http://localhost:3000', '');
+            this.props.history.push(url);
             
-        })
-        .catch(function(err) {
+        }).catch(function(err) {
             console.info('error');
+            console.info(err);
         });
     }
 
