@@ -4,6 +4,7 @@ var streamers = {};
 var topStreamers = [];
 
 var config = require('./config.js');
+var mongodb = require('./mongodb.js');
 
 
 
