@@ -62,9 +62,18 @@ app.post('/api/world', (request, response) => {
 	);
 });
 
-app.put('/api/follow/:name', (request, response) => {
-	console.log(request.params.name);
-	res.end();
+app.post('/api/login', (request, response) => {
+	console.log(request.body['email']);
+	console.log(request.body['password']);
+	response.send(
+		`I received your POST request. This is what you sent me: ${request.body.post}`,
+	);
+});
+
+app.post('/api/follow', (request, response) => {
+	console.log(request.body['name']);
+	twitchify.addStreamer(request.body['name']);
+	response.redirect('/');
 });
 
 var streamers = twitchify.streamers;

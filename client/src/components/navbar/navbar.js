@@ -1,6 +1,6 @@
 import React from 'react';
 import './navbar.css';
-//import { Button, Navbar, Nav, NavDropdown, Form, FormControl } from 'react-bootstrap';
+import { ButtonToolbar, Modal, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
 
 const NavItem = props => {
   const pageURI = window.location.pathname+window.location.search
@@ -47,8 +47,99 @@ class NavDropdown extends React.Component {
   }
 }
 
-class NavBar extends React.Component {
+class LogInModal extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      email: "",
+      password: ""
+    };
+  }
+
+  validateForm() {
+    return this.state.email.length > 0 && this.state.password.length > 0;
+  }
+
+  handleChange = event => {
+    this.setState({
+      [event.target.id]: event.target.value
+    });
+  }
+
+  handleSubmit = event => {
+    event.preventDefault();
+    
+    fetch('/api/login', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+        email: this.state.email,
+        password: this.state.password 
+      }),
+  });
+  }
+
   render() {
+    return (
+      <Modal
+        {...this.props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Log in to Twitchify
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="Login">
+            <form onSubmit={this.handleSubmit}>
+              <FormGroup controlId="email">
+                <FormLabel >Email</FormLabel >
+                <FormControl
+                  autoFocus
+                  type="email"
+                  value={this.state.email}
+                  onChange={this.handleChange}
+                />
+              </FormGroup>
+              <FormGroup controlId="password">
+                <FormLabel >Password</FormLabel >
+                <FormControl
+                  value={this.state.password}
+                  onChange={this.handleChange}
+                  type="password"
+                />
+              </FormGroup>
+
+              <button className="btn-block btn btn-outline-dark my-2 my-sm-0" disabled={!this.validateForm()} type="submit">Log in</button>
+
+            </form>
+          </div>
+        </Modal.Body>
+        <Modal.Footer className='logInModal'>
+          <button className="btn btn-outline-light my-2 my-sm-0" onClick={this.props.onHide}>Close</button>
+        </Modal.Footer>
+
+      </Modal>
+    );
+  }
+}
+
+class NavBar extends React.Component {
+  constructor(...args) {
+    super(...args);
+
+    this.state = { modalShow: false };
+  }
+
+  render() {
+    let modalClose = () => this.setState({ modalShow: false });
+
     return (
       <nav className="navbar-custom navbar navbar-custom navbar-expand-lg navbar-dark">
         <a className="navbar-brand" href="/"><b>Twitchify</b></a>
@@ -75,9 +166,22 @@ class NavBar extends React.Component {
             <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
             <button className="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
           </form>
+
+
           <ul className="navbar-nav ml-auto">
-            <NavItem path="/" name="Home" />
-            <NavItem path="/add" name="Add" />
+            <ButtonToolbar>
+              <button 
+                className="btn btn-outline-light my-2 my-sm-0" 
+                onClick={() => this.setState({ modalShow: true })}
+              >
+                Log in
+              </button>
+
+              <LogInModal
+                show={this.state.modalShow}
+                onHide={modalClose}
+              />
+            </ButtonToolbar>
           </ul>
 
         </div>
@@ -85,4 +189,5 @@ class NavBar extends React.Component {
     )
   }
 }
+
 export default NavBar;

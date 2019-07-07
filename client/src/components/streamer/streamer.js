@@ -16,6 +16,24 @@ class Streamer extends Component {
             .then(data => this.setState({ data }));
     }
 
+    handleSubmit = event => {
+        event.preventDefault();
+        fetch('/api/follow', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: this.state.data['name'] }),
+        }).then(response => {
+            // HTTP 301 response
+            window.location.href = response['url'];
+            
+        })
+        .catch(function(err) {
+            console.info('error');
+        });
+    }
+
 
     render() {
         return (
@@ -25,7 +43,9 @@ class Streamer extends Component {
                 <h2>{this.state.data['game']}</h2>
                 <img src={this.state.data['logo']} width="100" height="100" alt="MISSING" />
                 <img src={this.state.data['preview']} alt="MISSING" />
-                <a className="btn btn-primary" href={"/api/follow/" + this.state.data['name']} role="button">Follow</a>
+                <form onSubmit={this.handleSubmit}>
+                    <button className="btn btn-primary" type="submit">Follow</button>
+                </form>
             </div>
         );
     }

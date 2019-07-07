@@ -221,7 +221,7 @@ class Streamer {
 
 addStreamers();
 updateStreamers();
-setInterval(function () { updateStreamers() }, 30000)
+setInterval(function () { updateStreamers() }, 60000)
 getTopStreamers();
 
 function printStreamers() {
