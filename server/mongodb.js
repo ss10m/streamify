@@ -14,7 +14,6 @@ function connectToDb(callback) {
 
     callback();
     
-    //callback(getStreamers());
 
   });
 
@@ -28,19 +27,22 @@ function connectToDb(callback) {
 function setSchemas() {
   var Schema = mongoose.Schema;
   var streamersSchema = new Schema({
-      _id   : ObjectID,
-      name : String
+      _id : String,
+      display_name : String,
+      logo : String
   });
   streamerTable = mongoose.model("Streamers", streamersSchema);
 }
 
 
 
-function createStreamer(name) {
+function createStreamer(data) {
 
   var data = {
-    name: name,
-    _id: new ObjectID()
+    //_id: new ObjectID(),
+    _id: data['name'],
+    display_name: data['display_name'],
+    logo: data['logo']
   };
 
   var str = new streamerTable(data);
@@ -52,7 +54,7 @@ function createStreamer(name) {
 }
 
 function getStreamers(callback) {
-  var query = streamerTable.find({}).select({ "name": 1, "_id": 0});
+  var query = streamerTable.find().select( {'__v': 0});
   query.exec(function (err, data) {
     callback(data);
   });

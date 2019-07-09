@@ -33,7 +33,7 @@ class Streamers extends Component {
                             ) : (
                                 <img src={streamer.logo} width="100" height="100" alt="MISSING" />
                             )}
-                            <h1>{streamer.name}</h1>
+                            <h1>{streamer.display_name}</h1>
                             <h5>{streamer.game}</h5>
                             <h6>{streamer.viewers}</h6>
                             </a>
