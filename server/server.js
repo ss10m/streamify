@@ -14,11 +14,6 @@ app.use((request, response, next) => {
 	next()
 })
 
-app.use((request, response, next) => {
-	request.chance = Math.random()
-	next()
-})
-
 app.get('/api/streamers', (request, response) => {
 	response.json(twitchify.getStreamers());
 });
@@ -44,12 +39,6 @@ app.get('/api/hello', (request, response) => {
 	response.send({
 		express: 'Hello From Express!'
 	});
-});
-
-app.get('/api/random', (request, response) => {
-	response.json({
-		chance: request.chance
-	})
 });
 
 app.post('/api/world', (request, response) => {

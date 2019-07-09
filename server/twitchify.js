@@ -82,7 +82,7 @@ function getStreamer(name, callback) {
         //console.log('response');
         //console.log(response);
         var body = JSON.parse(body);
-        
+        console.log(body);
 
 
         if(!body['stream']) {
@@ -173,8 +173,15 @@ function getTopStreamers() {
 
 
 function addStreamers() {
-    addStreamer('summit1g');
-    addStreamer('kitboga');
+
+    console.log("===IN ADD STREAMERS===");
+
+    mongodb.getStreamers(function(data) {
+        data.forEach( (i) => 
+            addStreamer(i['name'])
+        );
+        
+    });
 }
 
 function follows(name) {
@@ -189,7 +196,9 @@ function addStreamer(name) {
     streamers[name] = new Streamer(name);
     updateStreamers();
     getChannel(name);
-    console.log(streamers[name].getChannel());
+    mongodb.createStreamer(name);
+    streamers[name].getChannel();
+
 }
 
 class Streamer {
@@ -220,8 +229,14 @@ class Streamer {
     }
 }
 
-addStreamers();
-updateStreamers();
+function dbConnected() {
+    console.log("dbConnected in twitchify");
+    addStreamers();
+}
+
+
+
+mongodb.connectToDb(dbConnected);
 setInterval(function () { updateStreamers() }, 60000)
 getTopStreamers();
 
@@ -231,6 +246,7 @@ function printStreamers() {
         console.log(key, value);
     }
 }
+
 
 
 

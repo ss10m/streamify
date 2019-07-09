@@ -28,7 +28,6 @@ class Streamer extends Component {
             this.props.history.push(url);
             
         }).catch(function(err) {
-            console.info('error');
             console.info(err);
         });
     }
