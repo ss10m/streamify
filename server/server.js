@@ -1,5 +1,3 @@
-
-
 const express = require('express');
 const bodyParser = require('body-parser');
 var twitchify = require('./twitchify.js');
@@ -16,13 +14,10 @@ app.use((request, response, next) => {
 	next()
 })
 
-app.use((request, response, next) => {
-	request.chance = Math.random()
-	next()
-})
-
 app.get('/api/streamers', (request, response) => {
-	response.json(twitchify.getStreamers());
+	twitchify.getStreamers(function(data) {
+		response.json(data);
+	});
 });
 
 app.get('/api/topStreamers', (request, response) => {
@@ -48,15 +43,9 @@ app.get('/api/hello', (request, response) => {
 	});
 });
 
-app.get('/api/random', (request, response) => {
-	response.json({
-		chance: request.chance
-	})
-});
-
 app.post('/api/world', (request, response) => {
 	console.log(request.body['post']);
-	twitchify.addStreamer(request.body['post']);
+	twitchify.followStreamer(request.body['post']);
 	response.send(
 		`I received your POST request. This is what you sent me: ${request.body.post}`,
 	);
@@ -71,7 +60,7 @@ app.post('/api/login', (request, response) => {
 });
 
 app.post('/api/follow', (request, response) => {
-	twitchify.addStreamer(request.body['name']);
+	twitchify.followStreamer(request.body['name']);
 	response.redirect('/');
 });
 
