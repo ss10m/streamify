@@ -36,11 +36,11 @@ class Streamer extends Component {
     render() {
         return (
             <div>
+                <img src={this.state.data['logo']} width="200" height="200" alt="MISSING" />
                 <h1>{this.state.data['name']}</h1>
                 <h2>{this.state.data['viewers']}</h2>
                 <h2>{this.state.data['game']}</h2>
-                <img src={this.state.data['logo']} width="100" height="100" alt="MISSING" />
-                <img src={this.state.data['preview']} alt="MISSING" />
+                <img src={this.state.data['preview']} width="1440" height="480" alt="MISSING" />
                 <form onSubmit={this.handleSubmit}>
                     <button className="btn btn-primary" type="submit">Follow</button>
                 </form>

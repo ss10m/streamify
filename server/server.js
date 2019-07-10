@@ -15,12 +15,9 @@ app.use((request, response, next) => {
 })
 
 app.get('/api/streamers', (request, response) => {
-	twitchify.getStreamers(
-		function(data) {
-			console.log(data);
-			response.json(data);
-		}
-	);
+	twitchify.getStreamers(function(data) {
+		response.json(data);
+	});
 });
 
 app.get('/api/topStreamers', (request, response) => {

@@ -26,40 +26,41 @@ function getStreamers(callback) {
 function getStreamersData(data, callback) {
     var ret = [];
     Array.from(data).forEach(function (streamer) {
-        (function(streamer){
-            request({
-                method: 'GET',
-                url: 'https://api.twitch.tv/kraken/streams/' + streamer['_id'],
-                //qs: { offset: '0', limit: '2' },
-                headers:
+        (function(streamer) {
+            request( 
                 {
-                    'Client-ID': config.clientid
-                }
-              },
-              function(err, res, body){
-                var body = JSON.parse(body);
-                var streamerData = {};
-                streamerData['name'] = streamer['_id'];
-                streamerData['display_name'] = streamer['display_name'];
-                streamerData['viewers'] = '0';
-                streamerData['game'] = 'Offline';
-                streamerData['logo'] = streamer['logo'];
-                streamerData['preview'] = streamer['logo'];
-        
-                if (body['stream']) {
-                    streamerData['viewers'] = body['stream']['viewers'];
-                    streamerData['game'] = body['stream']['game'];
-                }
+                    method: 'GET',
+                    url: 'https://api.twitch.tv/kraken/streams/' + streamer['_id'],
+                    //qs: { offset: '0', limit: '2' },
+                    headers:
+                    {
+                        'Client-ID': config.clientid
+                    }
+                },
 
-                
-                ret.push(streamerData);
-                if(ret.length == data.length) {
-                    console.log(ret);
-                    callback(ret);
-                }
-            });
-          })(streamer);
+                function(err, res, body) {
+                    var body = JSON.parse(body);
+                    var streamerData = {};
+                    streamerData['name'] = streamer['_id'];
+                    streamerData['display_name'] = streamer['display_name'];
+                    streamerData['viewers'] = '0';
+                    streamerData['game'] = 'Offline';
+                    streamerData['logo'] = streamer['logo'];
+                    streamerData['preview'] = streamer['logo'];
+            
+                    if (body['stream']) {
+                        streamerData['viewers'] = body['stream']['viewers'];
+                        streamerData['game'] = body['stream']['game'];
+                    }
 
+                    
+                    ret.push(streamerData);
+                    if(ret.length == data.length) {
+                        //console.log(ret);
+                        callback(ret);
+                    }
+                });
+        })(streamer);
     });
     
 }
@@ -175,7 +176,7 @@ function getStreamer(name, callback) {
         //console.log('response');
         //console.log(response);
         var body = JSON.parse(body);
-        //console.log(body);
+        console.log(body);
 
 
         if(!body['stream']) {
@@ -188,7 +189,8 @@ function getStreamer(name, callback) {
         streamerData['name'] = body['stream']['channel']['display_name'];
         streamerData['viewers'] = body['stream']['viewers'];
         streamerData['game'] = body['stream']['game'];
-        streamerData['preview'] = body['stream']['preview']['large'];
+        //streamerData['preview'] = body['stream']['preview']['large'];
+        streamerData['preview'] = body['stream']['channel']['profile_banner'];
         callback(streamerData);
 
     });
@@ -211,18 +213,17 @@ function getChannel(name, callback) {
         if (error) throw new Error(error);
         //console.log('response');
         //console.log(response);
+        var body = JSON.parse(body);
+        console.log(body);
 
-        if(callback) {
-            var streamerData = {};
-            streamerData['logo'] = body['logo'];
-            streamerData['name'] = body['display_name'];
-            streamerData['viewers'] = '0';
-            streamerData['game'] = body['game'];
-            streamerData['preview'] = body['profile_banner:'];
-            callback(streamerData);
-        } else {
-            streamers[name].setChannel(body);
-        }
+        var streamerData = {};
+        streamerData['logo'] = body['logo'];
+        streamerData['name'] = body['display_name'];
+        streamerData['viewers'] = '0';
+        streamerData['game'] = 'Offline';
+        streamerData['preview'] = body['profile_banner'];
+        console.log(streamerData);
+        callback(streamerData);
 
     });
 }
