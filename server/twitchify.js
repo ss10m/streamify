@@ -186,7 +186,8 @@ function getStreamer(name, callback) {
 
         var streamerData = {};
         streamerData['logo'] = body['stream']['channel']['logo'];
-        streamerData['name'] = body['stream']['channel']['display_name'];
+        streamerData['name'] = body['stream']['channel']['name'];
+        streamerData['display_name'] = body['stream']['channel']['display_name'];
         streamerData['viewers'] = body['stream']['viewers'];
         streamerData['game'] = body['stream']['game'];
         //streamerData['preview'] = body['stream']['preview']['large'];
@@ -218,7 +219,8 @@ function getChannel(name, callback) {
 
         var streamerData = {};
         streamerData['logo'] = body['logo'];
-        streamerData['name'] = body['display_name'];
+        streamerData['name'] = body['name'];
+        streamerData['display_name'] = body['display_name'];
         streamerData['viewers'] = '0';
         streamerData['game'] = 'Offline';
         streamerData['preview'] = body['profile_banner'];
@@ -246,7 +248,8 @@ function getTopStreamers() {
 
         for([key, stream] of Object.entries(body)) {
             var streamerData = {};
-            streamerData['name'] = stream['channel']['display_name'];
+            streamerData['name'] = stream['channel']['name'];
+            streamerData['display_name'] = stream['channel']['display_name'];
             streamerData['viewers'] = stream['viewers'];
             var game = stream['game'];
             if(game.length > 20) {

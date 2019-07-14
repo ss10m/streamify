@@ -1,6 +1,7 @@
 import React from 'react';
 import './navbar.css';
 import { ButtonToolbar, Modal, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
+import { Link } from 'react-router-dom'
 
 const NavItem = props => {
   const pageURI = window.location.pathname+window.location.search
@@ -97,28 +98,19 @@ class LogInModal extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <div className="Login">
-            <form onSubmit={this.handleSubmit}>
-              <FormGroup controlId="email">
-                <FormLabel >Email</FormLabel >
-                <FormControl
-                  autoFocus
-                  type="email"
-                  value={this.state.email}
-                  onChange={this.handleChange}
-                />
-              </FormGroup>
-              <FormGroup controlId="password">
-                <FormLabel >Password</FormLabel >
-                <FormControl
-                  value={this.state.password}
-                  onChange={this.handleChange}
-                  type="password"
-                />
-              </FormGroup>
-
-              <button className="btn-block btn btn-outline-dark my-2 my-sm-0" disabled={!this.validateForm()} type="submit">Log in</button>
-
-            </form>
+          <form action="/login" method="post">
+            <div>
+            <label>Username:</label>
+            <input type="text" name="username"/><br/>
+            </div>
+            <div>
+            <label>Password:</label>
+            <input type="password" name="password"/>
+            </div>
+            <div>
+            <input type="submit" value="Submit"/>
+            </div>
+          </form>
           </div>
         </Modal.Body>
         <Modal.Footer className='logInModal'>
@@ -131,11 +123,34 @@ class LogInModal extends React.Component {
 }
 
 class NavBar extends React.Component {
-  constructor(...args) {
-    super(...args);
+  constructor(props) {
+    super(props);
 
     this.state = { modalShow: false };
   }
+
+  handleClick = event => {
+    event.preventDefault();
+    
+    fetch('/logout', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+        user: 'user'
+      }),
+    }).then(response => {
+      console.log('response');
+      console.log(response['url']);
+      var url = response['url'].replace('http://localhost:3000', '');
+      this.props.history.push(url);
+        
+    }).catch(function(err) {
+        console.info(err);
+    });
+  }
+  
 
   render() {
     let modalClose = () => this.setState({ modalShow: false });
@@ -152,6 +167,7 @@ class NavBar extends React.Component {
             
             <NavItem path="/" name="Home" />
             <NavItem path="/add" name="Add" />
+            <NavItem path="/streamers" name="Following" />
             
             <NavDropdown name="Dropdown">
               <a className="dropdown-item" href="/">Action</a>
@@ -181,6 +197,15 @@ class NavBar extends React.Component {
                 show={this.state.modalShow}
                 onHide={modalClose}
               />
+            </ButtonToolbar>
+            <ButtonToolbar>
+              <button 
+                type="button"
+                className="btn btn-outline-light my-2 my-sm-0"
+                onClick={this.handleClick}
+              >
+                Log out
+              </button>
             </ButtonToolbar>
           </ul>
 
