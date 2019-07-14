@@ -1,6 +1,6 @@
 import React from 'react';
 import './navbar.css';
-import { ButtonToolbar, Modal, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
+import { ButtonToolbar, Modal, FormGroup, FormControl, FormLabel, Tabs, Tab } from 'react-bootstrap';
 import { Link } from 'react-router-dom'
 
 const NavItem = props => {
@@ -97,21 +97,48 @@ class LogInModal extends React.Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="Login">
-          <form action="/login" method="post">
-            <div>
-            <label>Username:</label>
-            <input type="text" name="username"/><br/>
-            </div>
-            <div>
-            <label>Password:</label>
-            <input type="password" name="password"/>
-            </div>
-            <div>
-            <input type="submit" value="Submit"/>
-            </div>
-          </form>
-          </div>
+
+
+          <Tabs defaultActiveKey="login" id="uncontrolled-tab-example">
+            <Tab eventKey="login" title="Login">
+              <div className="Login">
+                <form action="/login" method="post">
+                  <div>
+                    <label>Username:</label>
+                    <input type="text" name="username"/><br/>
+                  </div>
+                  <div>
+                    <label>Password:</label>
+                    <input type="password" name="password"/>
+                  </div>
+                  <div>
+                    <input type="submit" value="Submit"/>
+                  </div>
+                </form>
+              </div>
+            </Tab>
+            <Tab eventKey="register" title="Register">
+              <div className="Register">
+                <form action="/login" method="post">
+                  <div>
+                    <label>Username:</label>
+                    <input type="text" name="username"/><br/>
+                  </div>
+                  <div>
+                    <label>Password:</label>
+                    <input type="password" name="password"/>
+                  </div>
+                  <div>
+                    <label>Password:</label>
+                    <input type="password" name="password"/>
+                  </div>
+                  <div>
+                    <input type="submit" value="Submit"/>
+                  </div>
+                </form>
+              </div>
+            </Tab>
+          </Tabs>
         </Modal.Body>
         <Modal.Footer className='logInModal'>
           <button className="btn btn-outline-light my-2 my-sm-0" onClick={this.props.onHide}>Close</button>

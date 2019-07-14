@@ -4,12 +4,12 @@ const bodyParser = require('body-parser');
 var twitchify = require('./twitchify.js');
 const app = express();
 const port = 5000;
-
-
 var passport = require('passport');
-var Strategy = require('passport-local').Strategy;
-var db = require('./db');
+require('./config/passport.js');
+
 var ensureLoggedIn = require('connect-ensure-login')
+
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,33 +19,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-passport.use(new Strategy(
-	function(username, password, cb) {
-		console.log('checking for user');
-		db.users.findByUsername(username, function(err, user) {
-		if (err) { return cb(err); }
-		if (!user) { return cb(null, false); }
-		if (user.password != password) { return cb(null, false); }
-		return cb(null, user);
-		});
-	}));
 
-passport.serializeUser(function(user, cb) {
-	console.log("IN SERIALIZE");
-	cb(null, user.id);
-});
-	
-passport.deserializeUser(function(id, cb) {
-	console.log("IN DESERIALIZE");
-	db.users.findById(id, function (err, user) {
-		if (err) { return cb(err); }
-		cb(null, user);
-	});
-});
 	
 app.use((request, response, next) => {
 	console.log('============== new request ===============')
 	console.log(request.url)
+	console.log(request.user);
 	next()
 })
 
