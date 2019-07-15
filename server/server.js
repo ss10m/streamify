@@ -1,19 +1,27 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-var twitchify = require('./twitchify.js');
+
 const app = express();
 const port = 5000;
 var passport = require('passport');
+
+require('./db/mongoose.js');
+require('./db/User.js');
+require('./db/users.js');
+require('./db/index.js');
+
 require('./config/passport.js');
 
+
+var twitchify = require('./twitchify.js');
 var ensureLoggedIn = require('connect-ensure-login')
 
 
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
+app.use(require('express-session')({ secret: 'secsecsec', resave: false, saveUninitialized: false }));
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -23,16 +31,14 @@ app.use(passport.session());
 	
 app.use((request, response, next) => {
 	console.log('============== new request ===============')
-	console.log(request.url)
-	console.log(request.user);
+	console.log(request.url, request.user)
 	next()
 })
 
 app.get('/api/streamers', 
 	ensureLoggedIn.ensureLoggedIn('/login'),
 	(request, response) => {
-		console.log(request.user['username']);
-		twitchify.getStreamers(function(data) {
+		twitchify.getStreamers(request.user['username'], function(data) {
 			response.json(data);
 	});
 });
@@ -61,7 +67,6 @@ app.get('/api/hello', (request, response) => {
 });
 
 app.post('/api/world', (request, response) => {
-	console.log(request.body['post']);
 	twitchify.followStreamer(request.body['post']);
 	response.send(
 		`I received your POST request. This is what you sent me: ${request.body.post}`,
@@ -71,18 +76,19 @@ app.post('/api/world', (request, response) => {
 app.post('/login', 
   passport.authenticate('local', { failureRedirect: '/failed' }),
   function(req, res) {
-    res.redirect('/streamers');
+	  	res.redirect('/streamers');
 });
 
 app.post('/logout',
-  function(req, res){
-	console.log('logout');
-    req.logout();
-    res.redirect('/add');
+	ensureLoggedIn.ensureLoggedIn('/add'),
+	function(req, res){
+		console.log('logout');
+		req.logout();
+		res.redirect('/');
 });
 
 app.post('/api/follow', (request, response) => {
-	twitchify.followStreamer(request.body['name']);
+	twitchify.followStreamer(request.user['username'], request.body['name']);
 	response.redirect('/streamers');
 });
 

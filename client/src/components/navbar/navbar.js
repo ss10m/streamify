@@ -1,7 +1,7 @@
 import React from 'react';
 import './navbar.css';
 import { ButtonToolbar, Modal, FormGroup, FormControl, FormLabel, Tabs, Tab } from 'react-bootstrap';
-import { Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 
 const NavItem = props => {
   const pageURI = window.location.pathname+window.location.search
@@ -155,6 +155,10 @@ class NavBar extends React.Component {
 
     this.state = { modalShow: false };
   }
+
+  componentDidMount() {
+    console.log('component did mount');
+}
 
   handleClick = event => {
     event.preventDefault();
