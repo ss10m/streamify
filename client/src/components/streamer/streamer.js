@@ -24,8 +24,8 @@ class Streamer extends Component {
             },
             body: JSON.stringify({ name: this.state.data['name'] }),
         }).then(response => {
-            var url = response['url'].replace('http://localhost:3000', '');
-            this.props.history.push(url);
+            //var url = response['url'].replace('http://localhost:3000', '');
+            this.props.history.push('/streamers');
             
         }).catch(function(err) {
             console.info(err);

@@ -1,7 +1,9 @@
 import React from 'react';
 import './navbar.css';
 import { ButtonToolbar, Modal, FormGroup, FormControl, FormLabel, Tabs, Tab } from 'react-bootstrap';
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
+
+import LogInModal from './loginmodal.js';
 
 const NavItem = props => {
   const pageURI = window.location.pathname+window.location.search
@@ -48,106 +50,7 @@ class NavDropdown extends React.Component {
   }
 }
 
-class LogInModal extends React.Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      email: "",
-      password: ""
-    };
-  }
-
-  validateForm() {
-    return this.state.email.length > 0 && this.state.password.length > 0;
-  }
-
-  handleChange = event => {
-    this.setState({
-      [event.target.id]: event.target.value
-    });
-  }
-
-  handleSubmit = event => {
-    event.preventDefault();
-    
-    fetch('/api/login', {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 
-        email: this.state.email,
-        password: this.state.password 
-      }),
-  });
-  }
-
-  render() {
-    return (
-      <Modal
-        {...this.props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Log in to Twitchify
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-
-
-          <Tabs defaultActiveKey="login" id="uncontrolled-tab-example">
-            <Tab eventKey="login" title="Login">
-              <div className="Login">
-                <form action="/login" method="post">
-                  <div>
-                    <label>Username:</label>
-                    <input type="text" name="username"/><br/>
-                  </div>
-                  <div>
-                    <label>Password:</label>
-                    <input type="password" name="password"/>
-                  </div>
-                  <div>
-                    <input type="submit" value="Submit"/>
-                  </div>
-                </form>
-              </div>
-            </Tab>
-            <Tab eventKey="register" title="Register">
-              <div className="Register">
-                <form action="/login" method="post">
-                  <div>
-                    <label>Username:</label>
-                    <input type="text" name="username"/><br/>
-                  </div>
-                  <div>
-                    <label>Password:</label>
-                    <input type="password" name="password"/>
-                  </div>
-                  <div>
-                    <label>Password:</label>
-                    <input type="password" name="password"/>
-                  </div>
-                  <div>
-                    <input type="submit" value="Submit"/>
-                  </div>
-                </form>
-              </div>
-            </Tab>
-          </Tabs>
-        </Modal.Body>
-        <Modal.Footer className='logInModal'>
-          <button className="btn btn-outline-light my-2 my-sm-0" onClick={this.props.onHide}>Close</button>
-        </Modal.Footer>
-
-      </Modal>
-    );
-  }
-}
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -155,10 +58,6 @@ class NavBar extends React.Component {
 
     this.state = { modalShow: false };
   }
-
-  componentDidMount() {
-    console.log('component did mount');
-}
 
   handleClick = event => {
     event.preventDefault();
@@ -172,11 +71,7 @@ class NavBar extends React.Component {
         user: 'user'
       }),
     }).then(response => {
-      console.log('response');
-      console.log(response['url']);
-      var url = response['url'].replace('http://localhost:3000', '');
-      this.props.history.push(url);
-        
+      this.props.history.push('/');
     }).catch(function(err) {
         console.info(err);
     });
@@ -246,4 +141,4 @@ class NavBar extends React.Component {
   }
 }
 
-export default NavBar;
+export default withRouter (NavBar);

@@ -80,7 +80,7 @@ app.post('/login',
 });
 
 app.post('/logout',
-	ensureLoggedIn.ensureLoggedIn('/add'),
+	ensureLoggedIn.ensureLoggedIn('/'),
 	function(req, res){
 		console.log('logout');
 		req.logout();
