@@ -55,7 +55,6 @@ class NavDropdown extends React.Component {
 class NavBar extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = { modalShow: false };
   }
 
@@ -72,14 +71,49 @@ class NavBar extends React.Component {
       }),
     }).then(response => {
       this.props.history.push('/');
+      this.props.onLogout();
     }).catch(function(err) {
         console.info(err);
     });
+
+
   }
+
+  getButtons() {
+    let modalClose = () => this.setState({ modalShow: false });
+    if(!this.props.session) {
+      return(
+        <ButtonToolbar>
+          <button 
+            className="btn btn-outline-light my-2 my-sm-0" 
+            onClick={() => this.setState({ modalShow: true })}
+          >
+            Log in
+          </button>
+
+          <LogInModal
+            show={this.state.modalShow}
+            onHide={modalClose}
+          />
+        </ButtonToolbar>)
+    } else {
+      return (
+        <ButtonToolbar>
+          <button 
+            type="button"
+            className="btn btn-outline-light my-2 my-sm-0"
+            onClick={this.handleClick}
+          >
+            Log out
+          </button>
+        </ButtonToolbar>)
+    }
+  }
+
   
 
   render() {
-    let modalClose = () => this.setState({ modalShow: false });
+    
 
     return (
       <nav className="navbar-custom navbar navbar-custom navbar-expand-lg navbar-dark">
@@ -87,7 +121,6 @@ class NavBar extends React.Component {
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
-
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
             
@@ -111,28 +144,7 @@ class NavBar extends React.Component {
 
 
           <ul className="navbar-nav ml-auto">
-            <ButtonToolbar>
-              <button 
-                className="btn btn-outline-light my-2 my-sm-0" 
-                onClick={() => this.setState({ modalShow: true })}
-              >
-                Log in
-              </button>
-
-              <LogInModal
-                show={this.state.modalShow}
-                onHide={modalClose}
-              />
-            </ButtonToolbar>
-            <ButtonToolbar>
-              <button 
-                type="button"
-                className="btn btn-outline-light my-2 my-sm-0"
-                onClick={this.handleClick}
-              >
-                Log out
-              </button>
-            </ButtonToolbar>
+            {this.getButtons()}
           </ul>
 
         </div>

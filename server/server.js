@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 5000;
 var passport = require('passport');
+var session = require('express-session')
 
 require('./db/mongoose.js');
 require('./db/User.js');
@@ -21,7 +22,7 @@ var ensureLoggedIn = require('connect-ensure-login')
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(require('express-session')({ secret: 'secsecsec', resave: false, saveUninitialized: false }));
+app.use(session({ secret: 'secsecsec', resave: false, saveUninitialized: false }));
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -38,6 +39,7 @@ app.use((request, response, next) => {
 app.get('/api/streamers', 
 	ensureLoggedIn.ensureLoggedIn('/login'),
 	(request, response) => {
+		console.log(request.session),
 		twitchify.getStreamers(request.user['username'], function(data) {
 			response.json(data);
 	});
@@ -63,6 +65,18 @@ app.get('/api/streamer/:name', (request, response) => {
 app.get('/api/hello', (request, response) => {
 	response.send({
 		express: 'Logged in'
+	});
+});
+
+app.get('/api/token', (request, response) => {
+	var user = {};
+	if(request.user) {
+		user['username'] = request.user['username'];
+	} else {
+		user['username'] = ''
+	}
+	response.send({
+		loggedIn: user
 	});
 });
 

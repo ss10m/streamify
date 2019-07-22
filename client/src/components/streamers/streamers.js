@@ -27,7 +27,6 @@ class Streamers extends Component {
                 <ul className="stList">
                     {this.state.streamers.map(streamer =>
                         <li className="sList" key={streamer.name}>
-                            {console.log(streamer)}
                             <a href={'/streamer/' + streamer.name} >
                             {streamer.logo === 'default' ? (
                                 <img src={logo1g} width="100" height="100" alt="MISSING" />

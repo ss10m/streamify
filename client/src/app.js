@@ -6,7 +6,6 @@ import Streamer from './components/streamer/streamer';
 import Streamers from './components/streamers/streamers';
 import Add from './components/add/add';
 import NavBar from './components/navbar/navbar.js';
-import LogInModal from './components/navbar/loginmodal.js';
 import TopStreamers from './components/topStreamers/topStreamers'
     
 
@@ -15,54 +14,56 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            modalShow: false
+            modalShow: false,
+            session: ''
         };
     }
 
-    showModal = event => {
-        this.setState({ modalShow: true });
+    componentWillMount() {
+        console.log('getting user')
+        fetch("/api/token")
+            .then(res => res.json())
+            .then(res => {
+                this.setState({session: res['loggedIn']['username']})
+                console.log(res['loggedIn']['username'])
+            });
     }
 
+    onLogout() {
+        console.log('on logout')
+        this.setState({session: ''})
+        
+    }
 
     render() {
-        let modalClose = () => this.setState({ modalShow: false });
-
         return (
+            
             <BrowserRouter>
+                {console.log("in return")}
                 <div>
-                    <NavBar />
+                    
+                    <Route render={() => <NavBar session={this.state.session} onLogout={this.onLogout.bind(this)} />} />
                     <div className='topStreamers'>
-                        
                         <div className='divHeading'>
                             <h3>Top Streamers Live</h3>
                         </div>
                         <hr className='split'></hr>
                         <TopStreamers />
                     </div>  
-
-
-                    <LogInModal
-                        show={false}
-                        onHide={modalClose}
-                    />
-
                 </div>
                 <div className='streamers'>
                     <Switch>
+                        {/*<Route key="home" path="/" render={(props) => <HomeScreen test={this.state.test} {...props} />}/>  */ }
                         <Route exact path='/' render={() => (
                                     <h1>home page!</h1>
                                 )}/>
                         <Route path='/streamers' component={Streamers} />
                         <Route path='/streamer/:streamerid' component={Streamer} />
                         <Route path='/add' component={Add} />        
+                        <Route path='/add' component={Add} />    
                         <Route path='/login' render={() => (
-                                              <LogInModal
-                                              show={true}
-                                            />
-                            )}/>
-                        <Route render={() => (
-                                <h1>404 Not Found!</h1>
-                            )}/>
+                                    <h1>show modal</h1>
+                                )}/>
                     </Switch>
                 </div>
             </BrowserRouter>
@@ -75,33 +76,27 @@ export default App;
 
 
 /*
-export default (
-    <BrowserRouter>
-        <div>
-            <NavBar />
-            <div className='topStreamers'>
-                
-                <div className='divHeading'>
-                    <h3>Top Streamers Live</h3>
-                </div>
-                <hr className='split'></hr>
-                <TopStreamers />
-            </div>             
+const renderMergedProps = (component, ...rest) => {
+  const finalProps = Object.assign({}, ...rest);
+  return (
+    React.createElement(component, finalProps)
+  );
+}
 
-        </div>
-        <div className='streamers'>
-            <Switch>
-                <Route exact path='/' render={() => (
-                            <h1>home page!</h1>
-                        )}/>
-                <Route path='/streamers' component={Streamers} />
-                <Route path='/streamer/:streamerid' component={Streamer} />
-                <Route path='/add' component={Add} />
-                <Route render={() => (
-                        <h1>404 Not Found!</h1>
-                    )}/>
-            </Switch>
-        </div>
-    </BrowserRouter>
-  )
+const PropsRoute = ({ component, ...rest }) => {
+  return (
+    <Route {...rest} render={routeProps => {
+      return renderMergedProps(component, routeProps, rest);
+    }}/>
+  );
+}
+
+<Router>
+    <Switch>
+      <PropsRoute path='/login' component={Login} auth={auth} authenticatedRedirect="/" />
+      <PropsRoute path='/allbooks' component={Books} booksGetter={getAllBooks} />
+      <PropsRoute path='/mybooks' component={Books} booksGetter={getMyBooks} />
+      <PropsRoute path='/trades' component={Trades} user={user} />
+    </Switch>
+</Router>
 */

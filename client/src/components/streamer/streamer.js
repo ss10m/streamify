@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
+import LogInModal from '../navbar/loginmodal.js';
 
 class Streamer extends Component {
     constructor(props) {
         super(props);
         this.state = {
             name: this.props.match.params.streamerid,
-            data: {}
+            data: {},
+            modalShow: false
         };
+
 
     }
     componentDidMount() {
@@ -34,16 +37,27 @@ class Streamer extends Component {
 
 
     render() {
+
+        let modalClose = () => this.setState({ modalShow: false });
         return (
             <div>
-                <img src={this.state.data['logo']} width="200" height="200" alt="MISSING" />
-                <h1>{this.state.data['name']}</h1>
-                <h2>{this.state.data['viewers']}</h2>
-                <h2>{this.state.data['game']}</h2>
-                <img src={this.state.data['preview']} width="1440" height="480" alt="MISSING" />
-                <form onSubmit={this.handleSubmit}>
-                    <button className="btn btn-primary" type="submit">Follow</button>
-                </form>
+                <div>
+                    <img src={this.state.data['logo']} width="200" height="200" alt="MISSING" />
+                    <h1>{this.state.data['name']}</h1>
+                    <h2>{this.state.data['viewers']}</h2>
+                    <h2>{this.state.data['game']}</h2>
+                    <img src={this.state.data['preview']} width="1440" height="480" alt="MISSING" />
+                    <form onSubmit={this.handleSubmit}>
+                        <button className="btn btn-primary" type="submit">Follow</button>
+                    </form>
+                </div>
+                <div>
+                    <LogInModal
+                        show={this.state.modalShow}
+                        onHide={modalClose}
+                    />
+                    <button onClick={() => this.setState({ modalShow: true })}>Log in</button>
+                </div>
             </div>
         );
     }
