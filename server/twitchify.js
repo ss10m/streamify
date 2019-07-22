@@ -4,8 +4,9 @@ var streamers = {};
 var topStreamers = [];
 
 var config = require('./config.js');
-var mongodb = require('./mongodb.js');
-
+//var mongodb = require('./mongodb.js');
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
 
     //user id
     //get streamers coresponding to user id from db
@@ -13,14 +14,17 @@ var mongodb = require('./mongodb.js');
     //update streamers
     //callback return
 
-function getStreamers(callback) {
-
+function getStreamers(username, callback) {
+    console.log(username);
     console.log("===IN ADD STREAMERS===");
 
-    mongodb.getStreamers(function(data) {
-        getStreamersData(data, callback);
-        
-    });
+    User.findOne({username: username}, 
+              function(err,obj) {
+                  if(obj) {
+                      console.log('found user');
+                      getStreamersData(obj['streamers'], callback);
+                  }
+              });
 }
 
 function getStreamersData(data, callback) {
@@ -30,7 +34,7 @@ function getStreamersData(data, callback) {
             request( 
                 {
                     method: 'GET',
-                    url: 'https://api.twitch.tv/kraken/streams/' + streamer['_id'],
+                    url: 'https://api.twitch.tv/kraken/streams/' + streamer['name'],
                     //qs: { offset: '0', limit: '2' },
                     headers:
                     {
@@ -40,8 +44,10 @@ function getStreamersData(data, callback) {
 
                 function(err, res, body) {
                     var body = JSON.parse(body);
+
+                    //console.log(body);
                     var streamerData = {};
-                    streamerData['name'] = streamer['_id'];
+                    streamerData['name'] = streamer['name'];
                     streamerData['display_name'] = streamer['display_name'];
                     streamerData['viewers'] = '0';
                     streamerData['game'] = 'Offline';
@@ -56,7 +62,6 @@ function getStreamersData(data, callback) {
                     
                     ret.push(streamerData);
                     if(ret.length == data.length) {
-                        //console.log(ret);
                         callback(ret);
                     }
                 });
@@ -69,17 +74,17 @@ function getStreamersData(data, callback) {
 
 
 
-function followStreamer(name) {
+function followStreamer(username, nameToFollow) {
 
     //check if exists in db
     //if not
 
 
-    console.log(name);
+    console.log(nameToFollow);
 
     var options = {
         method: 'GET',
-        url: 'https://api.twitch.tv/kraken/channels/' + name,
+        url: 'https://api.twitch.tv/kraken/channels/' + nameToFollow,
         //qs: { offset: '0', limit: '2' },
         headers:
         {
@@ -98,7 +103,17 @@ function followStreamer(name) {
         streamerData['logo'] = body['logo'];
         streamerData['display_name'] = body['display_name'];
         
-        mongodb.createStreamer(streamerData);
+        //mongodb.createStreamer(streamerData);
+
+        User.findOne({username: username}, 
+            function(err,streamer) {
+                if(streamer) {
+                    console.log(streamer);
+                    console.log(streamerData);
+                    streamer['streamers'].push(streamerData);
+                    streamer.save();
+                }
+            });
 
     });
 
@@ -186,7 +201,8 @@ function getStreamer(name, callback) {
 
         var streamerData = {};
         streamerData['logo'] = body['stream']['channel']['logo'];
-        streamerData['name'] = body['stream']['channel']['display_name'];
+        streamerData['name'] = body['stream']['channel']['name'];
+        streamerData['display_name'] = body['stream']['channel']['display_name'];
         streamerData['viewers'] = body['stream']['viewers'];
         streamerData['game'] = body['stream']['game'];
         //streamerData['preview'] = body['stream']['preview']['large'];
@@ -218,7 +234,8 @@ function getChannel(name, callback) {
 
         var streamerData = {};
         streamerData['logo'] = body['logo'];
-        streamerData['name'] = body['display_name'];
+        streamerData['name'] = body['name'];
+        streamerData['display_name'] = body['display_name'];
         streamerData['viewers'] = '0';
         streamerData['game'] = 'Offline';
         streamerData['preview'] = body['profile_banner'];
@@ -246,7 +263,8 @@ function getTopStreamers() {
 
         for([key, stream] of Object.entries(body)) {
             var streamerData = {};
-            streamerData['name'] = stream['channel']['display_name'];
+            streamerData['name'] = stream['channel']['name'];
+            streamerData['display_name'] = stream['channel']['display_name'];
             streamerData['viewers'] = stream['viewers'];
             var game = stream['game'];
             if(game.length > 20) {
@@ -273,7 +291,7 @@ function dbConnected() {
 
 
 
-mongodb.connectToDb(dbConnected);
+//mongodb.connectToDb(dbConnected);
 //setInterval(function () { updateStreamers() }, 60000)
 getTopStreamers();
 

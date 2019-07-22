@@ -1,3 +1,4 @@
+/*
 const mongoose = require('mongoose');
 var ObjectID = require('mongodb').ObjectID;
 
@@ -69,3 +70,5 @@ module.exports.connectToDb = connectToDb;
 
 
 //"C:\Program Files\MongoDB\Server\4.0\bin\mongod.exe"
+///taskkill /F /IM node.exe
+*/

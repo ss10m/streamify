@@ -1,11 +1,11 @@
 import React from 'react';
 import './navbar.css';
-<<<<<<< Updated upstream
-import { ButtonToolbar, Modal, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
-=======
+
 import { ButtonToolbar, Modal, FormGroup, FormControl, FormLabel, Tabs, Tab } from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom'
->>>>>>> Stashed changes
+
+import LogInModal from './loginmodal.js';
 
 const NavItem = props => {
   const pageURI = window.location.pathname+window.location.search
@@ -52,40 +52,31 @@ class NavDropdown extends React.Component {
   }
 }
 
-class LogInModal extends React.Component {
+
+
+class NavBar extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      email: "",
-      password: ""
-    };
+    this.state = { modalShow: false };
   }
 
-  validateForm() {
-    return this.state.email.length > 0 && this.state.password.length > 0;
-  }
-
-  handleChange = event => {
-    this.setState({
-      [event.target.id]: event.target.value
-    });
-  }
-
-  handleSubmit = event => {
+  handleClick = event => {
     event.preventDefault();
     
-    fetch('/api/login', {
+    fetch('/logout', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',
       },
       body: JSON.stringify({ 
-        email: this.state.email,
-        password: this.state.password 
+        user: 'user'
       }),
-  });
-  }
+    }).then(response => {
+      this.props.history.push('/');
+      this.props.onLogout();
+    }).catch(function(err) {
+        console.info(err);
+    });
 
   render() {
     return (
@@ -101,34 +92,6 @@ class LogInModal extends React.Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-<<<<<<< Updated upstream
-          <div className="Login">
-            <form onSubmit={this.handleSubmit}>
-              <FormGroup controlId="email">
-                <FormLabel >Email</FormLabel >
-                <FormControl
-                  autoFocus
-                  type="email"
-                  value={this.state.email}
-                  onChange={this.handleChange}
-                />
-              </FormGroup>
-              <FormGroup controlId="password">
-                <FormLabel >Password</FormLabel >
-                <FormControl
-                  value={this.state.password}
-                  onChange={this.handleChange}
-                  type="password"
-                />
-              </FormGroup>
-
-              <button className="btn-block btn btn-outline-dark my-2 my-sm-0" disabled={!this.validateForm()} type="submit">Log in</button>
-
-            </form>
-          </div>
-=======
-
-
           <Tabs defaultActiveKey="login" id="uncontrolled-tab-example">
             <Tab eventKey="login" title="Login">
               <div className="Login">
@@ -169,7 +132,6 @@ class LogInModal extends React.Component {
               </div>
             </Tab>
           </Tabs>
->>>>>>> Stashed changes
         </Modal.Body>
         <Modal.Footer className='logInModal'>
           <button className="btn btn-outline-light my-2 my-sm-0" onClick={this.props.onHide}>Close</button>
@@ -180,15 +142,43 @@ class LogInModal extends React.Component {
   }
 }
 
-class NavBar extends React.Component {
-  constructor(...args) {
-    super(...args);
-
-    this.state = { modalShow: false };
   }
 
-  render() {
+  getButtons() {
     let modalClose = () => this.setState({ modalShow: false });
+    if(!this.props.session) {
+      return(
+        <ButtonToolbar>
+          <button 
+            className="btn btn-outline-light my-2 my-sm-0" 
+            onClick={() => this.setState({ modalShow: true })}
+          >
+            Log in
+          </button>
+
+          <LogInModal
+            show={this.state.modalShow}
+            onHide={modalClose}
+          />
+        </ButtonToolbar>)
+    } else {
+      return (
+        <ButtonToolbar>
+          <button 
+            type="button"
+            className="btn btn-outline-light my-2 my-sm-0"
+            onClick={this.handleClick}
+          >
+            Log out
+          </button>
+        </ButtonToolbar>)
+    }
+  }
+
+  
+
+  render() {
+    
 
     return (
       <nav className="navbar-custom navbar navbar-custom navbar-expand-lg navbar-dark">
@@ -196,12 +186,12 @@ class NavBar extends React.Component {
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
-
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
             
             <NavItem path="/" name="Home" />
             <NavItem path="/add" name="Add" />
+            <NavItem path="/streamers" name="Following" />
             
             <NavDropdown name="Dropdown">
               <a className="dropdown-item" href="/">Action</a>
@@ -219,19 +209,7 @@ class NavBar extends React.Component {
 
 
           <ul className="navbar-nav ml-auto">
-            <ButtonToolbar>
-              <button 
-                className="btn btn-outline-light my-2 my-sm-0" 
-                onClick={() => this.setState({ modalShow: true })}
-              >
-                Log in
-              </button>
-
-              <LogInModal
-                show={this.state.modalShow}
-                onHide={modalClose}
-              />
-            </ButtonToolbar>
+            {this.getButtons()}
           </ul>
 
         </div>
@@ -240,4 +218,4 @@ class NavBar extends React.Component {
   }
 }
 
-export default NavBar;
+export default withRouter (NavBar);

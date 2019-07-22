@@ -21,7 +21,7 @@ class TopStreamers extends Component {
                         <div className="d-flex">
                             <img className ='topStreamers' src={streamer['logo']} width="25" height="25" alt="MISSING" />
                             &nbsp;&nbsp;
-                            <h7 className="names">{streamer['name']}</h7>  
+                            <h7 className="names">{streamer['display_name']}</h7>  
                         </div>
                         <div>
                             <small className='text-white-50'>{streamer['game']}</small>
