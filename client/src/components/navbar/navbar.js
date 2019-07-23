@@ -113,8 +113,7 @@ class NavBar extends React.Component {
   
 
   render() {
-    
-
+ 
     return (
       <nav className="navbar-custom navbar navbar-custom navbar-expand-lg navbar-dark">
         <a className="navbar-brand" href="/"><b>Twitchify</b></a>

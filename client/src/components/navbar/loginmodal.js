@@ -1,5 +1,5 @@
 import React from 'react';
-import { ButtonToolbar, Modal, FormGroup, FormControl, FormLabel, Tabs, Tab } from 'react-bootstrap';
+import { Modal, Tabs, Tab } from 'react-bootstrap';
 
 class LogInModal extends React.Component {
     constructor(props) {

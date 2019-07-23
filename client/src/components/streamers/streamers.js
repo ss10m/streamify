@@ -18,8 +18,6 @@ class Streamers extends Component {
             .then(streamers => this.setState({ streamers }));
     }
 
-
-
     render() {
 
         return (

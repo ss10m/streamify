@@ -69,6 +69,7 @@ app.get('/api/hello', (request, response) => {
 });
 
 app.get('/api/token', (request, response) => {
+	console.log("GETTING TOKEN")
 	var user = {};
 	if(request.user) {
 		user['username'] = request.user['username'];

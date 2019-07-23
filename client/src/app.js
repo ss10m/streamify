@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import './components/app/app.css'
 import Streamer from './components/streamer/streamer';
@@ -32,14 +32,12 @@ class App extends Component {
     onLogout() {
         console.log('on logout')
         this.setState({session: ''})
-        
     }
 
     render() {
         return (
             
             <BrowserRouter>
-                {console.log("in return")}
                 <div>
                     
                     <Route render={() => <NavBar session={this.state.session} onLogout={this.onLogout.bind(this)} />} />
