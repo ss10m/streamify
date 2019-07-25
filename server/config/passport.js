@@ -1,7 +1,9 @@
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
 var db = require('../db');
-
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
+/*
 passport.use(new Strategy(
 	function(username, password, cb) {
 		console.log('checking for user');
@@ -13,15 +15,30 @@ passport.use(new Strategy(
 		});
 	}));
 
-passport.serializeUser(function(user, cb) {
-	console.log("IN SERIALIZE");
-	cb(null, user.id);
-});
+
+passport.use(new Strategy(
+	function(username, password, done) {
+	  User.findOne({ username: username }, function (err, user) {
+		  console.log(user)
+		if (err) { return done(err); }
+		if (!user) { return done(null, false); }
+		if (!user.validatePassword(password)) { console.log('found user');return done(null, false); }
+		return done(null, user);
+	  });
+	}
+  ));
+*/
+  passport.use(new Strategy(
+	  function(username, password, cb) {
+		User.findOne({ username })
+		.then((user) => {
+			if(!user || !user.validatePassword(password)) {
+				console.log(user, password)
+				console.log('email or password is invalid')
+			return cb(null, false, { errors: { 'email or password': 'is invalid' } });
+			}
 	
-passport.deserializeUser(function(id, cb) {
-	console.log("IN DESERIALIZE");
-	db.users.findById(id, function (err, user) {
-		if (err) { return cb(err); }
-		cb(null, user);
-	});
-});
+			return cb(null, user);
+		}).catch(cb);
+  }));
+

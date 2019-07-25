@@ -59,13 +59,15 @@ query.exec(function (err, data) {
 
 });
 
-*/
 
-User.findOne({username: 'peter'}, 
+
+User.findOne({username: 'admin'}, 
               function(err,obj) {
-                //console.log(obj['streamers']); 
+                //console.log(obj)
+                obj.setPassword('password')
                 //obj['streamers'].push(d3);
                 //obj.markModified('streamers');
-                //obj.save();
+                obj.save();
                 
               });
+*/

@@ -34,6 +34,15 @@ class App extends Component {
         this.setState({session: ''})
     }
 
+    /*
+        Example of writing to storage
+
+        window.sessionStorage.setItem("key", "value");
+        To retrieve item from storage use
+
+        window.sessionStorage.getItem("key");
+    */
+
     render() {
         return (
             
