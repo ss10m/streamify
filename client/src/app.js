@@ -14,24 +14,25 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            modalShow: false,
             session: ''
         };
     }
 
     componentWillMount() {
-        console.log('getting user')
-        fetch("/api/token")
-            .then(res => res.json())
-            .then(res => {
-                this.setState({session: res['loggedIn']['username']})
-                console.log(res['loggedIn']['username'])
-            });
+        var jwt = JSON.parse(localStorage.getItem("jwt"));
+
+        if(jwt) {
+            console.log(jwt.user)
+            this.setState({session: jwt.user})
+        } else {
+            console.log('jwt not found')
+        }
     }
 
     onLogout() {
         console.log('on logout')
         this.setState({session: ''})
+        localStorage.removeItem("jwt")
     }
 
     /*

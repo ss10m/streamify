@@ -48,21 +48,22 @@ app.post('/login',
 */
 app.post('/login', auth.optional, (req, res, next) => {
 
-  
-    return passport.authenticate('local', { session: false }, (err, passportUser, info) => {
+    console.log(req.body)
+    return passport.authenticate('local', { session: false }, (err, verifiedUser, info) => {
       if(err) {
         console.log(err)
       }
   
-      if(passportUser) {
-        const user = passportUser;
-        user.token = passportUser.generateJWT();
+      if(verifiedUser) {
+        const user = verifiedUser;
+        user.token = verifiedUser.generateJWT();
+        console.log('authenticated')
   
         return res.json({ user: user.toAuthJSON() });
       }
   
-      console.log('failed')
-      res.redirect('/failed')
+      console.log('failed to authenticate')
+      res.redirect('/')
     })(req, res, next);
   });
 
@@ -75,8 +76,8 @@ app.post('/login', auth.optional, (req, res, next) => {
   
   app.get('/api/streamers', 
     (request, response) => {
-      console.log(request.session),
-      twitchify.getStreamers(request.user['username'], function(data) {
+      var cookie = request.get('Authorization');
+      twitchify.getStreamers(JSON.parse(cookie).username, function(data) {
         response.json(data);
     });
   });

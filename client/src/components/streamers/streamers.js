@@ -13,9 +13,22 @@ class Streamers extends Component {
     }
 
     componentDidMount() {
-        fetch("/api/streamers")
+        var jwt = JSON.parse(localStorage.getItem("jwt"));
+        console.log(jwt)
+        if(jwt) {
+            fetch("/api/streamers", {
+                headers: {
+                    Authorization: JSON.stringify(jwt.user)
+                  }
+            })
             .then(res => res.json())
             .then(streamers => this.setState({ streamers }));
+        } else {
+            console.log('not logged in');
+            //redirect to login
+            this.props.history.push('/');
+        }
+
     }
 
     render() {

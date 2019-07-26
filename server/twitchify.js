@@ -254,7 +254,8 @@ function getTopStreamers() {
         //qs: { offset: '0', limit: '2' },
         headers:
         {
-            'Client-ID': config.clientid
+            'Client-ID': config.clientid,
+            'Accept': 'application/vnd.twitchtv.v5+json'
         }
     };
 
@@ -263,6 +264,7 @@ function getTopStreamers() {
         var body = JSON.parse(body)['streams'];
 
         for([key, stream] of Object.entries(body)) {
+            //console.log(stream)
             var streamerData = {};
             streamerData['name'] = stream['channel']['name'];
             streamerData['display_name'] = stream['channel']['display_name'];

@@ -1,18 +1,20 @@
 import React from 'react';
 import { Modal, Tabs, Tab } from 'react-bootstrap';
+import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
+import { withRouter } from 'react-router-dom';
 
 class LogInModal extends React.Component {
     constructor(props) {
       super(props);
   
       this.state = {
-        email: "",
+        username: "",
         password: ""
       };
     }
   
     validateForm() {
-      return this.state.email.length > 0 && this.state.password.length > 0;
+      return this.state.username.length > 0 && this.state.password.length > 0;
     }
   
     handleChange = event => {
@@ -23,17 +25,25 @@ class LogInModal extends React.Component {
   
     handleSubmit = event => {
       event.preventDefault();
+
+      this.props.onHide();
       
-      fetch('/api/login', {
+      fetch('/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ 
-          email: this.state.email,
+          username: this.state.username,
           password: this.state.password 
         }),
-    });
+      })
+      .then(res => res.json())
+      .then(data =>  {
+        localStorage.setItem("jwt", JSON.stringify(data),
+        this.props.history.push('/streamers'),
+        console.log('redirect')
+      )});
     }
   
     render() {
@@ -50,23 +60,34 @@ class LogInModal extends React.Component {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-  
-  
             <Tabs defaultActiveKey="login" id="uncontrolled-tab-example">
               <Tab eventKey="login" title="Login">
                 <div className="login">
-                  <form action="/login" method="post">
-                    <div>
-                      <label>Username:</label>
-                      <input type="text" name="username"/><br/>
-                    </div>
-                    <div>
-                      <label>Password:</label>
-                      <input type="password" name="password"/>
-                    </div>
-                    <div>
-                      <input type="submit" value="Submit"/>
-                    </div>
+                  <form onSubmit={this.handleSubmit}>
+                    <FormGroup controlId="username">
+                      <FormLabel >Username</FormLabel >
+                      <FormControl
+                        autoFocus
+                        type="username"
+                        value={this.state.username}
+                        onChange={this.handleChange}
+                      />
+                    </FormGroup>
+                    <FormGroup controlId="password">
+                      <FormLabel >Password</FormLabel >
+                      <FormControl
+                        value={this.state.password}
+                        type="password"
+                        onChange={this.handleChange}
+                      />
+                    </FormGroup>
+                    <Button
+                      block
+                      disabled={!this.validateForm()}
+                      type="submit"
+                    >
+                      Login
+                    </Button>
                   </form>
                 </div>
               </Tab>
@@ -103,4 +124,4 @@ class LogInModal extends React.Component {
   }
 
 
-  export default LogInModal;
+export default withRouter (LogInModal);
