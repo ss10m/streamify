@@ -30,6 +30,7 @@ passport.use(new Strategy(
 */
   passport.use(new Strategy(
 	  function(username, password, cb) {
+		  console.log('in passport')
 		User.findOne({ username })
 		.then((user) => {
 			if(!user || !user.validatePassword(password)) {

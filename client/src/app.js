@@ -70,7 +70,7 @@ class App extends Component {
                                     <h1>home page!</h1>
                                 )}/>
                         <Route path='/streamers' render={() => <Streamers session={this.state.session} modalOpen={modalOpen} />} />
-                        <Route path='/streamer/:streamerid' component={Streamer} />
+                        <Route path='/streamer/:id' render={() => <Streamer session={this.state.session} modalOpen={modalOpen}/>}  />
                         <Route path='/add' component={Add} />          
                         <Route render={() => (
                                     <h1>404</h1>

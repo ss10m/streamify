@@ -16,11 +16,10 @@ class Streamers extends Component {
 
     componentDidMount() {
         const jwt = this.props.session;
-        console.log(jwt)
         if(jwt) {
             fetch("/api/streamers", {
                 headers: {
-                    Authorization: `Token ${JSON.stringify(jwt)}`
+                    Authorization: JSON.stringify(jwt)
                 }
             })
             .then(res => res.json())

@@ -19,18 +19,19 @@ function getStreamers(username, callback) {
     console.log("===IN ADD STREAMERS===");
 
     User.findOne({username: username}, 
-              function(err,obj) {
-                  console.log(obj)
-                  if(obj) {
-                      console.log('found user');
-                      getStreamersData(obj['streamers'], callback);
-                  }
-              });
+        function(err,obj) {
+            console.log(obj)
+            if(obj) {
+                console.log('found user');
+                getStreamersData(obj, callback);
+            }
+        });
 }
 
-function getStreamersData(data, callback) {
+function getStreamersData(user, callback) {
     var ret = [];
-    Array.from(data).forEach(function (streamer) {
+    var streamers = user.streamers;
+    Array.from(streamers).forEach(function (streamer) {
         (function(streamer) {
             request( 
                 {
@@ -62,7 +63,7 @@ function getStreamersData(data, callback) {
 
                     
                     ret.push(streamerData);
-                    if(ret.length == data.length) {
+                    if(ret.length == streamers.length) {
                         callback(ret);
                     }
                 });
@@ -174,7 +175,31 @@ function updateStreamers() {
 
 }
 
-function getStreamer(name, callback) {
+function getStreamer(auth, name, callback) {
+    checkIfFollowing(auth, name, callback)
+}
+
+function checkIfFollowing(auth, name, callback) {
+    User.findOne({username: auth.username}, 
+        function(err, streamer) {
+            if(streamer) {
+                for(var [id, followedStreamer] of Object.entries(streamer.streamers)) {
+                    if(followedStreamer.name == name) {
+                        console.log(auth.username + ' is following ' + name)
+                        getStreamerInfo(true, name, callback);
+                        return;
+                    }
+                }
+            } 
+            getStreamerInfo(false, name, callback);
+            console.log('not following ' + name)
+        });
+    
+}
+
+
+
+function getStreamerInfo(isFollowed, name, callback) {
     console.log(name);
 
     var options = {
@@ -189,14 +214,10 @@ function getStreamer(name, callback) {
 
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
-        //console.log('response');
-        //console.log(response);
         var body = JSON.parse(body);
-        //console.log(body);
-
 
         if(!body['stream']) {
-            getChannel(name, callback);
+            getChannel(isFollowed, name, callback);
             return;
         }
 
@@ -208,12 +229,13 @@ function getStreamer(name, callback) {
         streamerData['game'] = body['stream']['game'];
         //streamerData['preview'] = body['stream']['preview']['large'];
         streamerData['preview'] = body['stream']['channel']['profile_banner'];
+        streamerData['isFollowed'] = Boolean(isFollowed).toString();
         callback(streamerData);
 
     });
 }
 
-function getChannel(name, callback) {
+function getChannel(isFollowed, name, callback) {
     console.log(name);
 
     var options = {
@@ -228,10 +250,7 @@ function getChannel(name, callback) {
 
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
-        //console.log('response');
-        //console.log(response);
         var body = JSON.parse(body);
-        console.log(body);
 
         var streamerData = {};
         streamerData['logo'] = body['logo'];
@@ -240,7 +259,7 @@ function getChannel(name, callback) {
         streamerData['viewers'] = '0';
         streamerData['game'] = 'Offline';
         streamerData['preview'] = body['profile_banner'];
-        console.log(streamerData);
+        streamerData['isFollowed'] = Boolean(isFollowed).toString();;
         callback(streamerData);
 
     });

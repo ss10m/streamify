@@ -18,15 +18,15 @@ const auth = require('./config/auth.js')
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({ secret: 'secsecsec', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
+app.use(session({ secret: 'secret', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 
-app.use((request, response, next) => {
+app.use((req, res, next) => {
     console.log('============== new request ===============')
-    console.log(request.url, request.user)
+    console.log(req.url, res.user)
     next()
 })
 
@@ -37,15 +37,14 @@ app.post('/login', auth.optional, (req, res, next) => {
     console.log(req.body)
     return passport.authenticate('local', { session: false }, (err, verifiedUser, info) => {
         if(err) {
-        console.log(err)
+            console.log(err)
         }
 
         if(verifiedUser) {
-        const user = verifiedUser;
-        user.token = verifiedUser.generateJWT();
-        console.log('authenticated')
-
-        return res.json({ user: user.toAuthJSON() });
+            const user = verifiedUser;
+            user.token = verifiedUser.generateJWT();
+            console.log('authenticated')
+            return res.json({ user: user.toAuthJSON() });
         }
 
         console.log('failed to authenticate')
@@ -64,30 +63,38 @@ app.post('/logout', auth.optional, (req, res, next) => {
 // Twitchify API
 
 app.get('/api/streamers', auth.required, (req, res, next) => {
-        var cookie = request.get('Authorization');
-        console.log(cookie)
-        twitchify.getStreamers(JSON.parse(cookie).username, function(data) {
-            response.json(data);
-        });
+    var auth = JSON.parse(req.get('Authorization'));
+    twitchify.getStreamers(auth.username, function(data) {
+        res.json(data);
+    });
 });
 
-app.get('/api/topStreamers', (request, response) => {
-    response.json(twitchify.topStreamers);
+app.get('/api/topStreamers', (req, res) => {
+    res.json(twitchify.topStreamers);
 });
 
-app.get('/api/streamer/:name', (request, response) => {
-    var name = request.params.name;
-    twitchify.getStreamer(name, function(jsonStreamer) {
-        response.json(jsonStreamer);
+app.get('/api/streamer/:name', (req, res) => {
+    var auth = JSON.parse(req.get('Authorization'));
+    var name = req.params.name;
+    twitchify.getStreamer(auth, name, function(retStreamer) {
+        res.json(retStreamer);
     });
 });
 
 
 
-app.post('/api/follow', (request, response) => {
-    console.log('trying to follow' + request.body['name']);
-    var cookie = request.get('Authorization');
-    console.log(cookie)
-    twitchify.followStreamer(request.user['username'], request.body['name']);});
+app.post('/api/follow', auth.required, (req, res, next) => {
+    var auth = JSON.parse(req.get('Authorization'));
+    console.log(auth.username + ' is trying to follow ' + req.body['name']);
+    //var auth = req.get('Authorization');
+    //twitchify.followStreamer(req.user['username'], req.body['name']);
+});
+
+app.post('/api/unfollow', auth.required, (req, res, next) => {
+    var auth = JSON.parse(req.get('Authorization'));
+    console.log(auth.username + ' is trying to unfollow ' + req.body['name']);
+    //var auth = req.get('Authorization');
+    //twitchify.followStreamer(req.user['username'], req.body['name']);
+});
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
