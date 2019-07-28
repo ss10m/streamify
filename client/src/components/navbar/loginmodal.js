@@ -71,7 +71,7 @@ class LogInModal extends React.Component {
                 <div className="login">
                   <form onSubmit={this.handleSubmit}>
                     <FormGroup controlId="username">
-                      <FormLabel >Username</FormLabel >
+                      <FormLabel>Username</FormLabel>
                       <FormControl
                         autoFocus
                         type="username"
@@ -80,7 +80,7 @@ class LogInModal extends React.Component {
                       />
                     </FormGroup>
                     <FormGroup controlId="password">
-                      <FormLabel >Password</FormLabel >
+                      <FormLabel>Password</FormLabel>
                       <FormControl
                         value={this.state.password}
                         type="password"

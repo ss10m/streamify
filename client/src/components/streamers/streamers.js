@@ -20,8 +20,8 @@ class Streamers extends Component {
         if(jwt) {
             fetch("/api/streamers", {
                 headers: {
-                    Authorization: JSON.stringify(jwt)
-                  }
+                    Authorization: `Token ${JSON.stringify(jwt)}`
+                }
             })
             .then(res => res.json())
             .then(streamers => this.setState({ streamers }));

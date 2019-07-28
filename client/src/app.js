@@ -72,8 +72,8 @@ class App extends Component {
                         <Route path='/streamers' render={() => <Streamers session={this.state.session} modalOpen={modalOpen} />} />
                         <Route path='/streamer/:streamerid' component={Streamer} />
                         <Route path='/add' component={Add} />          
-                        <Route path='/login' render={() => (
-                                    <h1>show modal</h1>
+                        <Route render={() => (
+                                    <h1>404</h1>
                                 )}/>
                     </Switch>
                 </div>
