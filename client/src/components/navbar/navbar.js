@@ -3,16 +3,11 @@ import './navbar.css';
 import { ButtonToolbar } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 
-import LogInModal from './loginmodal.js';
 import { NavItem, NavDropdown } from './navComponents.js';
 
 
 
 class NavBar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { modalShow: false };
-  }
 
   handleClick = event => {
     event.preventDefault();
@@ -36,21 +31,16 @@ class NavBar extends React.Component {
   }
 
   getButtons() {
-    let modalClose = () => this.setState({ modalShow: false });
     if(!this.props.session) {
       return(
         <ButtonToolbar>
           <button 
             className="btn btn-outline-light my-2 my-sm-0" 
-            onClick={() => this.setState({ modalShow: true })}
+            onClick={this.props.modalOpen}
           >
             Log in
           </button>
 
-          <LogInModal
-            show={this.state.modalShow}
-            onHide={modalClose}
-          />
         </ButtonToolbar>)
     } else {
       return (

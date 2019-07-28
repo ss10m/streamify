@@ -7,6 +7,7 @@ import Streamers from './components/streamers/streamers';
 import Add from './components/add/add';
 import NavBar from './components/navbar/navbar.js';
 import TopStreamers from './components/topStreamers/topStreamers'
+import LoginModal from './components/navbar/loginmodal'
     
 
 
@@ -14,7 +15,8 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            session: ''
+            session: '',
+            modalShow: false 
         };
     }
 
@@ -34,12 +36,25 @@ class App extends Component {
         localStorage.removeItem("jwt")
     }
 
+    updateSession(jwt) {
+        console.log(this.state.session)
+        this.setState({session: jwt})
+        console.log(this.state.session)
+    }
+
     render() {
+        let modalClose = () => this.setState({ modalShow: false });
+        let modalOpen = () => this.setState({ modalShow: true });
         return (
             
             <BrowserRouter>
                 <div> 
-                    <Route render={() => <NavBar session={this.state.session} onLogout={this.onLogout.bind(this)} />} />
+                    <Route render={() => <NavBar session={this.state.session} onLogout={this.onLogout.bind(this)} modalOpen={modalOpen}/>} />
+                    <LoginModal
+                        show={this.state.modalShow}
+                        onHide={modalClose}
+                        updateSession={this.updateSession.bind(this)}
+                    />
                     <div className='topStreamers'>
                         <div className='divHeading'>
                             <small>Top Streamers Live</small>
@@ -54,10 +69,9 @@ class App extends Component {
                         <Route exact path='/' render={() => (
                                     <h1>home page!</h1>
                                 )}/>
-                        <Route path='/streamers' render={() => <Streamers session={this.state.session} />} />
+                        <Route path='/streamers' render={() => <Streamers session={this.state.session} modalOpen={modalOpen} />} />
                         <Route path='/streamer/:streamerid' component={Streamer} />
-                        <Route path='/add' component={Add} />        
-                        <Route path='/add' component={Add} />    
+                        <Route path='/add' component={Add} />          
                         <Route path='/login' render={() => (
                                     <h1>show modal</h1>
                                 )}/>

@@ -46,6 +46,14 @@ app.post('/login',
     res.redirect('/');
   });
 */
+
+
+app.use((request, response, next) => {
+  console.log('============== new request ===============')
+  console.log(request.url, request.user)
+  next()
+})
+
 app.post('/login', auth.optional, (req, res, next) => {
 
     console.log(req.body)
@@ -68,11 +76,7 @@ app.post('/login', auth.optional, (req, res, next) => {
   });
 
 
-  app.use((request, response, next) => {
-    console.log('============== new request ===============')
-    console.log(request.url, request.user)
-    next()
-  })
+
   
   app.get('/api/streamers', 
     (request, response) => {

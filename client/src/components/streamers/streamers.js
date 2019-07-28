@@ -16,6 +16,7 @@ class Streamers extends Component {
 
     componentDidMount() {
         const jwt = this.props.session;
+        console.log(jwt)
         if(jwt) {
             fetch("/api/streamers", {
                 headers: {
@@ -51,7 +52,7 @@ class Streamers extends Component {
 
     getLoginButton() {
         return (
-            <Button variant="primary" size="lg">
+            <Button variant="primary" size="lg" onClick={this.props.modalOpen}>
                 Log in to see followed channels
             </Button>
         )
