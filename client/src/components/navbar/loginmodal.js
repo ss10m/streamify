@@ -40,10 +40,13 @@ class LogInModal extends React.Component {
       })
       .then(res => res.json())
       .then(data =>  {
-        localStorage.setItem("jwt", JSON.stringify(data),
-        this.props.history.push('/streamers'),
-        console.log('redirect')
-      )});
+        localStorage.setItem("jwt", JSON.stringify(data));
+        if(this.props.location.pathname === '/streamers') {
+          this.props.history.go(0)
+        } else {
+          this.props.history.push('/streamers')
+        };
+      });
     }
   
     render() {

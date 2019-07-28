@@ -22,7 +22,6 @@ class App extends Component {
         var jwt = JSON.parse(localStorage.getItem("jwt"));
 
         if(jwt) {
-            console.log(jwt.user)
             this.setState({session: jwt.user})
         } else {
             console.log('jwt not found')
@@ -35,25 +34,15 @@ class App extends Component {
         localStorage.removeItem("jwt")
     }
 
-    /*
-        Example of writing to storage
-
-        window.sessionStorage.setItem("key", "value");
-        To retrieve item from storage use
-
-        window.sessionStorage.getItem("key");
-    */
-
     render() {
         return (
             
             <BrowserRouter>
-                <div>
-                    
+                <div> 
                     <Route render={() => <NavBar session={this.state.session} onLogout={this.onLogout.bind(this)} />} />
                     <div className='topStreamers'>
                         <div className='divHeading'>
-                            <h3>Top Streamers Live</h3>
+                            <small>Top Streamers Live</small>
                         </div>
                         <hr className='split'></hr>
                         <TopStreamers />
@@ -65,7 +54,7 @@ class App extends Component {
                         <Route exact path='/' render={() => (
                                     <h1>home page!</h1>
                                 )}/>
-                        <Route path='/streamers' component={Streamers} />
+                        <Route path='/streamers' render={() => <Streamers session={this.state.session} />} />
                         <Route path='/streamer/:streamerid' component={Streamer} />
                         <Route path='/add' component={Add} />        
                         <Route path='/add' component={Add} />    

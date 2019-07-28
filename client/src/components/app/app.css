@@ -23,10 +23,15 @@ div.topStreamers {
     display: none; 
   }
 
+  small {
+    padding-left: 10 em;
+    color: white;
+  }
+
   h3 {
     padding-left: 10 em;
     color: white;
- }
+  }
   
   div.divHeading {
     text-align: center;

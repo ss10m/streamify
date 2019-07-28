@@ -77,6 +77,7 @@ app.post('/login', auth.optional, (req, res, next) => {
   app.get('/api/streamers', 
     (request, response) => {
       var cookie = request.get('Authorization');
+      console.log(cookie)
       twitchify.getStreamers(JSON.parse(cookie).username, function(data) {
         response.json(data);
     });
@@ -134,8 +135,11 @@ app.post('/login', auth.optional, (req, res, next) => {
   });
   
   app.post('/api/follow', (request, response) => {
+    console.log('trying to follow' + request.body['name']);
+    var cookie = request.get('Authorization');
+    console.log(cookie)
     twitchify.followStreamer(request.user['username'], request.body['name']);
-    response.redirect('/streamers');
+    //response.redirect('/streamers');
   });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
