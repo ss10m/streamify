@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import logo1g from '../../images/summit1g.png';
 import './streamers.css';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 
 class Streamers extends Component {
@@ -33,16 +33,16 @@ class Streamers extends Component {
             <ul className="stList">
                 {this.state.streamers.map(streamer =>
                     <li className="sList" key={streamer.name}>
-                        <a href={'/streamer/' + streamer.name} >
-                        {streamer.logo === 'default' ? (
-                            <img src={logo1g} width="100" height="100" alt="MISSING" />
-                        ) : (
-                            <img src={streamer.logo} width="100" height="100" alt="MISSING" />
-                        )}
-                        <h1>{streamer.display_name}</h1>
-                        <h5>{streamer.game}</h5>
-                        <h6>{streamer.viewers}</h6>
-                        </a>
+                        <Link to={'/streamer/' + streamer.name} className="nav-link">
+                            {streamer.logo === 'default' ? (
+                                <img src={logo1g} width="100" height="100" alt="MISSING" />
+                            ) : (
+                                <img src={streamer.logo} width="100" height="100" alt="MISSING" />
+                            )}
+                            <h1>{streamer.display_name}</h1>
+                            <h5>{streamer.game}</h5>
+                            <h6>{streamer.viewers}</h6>
+                        </Link>
                     </li>
                 )}
             </ul>
@@ -78,4 +78,4 @@ class Streamers extends Component {
 
 
 // ======================================
-export default withRouter (Streamers);
+export default Streamers;

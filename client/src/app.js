@@ -47,22 +47,20 @@ class App extends Component {
         let modalOpen = () => this.setState({ modalShow: true });
         return (
             
-            <BrowserRouter>
-                <div> 
-                    <Route render={() => <NavBar session={this.state.session} onLogout={this.onLogout.bind(this)} modalOpen={modalOpen}/>} />
-                    <LoginModal
-                        show={this.state.modalShow}
-                        onHide={modalClose}
-                        updateSession={this.updateSession.bind(this)}
-                    />
-                    <div className='topStreamers'>
-                        <div className='divHeading'>
-                            <small>Top Streamers Live</small>
-                        </div>
-                        <hr className='split'></hr>
-                        <TopStreamers />
-                    </div>  
-                </div>
+            <div>
+                <Route render={() => <NavBar session={this.state.session} onLogout={this.onLogout.bind(this)} modalOpen={modalOpen}/>} />
+                <LoginModal
+                    show={this.state.modalShow}
+                    onHide={modalClose}
+                    updateSession={this.updateSession.bind(this)}
+                />
+                <div className='topStreamers'>
+                    <div className='divHeading'>
+                        <small>Top Streamers Live</small>
+                    </div>
+                    <hr className='split'></hr>
+                    <TopStreamers />
+                </div>  
                 <div className='streamers'>
                     <Switch>
                         {/*<Route key="home" path="/" render={(props) => <HomeScreen test={this.state.test} {...props} />}/>  */ }
@@ -70,44 +68,17 @@ class App extends Component {
                                     <h1>home page!</h1>
                                 )}/>
                         <Route path='/streamers' render={() => <Streamers session={this.state.session} modalOpen={modalOpen} />} />
-                        <Route path='/streamer/:id' render={() => <Streamer session={this.state.session} modalOpen={modalOpen}/>}  />
+                        <Route exact path='/streamer/:id' render={(props) => <Streamer session={this.state.session} modalOpen={modalOpen} {...props}/>}  />
+
                         <Route path='/add' component={Add} />          
                         <Route render={() => (
                                     <h1>404</h1>
                                 )}/>
                     </Switch>
                 </div>
-            </BrowserRouter>
-
+            </div>
         )
     }
 }
 
 export default App;
-
-
-/*
-const renderMergedProps = (component, ...rest) => {
-  const finalProps = Object.assign({}, ...rest);
-  return (
-    React.createElement(component, finalProps)
-  );
-}
-
-const PropsRoute = ({ component, ...rest }) => {
-  return (
-    <Route {...rest} render={routeProps => {
-      return renderMergedProps(component, routeProps, rest);
-    }}/>
-  );
-}
-
-<Router>
-    <Switch>
-      <PropsRoute path='/login' component={Login} auth={auth} authenticatedRedirect="/" />
-      <PropsRoute path='/allbooks' component={Books} booksGetter={getAllBooks} />
-      <PropsRoute path='/mybooks' component={Books} booksGetter={getMyBooks} />
-      <PropsRoute path='/trades' component={Trades} user={user} />
-    </Switch>
-</Router>
-*/

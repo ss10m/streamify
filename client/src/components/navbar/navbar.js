@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './navbar.css';
 import { ButtonToolbar } from 'react-bootstrap';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 import { NavItem, NavDropdown } from './navComponents.js';
 
 
 
-class NavBar extends React.Component {
+class NavBar extends Component {
 
   handleClick = event => {
     event.preventDefault();
@@ -62,16 +62,16 @@ class NavBar extends React.Component {
  
     return (
       <nav className="navbar-custom navbar navbar-custom navbar-expand-lg navbar-dark">
-        <a className="navbar-brand" href="/"><b>Twitchify</b></a>
+        <Link to={'/'} className="navbar-brand"> <b>Twitchify</b> </Link>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
             
-            <NavItem path="/" name="Home" />
-            <NavItem path="/add" name="Add" />
-            <NavItem path="/streamers" name="Following" />
+            <li><Link to={'/'} className="nav-link"> Home </Link></li>
+            <li><Link to={'/add'} className="nav-link"> Add </Link></li>
+            <li><Link to={'/streamers'} className="nav-link"> Followed </Link></li>
             
             <NavDropdown name="Dropdown">
               <a className="dropdown-item" href="/">Action</a>

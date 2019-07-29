@@ -12,6 +12,14 @@ class Streamer extends Component {
 
     }
 
+    componentWillReceiveProps(nextProps) {
+        console.log(this.props.name)
+        console.log(this.props.id)
+        console.log(this.getStreamerName())
+
+        console.log(this.props.match.params.id)
+    }
+
     getStreamerName() {
         var lastIndex = window.location.href.lastIndexOf('/');
         return window.location.href.substring(lastIndex + 1);
@@ -54,7 +62,7 @@ class Streamer extends Component {
     }
 
     getFollowButton() {
-        console.log(this.state.data.isFollowed)
+        //console.log(this.state.data.isFollowed)
         if(this.state.data.isFollowed === 'true') {
             return (
                 <button className="btn btn-primary" onClick={this.handleSubmit}>Unfollow</button>

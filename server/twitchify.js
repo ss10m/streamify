@@ -20,7 +20,7 @@ function getStreamers(username, callback) {
 
     User.findOne({username: username}, 
         function(err,obj) {
-            console.log(obj)
+            //.log(obj)
             if(obj) {
                 console.log('found user');
                 getStreamersData(obj, callback);
