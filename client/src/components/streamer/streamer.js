@@ -4,30 +4,40 @@ class Streamer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: this.getStreamerName(),
-            data: {},
-            modalShow: false
+            name: this.props.match.params.id,
+            data: {}
         };
 
 
     }
 
-    componentWillReceiveProps(nextProps) {
-        console.log(this.props.name)
-        console.log(this.props.id)
-        console.log(this.getStreamerName())
-
-        console.log(this.props.match.params.id)
+    static getDerivedStateFromProps(nextProps, prevState) {
+        var next = nextProps.match.params.id;
+        var previous = prevState.name;
+        if(next !== previous) {
+            return { name: next};
+        } 
+        else {
+            return null;
+        }
     }
 
-    getStreamerName() {
-        var lastIndex = window.location.href.lastIndexOf('/');
-        return window.location.href.substring(lastIndex + 1);
-    }
-
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps.match.params.id !== this.state.name){
+            const jwt = this.props.session;
+            fetch("/api/streamer/" + this.state.name, {
+                headers: {
+                    Authorization: JSON.stringify(jwt)
+                }
+            })
+            .then(res => res.json())
+            .then(data => this.setState({ data }));
+        }
+      }
+    
     componentDidMount() {
         const jwt = this.props.session;
-        fetch("/api/streamer/"+ this.state.name, {
+        fetch("/api/streamer/" + this.props.match.params.id, {
             headers: {
                 Authorization: JSON.stringify(jwt)
             }
@@ -62,7 +72,7 @@ class Streamer extends Component {
     }
 
     getFollowButton() {
-        //console.log(this.state.data.isFollowed)
+        // check if logged in
         if(this.state.data.isFollowed === 'true') {
             return (
                 <button className="btn btn-primary" onClick={this.handleSubmit}>Unfollow</button>
