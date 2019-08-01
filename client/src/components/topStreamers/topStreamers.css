@@ -23,7 +23,6 @@ a:hover.topStreamers {
      color: text-light;
  }
 
- img.topStreamers {
+img.topStreamers {
     border-radius: 50%;
-  }
-
+}

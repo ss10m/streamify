@@ -86,15 +86,13 @@ app.get('/api/streamer/:name', (req, res) => {
 app.post('/api/follow', auth.required, (req, res, next) => {
     var auth = JSON.parse(req.get('Authorization'));
     console.log(auth.username + ' is trying to follow ' + req.body['name']);
-    //var auth = req.get('Authorization');
-    //twitchify.followStreamer(req.user['username'], req.body['name']);
+    twitchify.followStreamer(auth.username, req.body['name']);
 });
 
 app.post('/api/unfollow', auth.required, (req, res, next) => {
     var auth = JSON.parse(req.get('Authorization'));
     console.log(auth.username + ' is trying to unfollow ' + req.body['name']);
-    //var auth = req.get('Authorization');
-    //twitchify.followStreamer(req.user['username'], req.body['name']);
+    twitchify.unfollowStreamer(auth.username, req.body['name']);
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

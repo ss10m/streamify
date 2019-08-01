@@ -63,9 +63,7 @@ class Streamer extends Component {
             },
             body: JSON.stringify({ name: this.state.data['name'] }),
         }).then(response => {
-            //var url = response['url'].replace('http://localhost:3000', '');
             this.props.history.push('/streamers');
-            
         }).catch(function(err) {
             console.info(err);
         });
@@ -73,6 +71,11 @@ class Streamer extends Component {
 
     getFollowButton() {
         // check if logged in
+
+        if(!this.props.session) {
+            return <button className="btn btn-primary" onClick={this.props.modalOpen}>Follow</button>
+        }
+
         if(this.state.data.isFollowed === 'true') {
             return (
                 <button className="btn btn-primary" onClick={this.handleSubmit}>Unfollow</button>

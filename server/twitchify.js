@@ -72,17 +72,32 @@ function getStreamersData(user, callback) {
     
 }
 
+function unfollowStreamer(username, nameToUnfollow) {
+    User.findOne({username: username}, 
+        function(err,streamer) {
+            if(streamer) {
+                //console.log(streamer['streamers']);
+
+                //streamer['streamers'].push(streamerData);
+                //streamer.save();
+                for([index, stream] of Object.entries(streamer['streamers'])) {
+                    if(stream['name'] === nameToUnfollow) {
+                        if (index > -1) {
+                            streamer['streamers'].splice(index, 1);
+                        }
+                        streamer.save();
+                        break;
+                    }
+                }
+            }
+        });
+}
+
 
 
 
 
 function followStreamer(username, nameToFollow) {
-
-    //check if exists in db
-    //if not
-
-
-    console.log(nameToFollow);
 
     var options = {
         method: 'GET',
@@ -96,16 +111,12 @@ function followStreamer(username, nameToFollow) {
 
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
-        //console.log('response');
-        //console.log(response);
         var body = JSON.parse(body);
 
         var streamerData = {};
         streamerData['name'] = body['name'];
         streamerData['logo'] = body['logo'];
         streamerData['display_name'] = body['display_name'];
-        
-        //mongodb.createStreamer(streamerData);
 
         User.findOne({username: username}, 
             function(err,streamer) {
@@ -116,11 +127,7 @@ function followStreamer(username, nameToFollow) {
                     streamer.save();
                 }
             });
-
     });
-
-
-    
 }
 
 
@@ -304,33 +311,14 @@ function getTopStreamers() {
     
 }
 
-
-
-function dbConnected() {
-    console.log("dbConnected in twitchify");
-    //getStreamersNEW();
-}
-
-
-
 //mongodb.connectToDb(dbConnected);
 //setInterval(function () { updateStreamers() }, 60000)
 getTopStreamers();
 
-function printStreamers() {
-    console.log('============== printing streamers ===============')
-    for (var [key, value] of Object.entries(streamers)) {
-        console.log(key, value);
-    }
-}
-
-
-
-
 // Exports
 module.exports.streamers = streamers;
 module.exports.getStreamer = getStreamer;
-module.exports.printStreamers = printStreamers;
 module.exports.followStreamer = followStreamer;
+module.exports.unfollowStreamer = unfollowStreamer;
 module.exports.getStreamers = getStreamers;
 module.exports.topStreamers = topStreamers;

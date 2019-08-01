@@ -18,7 +18,7 @@ class TopStreamers extends Component {
         return (
             <div>
                 {this.state.topStreamers.map(streamer =>
-                    <Link to={"/streamer/" + streamer['name']} key={streamer['name']} className="nav-link topStreamers list-group-item py-1 list-group-item-action flex-column align-items-start border-0">
+                    <Link to={"/streamer/" + streamer['name']} key={streamer['name']} className="topS nav-link topStreamers list-group-item py-1 list-group-item-action flex-column align-items-start border-0">
                         <div className="d-flex">
                             <img className ='topStreamers' src={streamer['logo']} width="25" height="25" alt="MISSING" />
                             &nbsp;&nbsp;
