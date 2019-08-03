@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import logo1g from '../../images/summit1g.png';
 import './streamers.css';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 
 class Streamers extends Component {
@@ -12,6 +12,22 @@ class Streamers extends Component {
             streamers: []
         };
 
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        console.log('componentDidUpdate')
+        if(prevProps.session !== this.props.session) {
+            const jwt = this.props.session;
+            if(jwt) {
+                fetch("/api/streamers", {
+                    headers: {
+                        Authorization: JSON.stringify(jwt)
+                    }
+                })
+                .then(res => res.json())
+                .then(streamers => this.setState({ streamers }));
+            }
+        }
     }
 
     componentDidMount() {

@@ -9,6 +9,19 @@ class TopStreamers extends Component {
     };
 
     componentDidMount() {
+        this.fetchTopStreamers();
+        this.topStreamersID = setInterval(
+            () => this.fetchTopStreamers(),
+            35000
+        );
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.topStreamersID);
+    }
+
+    fetchTopStreamers() {
+        console.log('updating top streamers')
         fetch("/api/topStreamers")
             .then(res => res.json())
             .then(streamers => this.setState({ topStreamers : streamers }));

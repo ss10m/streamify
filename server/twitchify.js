@@ -1,7 +1,7 @@
 var request = require("request");
 console.log('new twitchify');
 var streamers = {};
-var topStreamers = [];
+var topStreamers = Array(20).fill(0);
 
 var config = require('./config.js');
 //var mongodb = require('./mongodb.js');
@@ -76,10 +76,6 @@ function unfollowStreamer(username, nameToUnfollow) {
     User.findOne({username: username}, 
         function(err,streamer) {
             if(streamer) {
-                //console.log(streamer['streamers']);
-
-                //streamer['streamers'].push(streamerData);
-                //streamer.save();
                 for([index, stream] of Object.entries(streamer['streamers'])) {
                     if(stream['name'] === nameToUnfollow) {
                         if (index > -1) {
@@ -274,6 +270,8 @@ function getChannel(isFollowed, name, callback) {
 
 function getTopStreamers() {
 
+    console.log('getting top streamers')
+
     var options = {
         method: 'GET',
         url: 'https://api.twitch.tv/kraken/streams?limit=20',
@@ -290,7 +288,6 @@ function getTopStreamers() {
         var body = JSON.parse(body)['streams'];
 
         for([key, stream] of Object.entries(body)) {
-            //console.log(stream)
             var streamerData = {};
             streamerData['name'] = stream['channel']['name'];
             streamerData['display_name'] = stream['channel']['display_name'];
@@ -304,16 +301,26 @@ function getTopStreamers() {
             streamerData['game'] = game;
             streamerData['logo'] = stream['channel']['logo'];
 
-            topStreamers.push(streamerData);
+            topStreamers[key] = streamerData;
         }
 
     });
+
+    //setTimeout(getTopStreamers, 10000);
     
 }
 
+function startTopStreamers() {
+    getTopStreamers();
+    setInterval(getTopStreamers, 30000)
+}
+
+
+//console.log(topStreamers)
 //mongodb.connectToDb(dbConnected);
-//setInterval(function () { updateStreamers() }, 60000)
-getTopStreamers();
+//setInterval(getTopStreamers, 30000)
+//getTopStreamers();
+startTopStreamers()
 
 // Exports
 module.exports.streamers = streamers;

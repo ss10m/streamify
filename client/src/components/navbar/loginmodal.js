@@ -43,12 +43,9 @@ class LogInModal extends React.Component {
         localStorage.setItem("jwt", JSON.stringify(data));
         this.props.updateSession(data.user);
         
-        if(this.props.location.pathname === '/streamers') {
-          this.props.history.go(0)
-        } else {
+        if(this.props.location.pathname !== '/streamers') {
           this.props.history.push('/streamers')
-        };
-        
+        }
       });
     }
   
