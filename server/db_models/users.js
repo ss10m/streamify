@@ -1,3 +1,4 @@
+/*
 console.log('users')
 const mongoose = require('mongoose');
 
@@ -9,28 +10,6 @@ var records = [
 
 const User = mongoose.model('User');
 
-exports.findById = function(id, cb) {
-  process.nextTick(function() {
-    var idx = id - 1;
-    if (records[idx]) {
-      cb(null, records[idx]);
-    } else {
-      cb(new Error('User ' + id + ' does not exist'));
-    }
-  });
-}
-
-exports.findByUsername = function(username, cb) {
-  process.nextTick(function() {
-    for (var i = 0, len = records.length; i < len; i++) {
-      var record = records[i];
-      if (record.username === username) {
-        return cb(null, record);
-      }
-    }
-    return cb(null, null);
-  });
-}
 
 
 
@@ -52,7 +31,7 @@ var data = {
 
 //const finalUser = new User(data);
 //finalUser.save();
-/*
+
 var query = User.find().select( {'streamers': 1, '_id': 0});
 query.exec(function (err, data) {
   console.log(data[1]['streamers'][0]['logo']);

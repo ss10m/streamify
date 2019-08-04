@@ -3,8 +3,7 @@ console.log('new twitchify');
 var streamers = {};
 var topStreamers = Array(20).fill(0);
 
-var config = require('./config.js');
-//var mongodb = require('./mongodb.js');
+var config = require('./config/config.js');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
@@ -18,58 +17,56 @@ function getStreamers(username, callback) {
     console.log(username);
     console.log("===IN ADD STREAMERS===");
 
-    User.findOne({username: username}, 
-        function(err,obj) {
-            //.log(obj)
+    User.findOne(
+        {username: username}, 
+        function(err, obj) {
             if(obj) {
                 console.log('found user');
                 getStreamersData(obj, callback);
             }
-        });
+        }
+    );
 }
 
 function getStreamersData(user, callback) {
     var ret = [];
     var streamers = user.streamers;
-    Array.from(streamers).forEach(function (streamer) {
-        (function(streamer) {
-            request( 
+    Array.from(streamers).forEach((streamer) => {
+        request(
+            {
+                method: 'GET',
+                url: 'https://api.twitch.tv/kraken/streams/' + streamer['name'],
+                //qs: { offset: '0', limit: '2' },
+                headers:
                 {
-                    method: 'GET',
-                    url: 'https://api.twitch.tv/kraken/streams/' + streamer['name'],
-                    //qs: { offset: '0', limit: '2' },
-                    headers:
-                    {
-                        'Client-ID': config.clientid
-                    }
-                },
+                    'Client-ID': config.clientid
+                }
+            },
 
-                function(err, res, body) {
-                    var body = JSON.parse(body);
+            function(err, res, body) {
+                var body = JSON.parse(body);
 
-                    //console.log(body);
-                    var streamerData = {};
-                    streamerData['name'] = streamer['name'];
-                    streamerData['display_name'] = streamer['display_name'];
-                    streamerData['viewers'] = '0';
-                    streamerData['game'] = 'Offline';
-                    streamerData['logo'] = streamer['logo'];
-                    streamerData['preview'] = streamer['logo'];
-            
-                    if (body['stream']) {
-                        streamerData['viewers'] = body['stream']['viewers'];
-                        streamerData['game'] = body['stream']['game'];
-                    }
+                var streamerData = {};
+                streamerData['name'] = streamer['name'];
+                streamerData['display_name'] = streamer['display_name'];
+                streamerData['viewers'] = '0';
+                streamerData['game'] = 'Offline';
+                streamerData['logo'] = streamer['logo'];
+                streamerData['preview'] = streamer['logo'];
+        
+                if (body['stream']) {
+                    streamerData['viewers'] = body['stream']['viewers'];
+                    streamerData['game'] = body['stream']['game'];
+                }
 
-                    
-                    ret.push(streamerData);
-                    if(ret.length == streamers.length) {
-                        callback(ret);
-                    }
-                });
-        })(streamer);
+                
+                ret.push(streamerData);
+                if(ret.length == streamers.length) {
+                    callback(ret);
+                }
+            }
+        );
     });
-    
 }
 
 function unfollowStreamer(username, nameToUnfollow) {
@@ -88,10 +85,6 @@ function unfollowStreamer(username, nameToUnfollow) {
             }
         });
 }
-
-
-
-
 
 function followStreamer(username, nameToFollow) {
 
@@ -117,65 +110,11 @@ function followStreamer(username, nameToFollow) {
         User.findOne({username: username}, 
             function(err,streamer) {
                 if(streamer) {
-                    console.log(streamer);
-                    console.log(streamerData);
                     streamer['streamers'].push(streamerData);
                     streamer.save();
                 }
             });
     });
-}
-
-
-
-
-
-
-
-
-
-
-
-
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-
-
-
-
-function updateStreamers() {
-
-    console.log('!!!!===== updating  streamers =====!!!!')
-    //streamers.push(new Streamer('summit'.concat(streamers.length).concat('g')));
-
-    for (var [name, streamer] of Object.entries(streamers)) {
-
-        var options = {
-            method: 'GET',
-            url: 'https://api.twitch.tv/kraken/streams/' + streamer.getName(),
-            //qs: { offset: '0', limit: '2' },
-            headers:
-            {
-                'Client-ID': config.clientid
-            }
-        };
-
-        request(options, function (error, response, body) {
-            if (error) throw new Error(error);
-            //console.log('response');
-            //console.log(response);
-            var streamerName = response['req']['path'].split("/")[3].split("?")[0];
-            var body = JSON.parse(body);
-            streamers[streamerName].setData(body);
-
-        });
-
-
-
-
-    };
-
 }
 
 function getStreamer(auth, name, callback) {
@@ -200,11 +139,7 @@ function checkIfFollowing(auth, name, callback) {
     
 }
 
-
-
 function getStreamerInfo(isFollowed, name, callback) {
-    console.log(name);
-
     var options = {
         method: 'GET',
         url: 'https://api.twitch.tv/kraken/streams/' + name,
@@ -230,8 +165,8 @@ function getStreamerInfo(isFollowed, name, callback) {
         streamerData['display_name'] = body['stream']['channel']['display_name'];
         streamerData['viewers'] = body['stream']['viewers'];
         streamerData['game'] = body['stream']['game'];
-        //streamerData['preview'] = body['stream']['preview']['large'];
-        streamerData['preview'] = body['stream']['channel']['profile_banner'];
+        streamerData['preview'] = body['stream']['preview']['large'];
+        streamerData['profile_banner'] = body['stream']['channel']['profile_banner'];
         streamerData['isFollowed'] = Boolean(isFollowed).toString();
         callback(streamerData);
 
@@ -261,7 +196,7 @@ function getChannel(isFollowed, name, callback) {
         streamerData['display_name'] = body['display_name'];
         streamerData['viewers'] = '0';
         streamerData['game'] = 'Offline';
-        streamerData['preview'] = body['profile_banner'];
+        streamerData['profile_banner'] = body['profile_banner'];
         streamerData['isFollowed'] = Boolean(isFollowed).toString();;
         callback(streamerData);
 
@@ -269,8 +204,6 @@ function getChannel(isFollowed, name, callback) {
 }
 
 function getTopStreamers() {
-
-    console.log('getting top streamers')
 
     var options = {
         method: 'GET',
@@ -303,11 +236,7 @@ function getTopStreamers() {
 
             topStreamers[key] = streamerData;
         }
-
     });
-
-    //setTimeout(getTopStreamers, 10000);
-    
 }
 
 function startTopStreamers() {
@@ -315,14 +244,9 @@ function startTopStreamers() {
     setInterval(getTopStreamers, 30000)
 }
 
-
-//console.log(topStreamers)
-//mongodb.connectToDb(dbConnected);
-//setInterval(getTopStreamers, 30000)
-//getTopStreamers();
 startTopStreamers()
+console.log('=========== twitchify started ============')
 
-// Exports
 module.exports.streamers = streamers;
 module.exports.getStreamer = getStreamer;
 module.exports.followStreamer = followStreamer;

@@ -1,31 +1,31 @@
 * {margin: 0; padding: 0;}
  
 ul.stList {
-  list-style-type: none;
-  width: 700px;
+    list-style-type: none;
+    width: 700px;
 }
 
 h3 {
-  font: bold 15px Helvetica, Verdana, sans-serif;
+    font: bold 15px Helvetica, Verdana, sans-serif;
 }
  
 li.sList img {
-  float: left;
-  margin: 0 15px 0 0;
+    float: left;
+    margin: 0 15px 0 0;
 }
  
 li.sList p {
-  font: 200 12px/1.5 Georgia, Times New Roman, serif;
-  float: left;
+    font: 200 12px/1.5 Georgia, Times New Roman, serif;
+    float: left;
 }
  
 li.sList {
-  padding: 10px;
-  overflow: auto;
+    padding: 10px;
+    overflow: auto;
 }
 
  
 li:hover.sList {
-  background: #eee;
-  cursor: pointer;
+    background: #eee;
+    cursor: pointer;
 }

@@ -87,21 +87,21 @@ class Streamer extends Component {
         }
     }
 
-
     render() {
         return (
             <div>
                 <div>
-
-                    <img src={this.state.data['logo']} width="200" height="200" alt="MISSING" />
+                    <div>
+                        <img src={this.state.data['logo']} width="200" height="200" alt="MISSING" />
+                        <img src={this.state.data['profile_banner']} width="700" height="200" alt="MISSING" />
+                    </div>
                     <h1>{this.state.data['name']}</h1>
                     <h2>{this.state.data['viewers']}</h2>
                     <h2>{this.state.data['game']}</h2>
-                    <img src={this.state.data['preview']} width="500" height="200" alt="MISSING" />
                     {this.getFollowButton()}
-                </div>
-                <div>
-                    <button onClick={this.props.modalOpen}>Log in</button>
+                    <div>
+                        <img src={this.state.data['preview']} alt="MISSING" />
+                    </div>
                 </div>
             </div>
         );

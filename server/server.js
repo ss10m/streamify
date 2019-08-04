@@ -2,19 +2,20 @@ const express = require('express');
 const bodyParser = require('body-parser');
 var passport = require('passport');
 var session = require('express-session')
+const mongoose = require('mongoose');
 
 const app = express();
 const port = 5000;
 
-require('./db/mongoose.js');
-require('./db/User.js');
-require('./db/users.js');
-require('./db/index.js');
+require('./db_models/User.js');
+require('./db_models/users.js');
 
 require('./config/passport.js');
 
 const twitchify = require('./twitchify.js');
 const auth = require('./config/auth.js')
+
+mongoose.connect('mongodb://localhost:27017/twitchify',  { useNewUrlParser: true });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -26,7 +27,7 @@ app.use(passport.session());
 
 app.use((req, res, next) => {
     console.log('============== new request ===============')
-    console.log(req.url, res.user)
+    console.log(req.url)
     next()
 })
 
@@ -81,8 +82,6 @@ app.get('/api/streamer/:name', (req, res) => {
     });
 });
 
-
-
 app.post('/api/follow', auth.required, (req, res, next) => {
     var auth = JSON.parse(req.get('Authorization'));
     console.log(auth.username + ' is trying to follow ' + req.body['name']);
@@ -96,3 +95,9 @@ app.post('/api/unfollow', auth.required, (req, res, next) => {
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
+
+console.log('============ server  started =============')
+
+
+
+//"C:\Program Files\MongoDB\Server\4.0\bin\mongod.exe"

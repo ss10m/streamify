@@ -48,7 +48,6 @@ class TopStreamers extends Component {
     };
 
     render() {
-
         return (
             <div className="topStreamers list-group list-group-flush">
                 {this.sidebar()}

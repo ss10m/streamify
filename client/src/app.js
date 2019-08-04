@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import './components/app/app.css'
+import './app.css'
+
 import Streamer from './components/streamer/streamer';
 import Streamers from './components/streamers/streamers';
 import Add from './components/add/add';
@@ -9,8 +10,6 @@ import NavBar from './components/navbar/navbar.js';
 import TopStreamers from './components/topStreamers/topStreamers'
 import LoginModal from './components/navbar/loginmodal'
     
-
-
 class App extends Component {
     constructor(props) {
         super(props);
@@ -46,7 +45,6 @@ class App extends Component {
         let modalClose = () => this.setState({ modalShow: false });
         let modalOpen = () => this.setState({ modalShow: true });
         return (
-            
             <div>
                 <Route render={() => <NavBar session={this.state.session} onLogout={this.onLogout.bind(this)} modalOpen={modalOpen}/>} />
                 <LoginModal
@@ -63,7 +61,6 @@ class App extends Component {
                 </div>  
                 <div className='streamers'>
                     <Switch>
-                        {/*<Route key="home" path="/" render={(props) => <HomeScreen test={this.state.test} {...props} />}/>  */ }
                         <Route exact path='/' render={() => (
                                     <h1>home page!</h1>
                                 )}/>

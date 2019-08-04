@@ -6,9 +6,9 @@ div.topStreamers {
     overflow: auto;
   
     
-  }
+}
   
-  div.streamers {
+div.streamers {
     margin-left: 250px;
     position: fixed;
     height: 100%;
@@ -17,31 +17,31 @@ div.topStreamers {
     overflow: auto;
     z-index: 1;
     
-  }
+}
   
-  ::-webkit-scrollbar { 
+::-webkit-scrollbar { 
     display: none; 
-  }
+}
 
-  small {
+small {
     padding-left: 10 em;
     color: white;
-  }
+}
 
-  h3 {
+h3 {
     padding-left: 10 em;
     color: white;
-  }
+}
   
-  div.divHeading {
+div.divHeading {
     text-align: center;
     padding-top: 5px;
-  }
+}
   
-  hr.split {
+hr.split {
     background-color: grey;
     margin-top: 10px;
     margin-bottom: 1px;
     margin-left: 20px;
     margin-right: 20px;
-  }
+}
