@@ -50,9 +50,7 @@ app.post('/login', auth.optional, (req, res, next) => {
 
         console.log('failed to authenticate')
         return res.status(422).json({
-            errors: {
-                user: 'failed to authenticate',
-            },
+            error: 'Incorrect username or password!',
         });
   })(req, res, next);
 });
@@ -60,9 +58,7 @@ app.post('/login', auth.optional, (req, res, next) => {
 app.post('/register', auth.optional, (req, res, next) => {
     console.log(req.body)
     return res.status(422).json({
-        errors: {
-            user: 'failed to authenticate',
-        },
+        error: 'Failed to register',
     });
 });
 

@@ -11,10 +11,18 @@ class LogInModal extends React.Component {
             username: "",
             password: "",
             confirmPassword: "",
-            error: false,
+            error: '',
             selectedTab: 'login'
         };
 
+    }
+
+    componentWillReceiveProps() {
+        this.setState({ username: '',
+            password: '',
+            confirmPassword: '',
+            error : '',
+            selectedTab: 'login'});
     }
     
     validateFormLogin() {
@@ -29,7 +37,7 @@ class LogInModal extends React.Component {
     handleChange = event => {
         this.setState({
             [event.target.id]: event.target.value,
-            error: false
+            error: ''
         });
     }
   
@@ -46,18 +54,16 @@ class LogInModal extends React.Component {
                 password: this.state.password 
             }),
         })
-        .then(function(response) {
-            if (!response.ok) {
-                throw Error(response.statusText);
-            }
-            return response;    
+        .then(function(res) {
+            if (!res.ok) { throw res }
+            return res.json()   
         })
-        .then(res => res.json())
         .then(data =>  {
+            console.log('1')
             this.props.onHide();
             this.setState({ username: '',
                             password: '',
-                            error : false})
+                            error : ''})
             console.log(data)
             localStorage.setItem("jwt", JSON.stringify(data));
             this.props.updateSession(data.user);
@@ -65,17 +71,20 @@ class LogInModal extends React.Component {
             if(this.props.location.pathname !== '/streamers') {
                 this.props.history.push('/streamers')
             }
-        }).catch(response => {
-            console.log(response)
-            this.setState({ error : true})
-        });
+        }).catch(err => {
+            console.log('2')
+            err.text().then( errorMessage => {
+                console.log(JSON.parse(errorMessage).error)
+              this.setState({error: JSON.parse(errorMessage).error})
+            })
+          })
     }
 
     getAlert = () => {
         if(this.state.error) {
             return (
                 <div id="formAlert" className="alert hide">  
-                    <strong>Error!</strong> Invalid username or password
+                    <strong style={{color: 'red'}}>Error!</strong> {this.state.error}
                 </div>
             )
         }
@@ -85,7 +94,8 @@ class LogInModal extends React.Component {
         this.setState({ username: '',
                         password: '',
                         confirmPassword: '',
-                        error : false});
+                        error : '',
+                        selectedTab: 'login'});
         this.props.onHide();
     }
 
@@ -93,7 +103,7 @@ class LogInModal extends React.Component {
         this.setState({username: '',
                        password: '',
                        confirmPassword: '',
-                       error: false,
+                       error: '',
                        selectedTab: currentKey})
     }
 
@@ -178,7 +188,6 @@ class LogInModal extends React.Component {
     }
   
     render() {
-        console.log(this.state.selectedTab)
         return (
             <Modal
                 {...this.props}
