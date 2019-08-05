@@ -11,17 +11,16 @@ a:hover.topStreamers {
     margin: 0; 
     min-width: 250px;
     width: 100%;
- }
-
- h7.names {
+}
+ 
+h7.names {
     padding-left: 10 em;
     color: white;
- }
+}
 
-
- small {    
+small {
     color: text-light;
- }
+}
 
 img.topStreamers {
     border-radius: 50%;

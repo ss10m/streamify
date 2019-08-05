@@ -43,13 +43,15 @@ class NavBar extends Component {
         } else {
             return (
                 <ButtonToolbar>
-                    <button 
-                        type="button"
-                        className="btn btn-outline-light my-2 my-sm-0"
-                        onClick={this.handleClick}
-                    >
-                        Log out
-                    </button>
+                        <NavDropdown name={
+                                <span><img src='https://static-cdn.jtvnw.net/jtv_user_pictures/7ed5e0c6-0191-4eef-8328-4af6e4ea5318-profile_image-300x300.png' width="30" height="30" alt="MISSING" /> {this.props.session.username}</span>
+        
+                        }>
+                            <li>{this.props.session.username}</li>
+                            <li><Link to={'/'} className="nav-link text-primary"> Profile </Link></li>
+                            <div className="dropdown-divider"></div>
+                            <li onClick={this.handleClick}><li><Link className="nav-link text-primary"> Log out </Link></li></li>
+                        </NavDropdown>
                 </ButtonToolbar>
             )
         }
@@ -69,12 +71,7 @@ class NavBar extends Component {
                         <li><Link to={'/add'} className="nav-link"> Add </Link></li>
                         <li><Link to={'/streamers'} className="nav-link"> Followed </Link></li>
                         
-                        <NavDropdown name="Dropdown">
-                            <a className="dropdown-item" href="/">Action</a>
-                            <a className="dropdown-item" href="/">Another action</a>
-                            <div className="dropdown-divider"></div>
-                            <a className="dropdown-item" href="/">Something else here</a>
-                        </NavDropdown>
+
                         
                     </ul>
 
