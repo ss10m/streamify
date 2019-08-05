@@ -205,6 +205,8 @@ function getChannel(isFollowed, name, callback) {
 
 function getTopStreamers() {
 
+    console.log('getting top streamers')
+
     var options = {
         method: 'GET',
         url: 'https://api.twitch.tv/kraken/streams?limit=20',
@@ -241,7 +243,7 @@ function getTopStreamers() {
 
 function startTopStreamers() {
     getTopStreamers();
-    setInterval(getTopStreamers, 30000)
+    setInterval(getTopStreamers, 60000)
 }
 
 startTopStreamers()

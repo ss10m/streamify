@@ -9,44 +9,92 @@ class LogInModal extends React.Component {
   
         this.state = {
             username: "",
-            password: ""
+            password: "",
+            confirmPassword: "",
+            error: false,
+            selectedTab: 'login'
         };
+
     }
     
-    validateForm() {
+    validateFormLogin() {
         return this.state.username.length > 0 && this.state.password.length > 0;
+    }
+    
+    validateFormRegister() {
+        return this.state.username.length > 0 && this.state.password.length > 0 &&
+            this.state.confirmPassword.length > 0 && this.state.password === this.state.confirmPassword;
     }
   
     handleChange = event => {
         this.setState({
-            [event.target.id]: event.target.value
+            [event.target.id]: event.target.value,
+            error: false
         });
     }
   
     handleSubmit = event => {
-        event.preventDefault();
+        event.preventDefault(); // Prevent the form from submitting
 
-        this.props.onHide();
-      
-        fetch('/login', {
+        fetch('/' + this.state.selectedTab, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ 
-            username: this.state.username,
-            password: this.state.password 
+                username: this.state.username,
+                password: this.state.password 
             }),
+        })
+        .then(function(response) {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response;    
         })
         .then(res => res.json())
         .then(data =>  {
+            this.props.onHide();
+            this.setState({ username: '',
+                            password: '',
+                            error : false})
+            console.log(data)
             localStorage.setItem("jwt", JSON.stringify(data));
             this.props.updateSession(data.user);
         
             if(this.props.location.pathname !== '/streamers') {
                 this.props.history.push('/streamers')
             }
+        }).catch(response => {
+            console.log(response)
+            this.setState({ error : true})
         });
+    }
+
+    getAlert = () => {
+        if(this.state.error) {
+            return (
+                <div id="formAlert" className="alert hide">  
+                    <strong>Error!</strong> Invalid username or password
+                </div>
+            )
+        }
+    }
+
+    hideModal = () => {
+        this.setState({ username: '',
+                        password: '',
+                        confirmPassword: '',
+                        error : false});
+        this.props.onHide();
+    }
+
+    handleTabChange = (currentKey) => {
+        this.setState({username: '',
+                       password: '',
+                       confirmPassword: '',
+                       error: false,
+                       selectedTab: currentKey})
     }
 
     getLoginForm() {
@@ -70,10 +118,11 @@ class LogInModal extends React.Component {
                             onChange={this.handleChange}
                         />
                     </FormGroup>
+                    {this.getAlert()}
                     <Button
                         size="lg"
                         block
-                        disabled={!this.validateForm()}
+                        disabled={!this.validateFormLogin()}
                         type="submit"
                         variant="dark"
                     >
@@ -104,17 +153,20 @@ class LogInModal extends React.Component {
                             type="password"
                             onChange={this.handleChange}
                         />
-                        <FormLabel>Confirm password</FormLabel>
+                    </FormGroup>
+                    <FormGroup controlId="confirmPassword">
+                        <FormLabel>Confirm Password</FormLabel>
                         <FormControl
-                            value={this.state.password}
+                            value={this.state.confirmPassword}
                             type="password"
                             onChange={this.handleChange}
                         />
                     </FormGroup>
+                    {this.getAlert()}
                     <Button
                         size="lg"
                         block
-                        disabled={!this.validateForm()}
+                        disabled={!this.validateFormRegister()}
                         type="submit"
                         variant="dark"
                     >
@@ -126,6 +178,7 @@ class LogInModal extends React.Component {
     }
   
     render() {
+        console.log(this.state.selectedTab)
         return (
             <Modal
                 {...this.props}
@@ -139,17 +192,17 @@ class LogInModal extends React.Component {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Tabs defaultActiveKey="login" id="uncontrolled-tab-example">
-                    <Tab eventKey="login" title="Login">
-                        {this.getLoginForm()}
-                    </Tab>
-                    <Tab eventKey="register" title="Register">
-                        {this.getRegisterForm()}
-                    </Tab>
+                    <Tabs defaultActiveKey="login" id="uncontrolled-tab-example" onSelect={this.handleTabChange}>
+                        <Tab eventKey="login" title="Login">
+                            {this.getLoginForm()}
+                        </Tab>
+                        <Tab eventKey="register" title="Register">
+                            {this.getRegisterForm()}
+                        </Tab>
                     </Tabs>
                 </Modal.Body>
                 <Modal.Footer className='logInModal'>
-                    <button className="btn btn-outline-light my-2 my-sm-0" onClick={this.props.onHide}>Close</button>
+                    <button className="btn btn-outline-light my-2 my-sm-0" onClick={this.hideModal}>Close</button>
                 </Modal.Footer>
     
             </Modal>

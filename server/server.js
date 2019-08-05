@@ -49,8 +49,21 @@ app.post('/login', auth.optional, (req, res, next) => {
         }
 
         console.log('failed to authenticate')
-        res.redirect('/')
+        return res.status(422).json({
+            errors: {
+                user: 'failed to authenticate',
+            },
+        });
   })(req, res, next);
+});
+
+app.post('/register', auth.optional, (req, res, next) => {
+    console.log(req.body)
+    return res.status(422).json({
+        errors: {
+            user: 'failed to authenticate',
+        },
+    });
 });
 
 app.post('/logout', auth.optional, (req, res, next) => {
