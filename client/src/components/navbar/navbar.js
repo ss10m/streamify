@@ -8,6 +8,17 @@ import { NavDropdown } from './navComponents.js';
 
 
 class NavBar extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            navCollapsed: true
+        };
+    }
+
+    toggleNav = () => {
+        console.log('toggleNav')
+        this.setState({ navCollapsed: !this.state.navCollapsed })
+      }
 
     handleClick = event => {
         event.preventDefault();
@@ -30,7 +41,7 @@ class NavBar extends Component {
 
     getButtons() {
         if(!this.props.session) {
-        return(
+            return(
                 <ButtonToolbar>
                     <button 
                         className="btn btn-outline-light my-2 my-sm-0" 
@@ -61,10 +72,10 @@ class NavBar extends Component {
         return (
             <nav className="navbar-custom navbar navbar-custom navbar-expand-lg navbar-dark">
                 <Link to={'/'} className="navbar-brand"> <b>Twitchify</b> </Link>
-                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button onClick={this.toggleNav} className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                <div className={(this.state.navCollapsed ? 'collapse' : '') + ' navbar-collapse'}>
                     <ul className="navbar-nav mr-auto">
                         
                         <li><Link to={'/'} className="nav-link"> Home </Link></li>
@@ -80,9 +91,19 @@ class NavBar extends Component {
                         <button className="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
                     </form>
 
-                    <ul className="navbar-nav ml-auto">
-                        {this.getButtons()}
-                    </ul>
+
+                    {this.state.navCollapsed ? (
+                        <ul className="navbar-nav ml-auto">
+                            {this.getButtons()}
+                        </ul>
+                    ) : (
+                        <ul className="navbar-nav mr-auto">
+                            <li><Link to={'/'} className="nav-link"> Home </Link></li>
+                            <li><Link to={'/add'} className="nav-link"> Add </Link></li>
+                            <li><Link to={'/streamers'} className="nav-link"> Followed </Link></li>  
+                            <li onClick={this.handleClick}><li><Link className="nav-link text-primary"> Log out </Link></li></li>
+                        </ul>
+                    )}
                 </div>
             </nav>
         )
