@@ -16,6 +16,7 @@ const twitchify = require('./twitchify.js');
 const auth = require('./config/auth.js')
 
 mongoose.connect('mongodb://localhost:27017/twitchify',  { useNewUrlParser: true });
+const User = mongoose.model('User');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -56,11 +57,91 @@ app.post('/login', auth.optional, (req, res, next) => {
 });
 
 app.post('/register', auth.optional, (req, res, next) => {
-    console.log(req.body)
-    return res.status(422).json({
-        error: 'Failed to register',
+    const user = req.body;
+
+    if(!user.username) {
+        return res.status(422).json({
+            error: 'Username is required!',
+        });
+    }
+    
+    if(!user.password) {
+        return res.status(422).json({
+            error: 'Password is required!',
+        });
+    }
+
+    checkIfUsernameExists(user, (err, user) => {
+        console.log(err, user)
+        if(err) {
+            return res.status(422).json({
+                error: err
+            });
+        }
+
+        const newUser = new User(user);
+        newUser.setPassword(user.password)
+        newUser.save(function(err, createdUser) {
+            if(err) {
+                return res.status(422).json({
+                    error: 'Error while registering user!',
+                });
+            }
+            
+            const retUser = createdUser;
+            retUser.token = retUser.generateJWT();
+            console.log('registered')
+            return res.json({ user: retUser.toAuthJSON() });
+
+         });
+
+
+            /*
+        return NewUser.save()
+            .then(
+                console.log(username),
+                //user doesnt exist yet
+                User.findOne({ username })
+                    .then((userFound) => {
+                        if(!userFound) {
+                            return res.status(422).json({
+                                error: 'Error while registering user!',
+                            });
+                        }
+
+                        const user = verifiedUser;
+                        user.token = verifiedUser.generateJWT();
+                        console.log('authenticated')
+                        return res.json({ user: user.toAuthJSON() });
+                    })
+            );
+
+            */
+
+
+                    //.then(() => res.status(422).json({
+                    //    error: 'User was registered!',
+                    //}));
     });
+
+
+    //return res.status(422).json({
+    //    error: 'Failed to register',
+    //});
 });
+
+
+function checkIfUsernameExists(user, callback) {
+    var username = user.username;
+    User.findOne({ username })
+        .then((userFound) => {
+            if(!userFound) {
+                callback(false, user);
+            } else {
+                callback('Username is taken!', user);
+            }
+        });
+}
 
 app.post('/logout', auth.optional, (req, res, next) => {
         console.log('logout');

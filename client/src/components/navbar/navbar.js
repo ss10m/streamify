@@ -91,19 +91,9 @@ class NavBar extends Component {
                         <button className="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
                     </form>
 
-
-                    {this.state.navCollapsed ? (
-                        <ul className="navbar-nav ml-auto">
-                            {this.getButtons()}
-                        </ul>
-                    ) : (
-                        <ul className="navbar-nav mr-auto">
-                            <li><Link to={'/'} className="nav-link"> Home </Link></li>
-                            <li><Link to={'/add'} className="nav-link"> Add </Link></li>
-                            <li><Link to={'/streamers'} className="nav-link"> Followed </Link></li>  
-                            <li onClick={this.handleClick}><li><Link className="nav-link text-primary"> Log out </Link></li></li>
-                        </ul>
-                    )}
+                    <ul className="navbar-nav ml-auto">
+                        {this.getButtons()}
+                    </ul>
                 </div>
             </nav>
         )
