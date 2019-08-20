@@ -168,9 +168,42 @@ function getStreamerInfo(isFollowed, name, callback) {
         streamerData['preview'] = body['stream']['preview']['large'];
         streamerData['profile_banner'] = body['stream']['channel']['profile_banner'];
         streamerData['isFollowed'] = Boolean(isFollowed).toString();
-        callback(streamerData);
+    
+        getRecentGamesPlayed(name, callback, streamerData);
 
     });
+
+    
+
+
+}
+
+function getRecentGamesPlayed(name, callback, streamerData) {
+
+    var options = {
+        method: 'GET',
+        url: "https://api.twitch.tv/kraken/channels/" + name + "/videos?broadcast_type=archive&limit=50",
+        //qs: { offset: '0', limit: '2' },
+        headers:
+        {
+            'Client-ID': config.clientid
+        }
+    };
+
+    request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+        var body = JSON.parse(body);
+        var videos = body.videos;
+        console.log(videos.length)
+        var recentGames = new Set();
+        for(var [id, video] of Object.entries(videos)) {
+            recentGames.add(video.game)
+        }
+        console.log(recentGames)
+        streamerData['recentGames'] = Array.from(recentGames);
+        callback(streamerData);
+    });
+
 }
 
 function getChannel(isFollowed, name, callback) {
@@ -198,7 +231,7 @@ function getChannel(isFollowed, name, callback) {
         streamerData['game'] = 'Offline';
         streamerData['profile_banner'] = body['profile_banner'];
         streamerData['isFollowed'] = Boolean(isFollowed).toString();;
-        callback(streamerData);
+        getRecentGamesPlayed(name, callback, streamerData);
 
     });
 }

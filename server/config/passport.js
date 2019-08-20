@@ -10,7 +10,7 @@ passport.use(new Strategy(
 			if(!user || !user.validatePassword(password)) {
 				console.log(user, password)
 				console.log('email or password is invalid')
-				return cb(null, false, { errors: { 'email or password': 'is invalid' } });
+				return cb(null, false);
 			}
 			return cb(null, user);
 		}).catch(cb);

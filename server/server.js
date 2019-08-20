@@ -37,7 +37,7 @@ app.use((req, res, next) => {
 
 app.post('/login', auth.optional, (req, res, next) => {
     console.log(req.body)
-    return passport.authenticate('local', { session: false }, (err, verifiedUser, info) => {
+    return passport.authenticate('local', { session: false }, (err, verifiedUser) => {
         if(err) {
             console.log(err)
         }
@@ -94,40 +94,7 @@ app.post('/register', auth.optional, (req, res, next) => {
             return res.json({ user: retUser.toAuthJSON() });
 
          });
-
-
-            /*
-        return NewUser.save()
-            .then(
-                console.log(username),
-                //user doesnt exist yet
-                User.findOne({ username })
-                    .then((userFound) => {
-                        if(!userFound) {
-                            return res.status(422).json({
-                                error: 'Error while registering user!',
-                            });
-                        }
-
-                        const user = verifiedUser;
-                        user.token = verifiedUser.generateJWT();
-                        console.log('authenticated')
-                        return res.json({ user: user.toAuthJSON() });
-                    })
-            );
-
-            */
-
-
-                    //.then(() => res.status(422).json({
-                    //    error: 'User was registered!',
-                    //}));
     });
-
-
-    //return res.status(422).json({
-    //    error: 'Failed to register',
-    //});
 });
 
 
