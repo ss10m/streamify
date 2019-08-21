@@ -193,6 +193,7 @@ function getRecentGamesPlayed(name, callback, streamerData) {
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
         var body = JSON.parse(body);
+        console.log(body)
         var videos = body.videos;
         console.log(videos.length)
         var recentGames = new Set();
@@ -200,8 +201,9 @@ function getRecentGamesPlayed(name, callback, streamerData) {
             recentGames.add(video.game)
         }
         console.log(recentGames)
-        streamerData['recentGames'] = Array.from(recentGames);
-        callback(streamerData);
+
+        var recentGamesArray = Array.from(recentGames)
+        getRecentGamesBoxArt(recentGamesArray, callback, streamerData)
     });
 
 }
@@ -230,7 +232,7 @@ function getChannel(isFollowed, name, callback) {
         streamerData['viewers'] = '0';
         streamerData['game'] = 'Offline';
         streamerData['profile_banner'] = body['profile_banner'];
-        streamerData['isFollowed'] = Boolean(isFollowed).toString();;
+        streamerData['isFollowed'] = Boolean(isFollowed).toString();
         getRecentGamesPlayed(name, callback, streamerData);
 
     });
@@ -271,6 +273,44 @@ function getTopStreamers() {
 
             topStreamers[key] = streamerData;
         }
+    });
+}
+
+function getRecentGamesBoxArt(recentGames, callback, streamerData) {
+
+    console.log(recentGames.length)
+
+    var requestParameters = '';
+
+    Array.from(recentGames).forEach((recentGame) => {
+        requestParameters += '&name=' + recentGame
+    })
+
+    requestParameters = requestParameters.substr(1);
+
+
+    var options = {
+        method: 'GET',
+        url: "https://api.twitch.tv/helix/games?" + requestParameters,
+        //qs: { offset: '0', limit: '2' },
+        headers:
+        {
+            'Client-ID': config.clientid
+        }
+    };
+
+    request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+        body = body.replace(/{width}/g, '200')
+        body = body.replace(/{height}/g, '300')
+        console.log(body)
+        var body = JSON.parse(body);
+
+        console.log(body.data)
+        streamerData['recentGames'] = JSON.stringify(body.data);
+
+        callback(streamerData);
+
     });
 }
 

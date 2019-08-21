@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import defaultPreview from '../../images/preview.jpg'
+import './streamer.css';
 
 class Streamer extends Component {
     constructor(props) {
@@ -91,30 +92,30 @@ class Streamer extends Component {
     getRecentGames() {
         var recentGames = []
         var recent =  this.state.data['recentGames'];
-        for(var a in recent) {
-            recentGames.push(recent[a])
+
+        if(recent) {
+            recent = JSON.parse(this.state.data['recentGames']);
+            recent.map(recentGame => {
+                recentGames.push(recentGame)
+            })
         }
-        recentGames.map(streamer =>
-            console.log(streamer)
-        )
 
         return (
-            <ul>
-                {recentGames.map(recentGame =>
-                    <li>
-                        <p>{recentGame}</p>
-                    </li>
-                )}
-            </ul>
+            <div>
+                <div class="row">
+                    {recentGames.map(recentGame =>
+                        <div className="block">
+                            {recentGame['name']}
+                            <img src={recentGame['box_art_url']} alt="MISSING" />
+                        </div>
+                    )}
+                </div>
+            </div>
         )
     }
 
+
     render() {
-        
-
-
-   
-
         return (
             <div>
                 <div>
@@ -136,7 +137,9 @@ class Streamer extends Component {
                         }
                         
                     </div>
-                    {this.getRecentGames()}
+                    <div>
+                        {this.getRecentGames()}
+                    </div>
                 </div>
             </div>
         );
