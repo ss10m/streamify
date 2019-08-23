@@ -90,7 +90,8 @@ function followStreamer(username, nameToFollow) {
 
     var options = {
         method: 'GET',
-        url: 'https://api.twitch.tv/kraken/channels/' + nameToFollow,
+        //url: 'https://api.twitch.tv/kraken/channels/' + nameToFollow,
+        url: 'https://api.twitch.tv/helix/users?login=' + nameToFollow,
         //qs: { offset: '0', limit: '2' },
         headers:
         {
@@ -100,11 +101,12 @@ function followStreamer(username, nameToFollow) {
 
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
-        var body = JSON.parse(body);
+        body = JSON.parse(body).data[0];
 
         var streamerData = {};
-        streamerData['name'] = body['name'];
-        streamerData['logo'] = body['logo'];
+        streamerData['id'] = body['id'];
+        streamerData['name'] = body['login'];
+        streamerData['logo'] = body['profile_image_url'];
         streamerData['display_name'] = body['display_name'];
 
         User.findOne({username: username}, 
@@ -112,7 +114,7 @@ function followStreamer(username, nameToFollow) {
                 if(streamer) {
                     streamer['streamers'].push(streamerData);
                     streamer.save();
-                }
+               }
             });
     });
 }
@@ -142,7 +144,7 @@ function checkIfFollowing(auth, name, callback) {
 function getStreamerInfo(isFollowed, name, callback) {
     var options = {
         method: 'GET',
-        url: 'https://api.twitch.tv/kraken/streams/' + name,
+        url: 'https://api.twitch.tv/helix/users?login=' + name,
         //qs: { offset: '0', limit: '2' },
         headers:
         {
@@ -152,37 +154,29 @@ function getStreamerInfo(isFollowed, name, callback) {
 
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
-        var body = JSON.parse(body);
-
-        if(!body['stream']) {
-            getChannel(isFollowed, name, callback);
-            return;
-        }
+        body = JSON.parse(body).data[0];
 
         var streamerData = {};
-        streamerData['logo'] = body['stream']['channel']['logo'];
-        streamerData['name'] = body['stream']['channel']['name'];
-        streamerData['display_name'] = body['stream']['channel']['display_name'];
-        streamerData['viewers'] = body['stream']['viewers'];
-        streamerData['game'] = body['stream']['game'];
-        streamerData['preview'] = body['stream']['preview']['large'];
-        streamerData['profile_banner'] = body['stream']['channel']['profile_banner'];
+        
+        streamerData['id'] = body['id'];
+        streamerData['logo'] = body['profile_image_url'];
+        streamerData['name'] = body['login'];
+        streamerData['display_name'] = body['display_name'];
+        streamerData['description'] = body['description'];
+        streamerData['preview'] = body['offline_image_url'];
         streamerData['isFollowed'] = Boolean(isFollowed).toString();
     
-        getRecentGamesPlayed(name, callback, streamerData);
+        getStream(name, streamerData, callback)
 
     });
-
-    
-
-
 }
 
-function getRecentGamesPlayed(name, callback, streamerData) {
+function getStream(name, streamerData, callback) {
+    console.log(name);
 
     var options = {
         method: 'GET',
-        url: "https://api.twitch.tv/kraken/channels/" + name + "/videos?broadcast_type=archive&limit=50",
+        url: 'https://api.twitch.tv/helix/streams?user_login=' + name,
         //qs: { offset: '0', limit: '2' },
         headers:
         {
@@ -192,13 +186,49 @@ function getRecentGamesPlayed(name, callback, streamerData) {
 
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
-        var body = JSON.parse(body);
+        body = JSON.parse(body).data[0];
+
         console.log(body)
+
+
+        if(body) {
+            streamerData['viewers'] = body['viewer_count'];
+            streamerData['game'] = body['game_id'];
+            streamerData['title'] = body['title'];
+            var thumbnail_url = body['thumbnail_url'];
+            thumbnail_url = thumbnail_url.replace(/{width}/g, '700')
+            thumbnail_url = thumbnail_url.replace(/{height}/g, '400')
+            streamerData['preview'] = thumbnail_url;
+        } else {
+            streamerData['viewers'] = 0;
+            streamerData['game'] = 'Offline';
+            streamerData['title'] = 'Stream is currently offline';
+        }
+
+        getRecentGamesPlayed(name, callback, streamerData);
+
+    });
+}
+
+function getRecentGamesPlayed(name, callback, streamerData) {
+    console.log(streamerData['id'])
+    var options = {
+        method: 'GET',
+        url: "https://api.twitch.tv/kraken/channels/" + streamerData['id'] + "/videos?broadcast_type=archive&limit=50",
+        headers:
+        {
+            'Client-ID': config.clientid,
+            'Accept': 'application/vnd.twitchtv.v5+json'
+        }
+    };
+
+    request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+        body = JSON.parse(body);
         var videos = body.videos;
-        console.log(videos.length)
         var recentGames = new Set();
         for(var [id, video] of Object.entries(videos)) {
-            recentGames.add(video.game)
+            recentGames.add(video.game.toLowerCase())
         }
         console.log(recentGames)
 
@@ -206,36 +236,6 @@ function getRecentGamesPlayed(name, callback, streamerData) {
         getRecentGamesBoxArt(recentGamesArray, callback, streamerData)
     });
 
-}
-
-function getChannel(isFollowed, name, callback) {
-    console.log(name);
-
-    var options = {
-        method: 'GET',
-        url: 'https://api.twitch.tv/kraken/channels/' + name,
-        //qs: { offset: '0', limit: '2' },
-        headers:
-        {
-            'Client-ID': config.clientid
-        }
-    };
-
-    request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-        var body = JSON.parse(body);
-
-        var streamerData = {};
-        streamerData['logo'] = body['logo'];
-        streamerData['name'] = body['name'];
-        streamerData['display_name'] = body['display_name'];
-        streamerData['viewers'] = '0';
-        streamerData['game'] = 'Offline';
-        streamerData['profile_banner'] = body['profile_banner'];
-        streamerData['isFollowed'] = Boolean(isFollowed).toString();
-        getRecentGamesPlayed(name, callback, streamerData);
-
-    });
 }
 
 function getTopStreamers() {
@@ -255,7 +255,7 @@ function getTopStreamers() {
 
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
-        var body = JSON.parse(body)['streams'];
+        body = JSON.parse(body)['streams'];
 
         for([key, stream] of Object.entries(body)) {
             var streamerData = {};
@@ -303,10 +303,14 @@ function getRecentGamesBoxArt(recentGames, callback, streamerData) {
         if (error) throw new Error(error);
         body = body.replace(/{width}/g, '200')
         body = body.replace(/{height}/g, '300')
-        console.log(body)
-        var body = JSON.parse(body);
+        body = JSON.parse(body);
 
-        console.log(body.data)
+        body.data.map(boxArt => {
+            if(boxArt.name.length > 20) {
+                boxArt.name = boxArt.name.substring(0,20) + '...';
+            }
+        })
+
         streamerData['recentGames'] = JSON.stringify(body.data);
 
         callback(streamerData);

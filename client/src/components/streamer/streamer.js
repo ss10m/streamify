@@ -7,7 +7,8 @@ class Streamer extends Component {
         super(props);
         this.state = {
             name: this.props.match.params.id,
-            data: {}
+            data: {},
+            followedGames: []
         };
 
 
@@ -26,6 +27,7 @@ class Streamer extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if(prevProps.match.params.id !== this.state.name){
+            this.setState({ followedGames: [] });
             const jwt = this.props.session;
             fetch("/api/streamer/" + this.state.name, {
                 headers: {
@@ -71,6 +73,11 @@ class Streamer extends Component {
         });
     }
 
+    toggleGameFollow = gameName => {
+        var newArray = [...this.state.followedGames, gameName]
+        this.setState({ followedGames: newArray});
+    }
+    
     getFollowButton() {
         // check if logged in
 
@@ -104,7 +111,7 @@ class Streamer extends Component {
             <div>
                 <div class="row">
                     {recentGames.map(recentGame =>
-                        <div className="block">
+                        <div className="block"  onClick={() => this.toggleGameFollow(recentGame['name'])}>
                             {recentGame['name']}
                             <img src={recentGame['box_art_url']} alt="MISSING" />
                         </div>
@@ -116,26 +123,31 @@ class Streamer extends Component {
 
 
     render() {
+
+        const followedGames = this.state.followedGames.map((name) => {
+            return (
+                <li>
+                    {name}
+                </li>
+            )
+        })
+
         return (
             <div>
                 <div>
                     <div>
                         <img src={this.state.data['logo']} width="200" height="200" alt="MISSING" />
-                        <img src={this.state.data['profile_banner']} width="700" height="200" alt="MISSING" />
+                        <h1>{this.state.data['display_name']}</h1>
+                        <p>{this.state.data['description']}</p>
+
                     </div>
-                    <h1>{this.state.data['name']}</h1>
+                    <p>{this.state.data['title']}</p>
                     <h2>{this.state.data['viewers']}</h2>
                     <h2>{this.state.data['game']}</h2>
                     {this.getFollowButton()}
+                    <ol>{followedGames}</ol>
                     <div>
-                        {this.state.data['preview'] ? (
-                            <img src={this.state.data['preview']} alt="MISSING" />
-                        ) : (
-                            <img src={defaultPreview} alt="MISSING" />
-                        )
-
-                        }
-                        
+                        <img src={this.state.data['preview']} width="700" height="400" alt="MISSING" />
                     </div>
                     <div>
                         {this.getRecentGames()}
