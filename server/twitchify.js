@@ -286,6 +286,8 @@ function getRecentGamesBoxArt(recentGames, callback, streamerData) {
         requestParameters += '&name=' + recentGame
     })
 
+    requestParameters += '&id=' + streamerData['game']
+
     requestParameters = requestParameters.substr(1);
 
 
@@ -305,7 +307,13 @@ function getRecentGamesBoxArt(recentGames, callback, streamerData) {
         body = body.replace(/{height}/g, '300')
         body = JSON.parse(body);
 
-        body.data.map(boxArt => {
+
+        streamerData['game'] = body.data[0]['name'];
+
+        console.log(body)
+        var boxArts = [body.data.shift()]
+
+        boxArts.map(boxArt => {
             if(boxArt.name.length > 20) {
                 boxArt.name = boxArt.name.substring(0,20) + '...';
             }

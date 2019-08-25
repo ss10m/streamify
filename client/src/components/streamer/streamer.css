@@ -1,5 +1,9 @@
+.roundedImg {
+    border-radius: 10px;
+}
+
 .row {
-    display: flex;
+    display: flex;  
 }
 
 .block {
@@ -8,4 +12,28 @@
     color: white;
     text-align: center;
     margin: 1em;
+}
+
+.innerbox {
+    height: 200px;
+    border: 1px solid #122941; 
+    padding: 10px;
+    overflow: scroll;
+}
+
+.flexContainer {
+    display: flex;
+} 
+  
+.left {
+    flex-basis : 0%;
+}
+  
+.right {
+    flex-basis : 50%;
+}
+
+.main {
+   width: 87vw;
+   padding : 10px
 }

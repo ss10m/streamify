@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import defaultPreview from '../../images/preview.jpg'
 import './streamer.css';
 
 class Streamer extends Component {
@@ -109,9 +108,9 @@ class Streamer extends Component {
 
         return (
             <div>
-                <div class="row">
+                <div className="row">
                     {recentGames.map(recentGame =>
-                        <div className="block"  onClick={() => this.toggleGameFollow(recentGame['name'])}>
+                        <div className="block"  key={recentGame['name']} onClick={() => this.toggleGameFollow(recentGame['name'])}>
                             {recentGame['name']}
                             <img src={recentGame['box_art_url']} alt="MISSING" />
                         </div>
@@ -126,32 +125,43 @@ class Streamer extends Component {
 
         const followedGames = this.state.followedGames.map((name) => {
             return (
-                <li>
+                <div>
                     {name}
-                </li>
+                </div>
             )
         })
 
         return (
-            <div>
-                <div>
-                    <div>
+            <div className="main">
+                <div className="flexContainer">
+                    <div className="left">
                         <img src={this.state.data['logo']} width="200" height="200" alt="MISSING" />
+                    </div>
+
+                    <div className="right">
                         <h1>{this.state.data['display_name']}</h1>
                         <p>{this.state.data['description']}</p>
+                        {this.getFollowButton()}
+                    </div>
+                    
+                    <div className="right innerbox">
+                        {followedGames}
+                    </div>
 
-                    </div>
-                    <p>{this.state.data['title']}</p>
-                    <h2>{this.state.data['viewers']}</h2>
-                    <h2>{this.state.data['game']}</h2>
-                    {this.getFollowButton()}
-                    <ol>{followedGames}</ol>
-                    <div>
-                        <img src={this.state.data['preview']} width="700" height="400" alt="MISSING" />
-                    </div>
-                    <div>
-                        {this.getRecentGames()}
-                    </div>
+
+
+                </div>
+
+                <p>{this.state.data['title']}</p>
+                <p>{this.state.data['viewers']}</p>
+                <p>{this.state.data['game']}</p>
+
+
+                <div>
+                    <img src={this.state.data['preview']} width="450" height="250" className="roundedImg" alt="MISSING" />
+                </div>
+                <div>
+                    {this.getRecentGames()}
                 </div>
             </div>
         );
