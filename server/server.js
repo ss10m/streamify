@@ -151,6 +151,11 @@ app.post('/api/unfollow', auth.required, (req, res, next) => {
     twitchify.unfollowStreamer(auth.username, req.body['name']);
 });
 
+app.post('/api/followGame', auth.required, (req, res, next) => {
+    var auth = JSON.parse(req.get('Authorization'));
+    console.log(auth.username + ' is trying to follow ' + req.body['gameName']  + " for " + req.body['name'] );
+});
+
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
 console.log('============ server  started =============')

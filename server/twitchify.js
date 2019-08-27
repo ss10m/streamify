@@ -283,7 +283,10 @@ function getRecentGamesBoxArt(recentGames, callback, streamerData) {
     var requestParameters = '';
 
     Array.from(recentGames).forEach((recentGame) => {
-        requestParameters += '&name=' + recentGame
+        var alphaNumeric = /^[a-z\d\-_\s\'\!\:\+]+$/i;
+        if(recentGame.match(alphaNumeric)) {
+            requestParameters += '&name=' + recentGame
+        }
     })
 
     requestParameters += '&id=' + streamerData['game']

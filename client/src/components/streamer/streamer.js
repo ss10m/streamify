@@ -73,8 +73,32 @@ class Streamer extends Component {
     }
 
     toggleGameFollow = gameName => {
-        var newArray = [...this.state.followedGames, gameName]
+        if(!this.props.session) {
+            this.props.modalOpen();
+            return;
+        }
+        var unique = !this.state.followedGames.includes(gameName)
+
+        var newArray = [];
+        if(unique) {
+            newArray = [...this.state.followedGames, gameName]
+        } else {
+            newArray = [...this.state.followedGames]
+            var index = newArray.indexOf(gameName)
+            newArray.splice(index, 1);
+        }
         this.setState({ followedGames: newArray});
+
+        fetch('/api/followGame', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: JSON.stringify(this.props.session)
+            },
+            body: JSON.stringify({ name: this.state.data['name'],
+                                   gameName: gameName})
+        })
+        
     }
     
     getFollowButton() {
