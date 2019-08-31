@@ -15,7 +15,7 @@ const User = mongoose.model('User');
 
 function getStreamers(username, callback) {
     console.log(username);
-    console.log("===IN ADD STREAMERS===");
+    console.log("===IN GET STREAMERS===");
 
     User.findOne(
         {username: username}, 

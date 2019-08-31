@@ -1,6 +1,30 @@
+div.topStreamers {
+    background-color: #122941;
+    position: fixed;
+    width: 250px;
+    height: 100%;
+    overflow-y: scroll;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE 10+ */
+}
+
+div.topStreamersMini {
+    background-color: #122941;
+    position: fixed;
+    width: 50px;
+    height: 100%;
+    overflow-y: scroll;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE 10+ */
+}
+
 a.topStreamers { 
     background-color: #122941;
+}
 
+a.topStreamersMini { 
+    background-color: #122941;
+    padding: 5px;
 }
 
 a:hover.topStreamers {
@@ -12,20 +36,17 @@ a:focus.topStreamers {
 }
 
 .list-group { 
-    margin: 0; 
-    min-width: 250px;
+    width: 100%;
+}
+
+.listMini { 
     width: 100%;
 }
  
-h7.names {
-    padding-left: 10 em;
-    color: white;
-}
-
 small {
     color: text-light;
 }
 
-img.topStreamers {
+img.topStreamersImg {
     border-radius: 50%;
 }

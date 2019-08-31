@@ -125,7 +125,7 @@ class Streamer extends Component {
 
         if(recent) {
             recent = JSON.parse(this.state.data['recentGames']);
-            recent.map(recentGame => {
+            recent.forEach(recentGame => {
                 recentGames.push(recentGame)
             })
         }

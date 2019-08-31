@@ -1,15 +1,16 @@
-div.topStreamers {
-    background-color: #122941;
-    position: fixed;
-    width: 250px;
-    height: 100%;
-    overflow: auto;
-  
-    
-}
-  
 div.streamers {
     margin-left: 250px;
+    position: fixed;
+    height: 100%;
+    width: auto;
+    position: fixed;
+    overflow: auto;
+    z-index: 1;
+    
+}
+
+div.streamers2 {
+    margin-left: 50px;
     position: fixed;
     height: 100%;
     width: auto;

@@ -15,9 +15,19 @@ class App extends Component {
         super(props);
         this.state = {
             session: '',
-            modalShow: false 
+            modalShow: false,
+            winWidth: window.innerWidth
         };
     }
+
+    componentDidMount() {
+        window.addEventListener("resize", this.handleResize);
+    }
+
+    handleResize = event => {
+        this.setState({winWidth: window.innerWidth});
+        console.log('resize')
+    };
 
     componentWillMount() {
         var jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -42,6 +52,9 @@ class App extends Component {
     }
 
     render() {
+        var winSize = (this.state.winWidth > 800) ? 'streamers' : 'streamers2';
+        console.log(this.state.winWidth)
+        console.log(winSize)
         let modalClose = () => this.setState({ modalShow: false });
         let modalOpen = () => this.setState({ modalShow: true });
         return (
@@ -52,14 +65,16 @@ class App extends Component {
                     onHide={modalClose}
                     updateSession={this.updateSession.bind(this)}
                 />
-                <div className='topStreamers'>
+                <div>
+                    {/*
                     <div className='divHeading'>
                         <small>Top Streamers Live</small>
                     </div>
                     <hr className='split'></hr>
-                    <TopStreamers />
+                    */}
+                    <TopStreamers winWidth={this.state.winWidth}/>
                 </div>  
-                <div className='streamers'>
+                <div className={winSize}>
                     <Switch>
                         <Route exact path='/' render={() => (
                                     <h1>home page!</h1>
