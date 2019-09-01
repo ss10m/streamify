@@ -1,24 +1,41 @@
-div.streamers {
-    margin-left: 250px;
+div.mainBody {
     position: fixed;
-    height: 100%;
-    width: auto;
-    position: fixed;
-    overflow: auto;
-    z-index: 1;
+    top: 50px;
+    right: 0;
+    bottom: 0;
+    left: 0;
     
+    display: flex;
+}
+
+div.box {
+    min-height: -webkit-min-content;
+    display: flex;
+}
+
+div.sidebar {
+    display: flex;
+    overflow: auto;
+    flex-direction: column;
+}
+
+
+div.streamers {
+    flex: 1;
+    display: flex;
+    overflow: auto;
+    flex-direction: column;
 }
 
 div.streamers2 {
-    margin-left: 50px;
-    position: fixed;
-    height: 100%;
-    width: auto;
-    position: fixed;
+    flex: 1;
+    display: flex;
     overflow: auto;
-    z-index: 1;
+    flex-direction: column;
     
 }
+
+
   
 ::-webkit-scrollbar { 
     display: none; 

@@ -65,28 +65,35 @@ class App extends Component {
                     onHide={modalClose}
                     updateSession={this.updateSession.bind(this)}
                 />
-                <div>
+                <div className="mainBody">
                     {/*
                     <div className='divHeading'>
                         <small>Top Streamers Live</small>
                     </div>
                     <hr className='split'></hr>
                     */}
-                    <TopStreamers winWidth={this.state.winWidth}/>
-                </div>  
-                <div className={winSize}>
-                    <Switch>
-                        <Route exact path='/' render={() => (
-                                    <h1>home page!</h1>
-                                )}/>
-                        <Route path='/streamers' render={() => <Streamers session={this.state.session} modalOpen={modalOpen} />} />
-                        <Route exact path='/streamer/:id' render={(props) => <Streamer session={this.state.session} modalOpen={modalOpen} {...props}/>}  />
+                    <div className="sidebar">
+                        <TopStreamers winWidth={this.state.winWidth}/>
+                    </div>
+                  
+                    <div className={winSize}>
+                        <div className="box">
+                            <Switch>
+                                
+                                    <Route exact path='/' render={() => (
+                                                <h1>home page!</h1>
+                                            )}/>
+                                    <Route path='/streamers' render={() => <Streamers session={this.state.session} modalOpen={modalOpen} />} />
+                                    <Route exact path='/streamer/:id' render={(props) => <Streamer session={this.state.session} modalOpen={modalOpen} {...props}/>}  />
 
-                        <Route path='/add' component={Add} />          
-                        <Route render={() => (
-                                    <h1>404</h1>
-                                )}/>
-                    </Switch>
+                                    <Route path='/add' component={Add} />          
+                                    <Route render={() => (
+                                                <h1>404</h1>
+                                            )}/>
+                                
+                            </Switch>
+                        </div>
+                    </div>
                 </div>
             </div>
         )
