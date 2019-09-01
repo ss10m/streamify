@@ -191,8 +191,8 @@ class LogInModal extends React.Component {
         return (
             <Modal
                 {...this.props}
-                size="lg"
-                aria-labelledby="contained-modal-title-vcenter"
+                size="md"
+                aria-labelledby="example-modal-sizes-title-md"
                 centered
             >
                 <Modal.Header>

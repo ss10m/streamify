@@ -136,7 +136,7 @@ class Streamer extends Component {
                     {recentGames.map(recentGame =>
                         <div className="block"  key={recentGame['name']} onClick={() => this.toggleGameFollow(recentGame['name'])}>
                             {recentGame['name']}
-                            <img src={recentGame['box_art_url']} alt="MISSING" />
+                            <img src={recentGame['box_art_url']} width="150" height="220"  alt="MISSING" />
                         </div>
                     )}
                 </div>
@@ -156,7 +156,7 @@ class Streamer extends Component {
         })
 
         return (
-            <div className="main">
+            <div>
                 <div className="flexContainer">
                     <div className="left">
                         <img src={this.state.data['logo']} width="200" height="200" alt="MISSING" />

@@ -7,7 +7,7 @@
 }
 
 .block {
-    width: 200px;
+    width: 150px;
     background-color: #122941;
     color: white;
     text-align: center;
@@ -17,7 +17,6 @@
 .innerbox {
     height: 200px;
     border: 1px solid #122941; 
-    padding: 10px;
     overflow: scroll;
 }
 
@@ -31,10 +30,4 @@
   
 .right {
     flex-basis : 50%;
-}
-
-.main {
-   width: 87vw;
-   padding : 10px;
-   background-color: #c3c7cc;
 }

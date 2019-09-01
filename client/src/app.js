@@ -52,19 +52,21 @@ class App extends Component {
     }
 
     render() {
-        var winSize = (this.state.winWidth > 800) ? 'streamers' : 'streamers2';
         console.log(this.state.winWidth)
-        console.log(winSize)
         let modalClose = () => this.setState({ modalShow: false });
         let modalOpen = () => this.setState({ modalShow: true });
         return (
             <div>
-                <Route render={() => <NavBar session={this.state.session} onLogout={this.onLogout.bind(this)} modalOpen={modalOpen}/>} />
-                <LoginModal
-                    show={this.state.modalShow}
-                    onHide={modalClose}
-                    updateSession={this.updateSession.bind(this)}
-                />
+                <div>
+                    <Route render={() => <NavBar session={this.state.session} onLogout={this.onLogout.bind(this)} modalOpen={modalOpen}/>} />
+                </div>
+                <div>
+                    <LoginModal
+                        show={this.state.modalShow}
+                        onHide={modalClose}
+                        updateSession={this.updateSession.bind(this)}
+                    />
+                </div>
                 <div className="mainBody">
                     {/*
                     <div className='divHeading'>
@@ -76,21 +78,19 @@ class App extends Component {
                         <TopStreamers winWidth={this.state.winWidth}/>
                     </div>
                   
-                    <div className={winSize}>
+                    <div className='streamers'>
                         <div className="box">
                             <Switch>
-                                
-                                    <Route exact path='/' render={() => (
-                                                <h1>home page!</h1>
-                                            )}/>
-                                    <Route path='/streamers' render={() => <Streamers session={this.state.session} modalOpen={modalOpen} />} />
-                                    <Route exact path='/streamer/:id' render={(props) => <Streamer session={this.state.session} modalOpen={modalOpen} {...props}/>}  />
+                                <Route exact path='/' render={() => (
+                                            <h1>home page!</h1>
+                                        )}/>
+                                <Route path='/streamers' render={() => <Streamers session={this.state.session} modalOpen={modalOpen} />} />
+                                <Route exact path='/streamer/:id' render={(props) => <Streamer session={this.state.session} modalOpen={modalOpen} {...props}/>}  />
 
-                                    <Route path='/add' component={Add} />          
-                                    <Route render={() => (
-                                                <h1>404</h1>
-                                            )}/>
-                                
+                                <Route path='/add' component={Add} />          
+                                <Route render={() => (
+                                            <h1>404</h1>
+                                        )}/>
                             </Switch>
                         </div>
                     </div>

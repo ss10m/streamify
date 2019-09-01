@@ -1,10 +1,16 @@
+*{
+    margin:0;
+    padding:0;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE 10+ */
+    }
+
 div.mainBody {
-    position: fixed;
-    top: 50px;
+    position: absolute;
+    top: 56px;
     right: 0;
     bottom: 0;
     left: 0;
-    
     display: flex;
 }
 
@@ -19,23 +25,14 @@ div.sidebar {
     flex-direction: column;
 }
 
-
 div.streamers {
     flex: 1;
     display: flex;
     overflow: auto;
     flex-direction: column;
+    background-color: #c3c7cc;
+    padding: 10px;
 }
-
-div.streamers2 {
-    flex: 1;
-    display: flex;
-    overflow: auto;
-    flex-direction: column;
-    
-}
-
-
   
 ::-webkit-scrollbar { 
     display: none; 
