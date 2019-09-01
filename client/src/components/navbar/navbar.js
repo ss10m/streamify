@@ -70,7 +70,7 @@ class NavBar extends Component {
 
     render() {
         return (
-            <nav className="navbar-custom navbar navbar-custom navbar-expand-lg navbar-dark">
+            <nav className={(this.state.navCollapsed ? 'navbar-custom' : 'navbar-custom-expaneded') + " navbar navbar-custom navbar-expand-lg navbar-dark"}>
                 <Link to={'/'} className="navbar-brand"> <b>Twitchify</b> </Link>
                 <button onClick={this.toggleNav} className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>

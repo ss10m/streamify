@@ -1,5 +1,12 @@
 .navbar-custom {
     background-color: #1c4269;
+    height: 50px;
+    z-index: 1;
+}
+
+.navbar-custom-expaneded {
+    background-color: #1c4269;
+    height: auto;
     z-index: 1;
 }
 /* change the brand and text color */
