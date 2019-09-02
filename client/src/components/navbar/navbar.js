@@ -18,7 +18,7 @@ class NavBar extends Component {
     toggleNav = () => {
         console.log('toggleNav')
         this.setState({ navCollapsed: !this.state.navCollapsed })
-      }
+    }
 
     handleClick = event => {
         event.preventDefault();

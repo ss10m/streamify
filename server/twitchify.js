@@ -32,40 +32,40 @@ function getStreamersData(user, callback) {
     var ret = [];
     var streamers = user.streamers;
     Array.from(streamers).forEach((streamer) => {
-        request(
+        var options = {
+            method: 'GET',
+            url: 'https://api.twitch.tv/kraken/streams/' + streamer['name'],
+            headers:
             {
-                method: 'GET',
-                url: 'https://api.twitch.tv/kraken/streams/' + streamer['name'],
-                //qs: { offset: '0', limit: '2' },
-                headers:
-                {
-                    'Client-ID': config.clientid
-                }
-            },
-
-            function(err, res, body) {
-                var body = JSON.parse(body);
-
-                var streamerData = {};
-                streamerData['name'] = streamer['name'];
-                streamerData['display_name'] = streamer['display_name'];
-                streamerData['viewers'] = '0';
-                streamerData['game'] = 'Offline';
-                streamerData['logo'] = streamer['logo'];
-                streamerData['preview'] = streamer['logo'];
-        
-                if (body['stream']) {
-                    streamerData['viewers'] = body['stream']['viewers'];
-                    streamerData['game'] = body['stream']['game'];
-                }
-
-                
-                ret.push(streamerData);
-                if(ret.length == streamers.length) {
-                    callback(ret);
-                }
+                'Client-ID': config.clientid
             }
-        );
+        };
+        request(options, function(error, response, body) {
+            if(response && response.statusCode != '200') {
+                console.log(response.statusCode)
+                callback({error: response.statusCode})
+            }
+            var body = JSON.parse(body);
+
+            var streamerData = {};
+            streamerData['name'] = streamer['name'];
+            streamerData['display_name'] = streamer['display_name'];
+            streamerData['viewers'] = '0';
+            streamerData['game'] = 'Offline';
+            streamerData['logo'] = streamer['logo'];
+            streamerData['preview'] = streamer['logo'];
+    
+            if(body['stream']) {
+                streamerData['viewers'] = body['stream']['viewers'];
+                streamerData['game'] = body['stream']['game'];
+            }
+
+            
+            ret.push(streamerData);
+            if(ret.length == streamers.length) {
+                callback(ret);
+            }
+        });
     });
 }
 
@@ -100,7 +100,11 @@ function followStreamer(username, nameToFollow) {
     };
 
     request(options, function (error, response, body) {
-        if (error) throw new Error(error);
+        if(response && response.statusCode != '200') {
+            console.log(response.statusCode)
+            return;
+        }
+
         body = JSON.parse(body).data[0];
 
         var streamerData = {};
@@ -153,8 +157,15 @@ function getStreamerInfo(isFollowed, name, callback) {
     };
 
     request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-        body = JSON.parse(body).data[0];
+        if(response && response.statusCode != '200') {
+            console.log(response.statusCode);
+            callback({error: response.statusCode});
+            return;
+        }
+
+        body = JSON.parse(body);
+
+        body = body.data[0];
 
         var streamerData = {};
         
@@ -167,6 +178,8 @@ function getStreamerInfo(isFollowed, name, callback) {
         streamerData['isFollowed'] = Boolean(isFollowed).toString();
     
         getStream(name, streamerData, callback)
+        
+
 
     });
 }
@@ -185,10 +198,16 @@ function getStream(name, streamerData, callback) {
     };
 
     request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-        body = JSON.parse(body).data[0];
+        if(response && response.statusCode != '200') {
+            console.log(response.statusCode)
+            callback({error: response.statusCode})
+            return;
+        }
 
-        console.log(body)
+        body = JSON.parse(body);
+
+        body = body.data[0];
+        //console.log(body)
 
 
         if(body) {
@@ -211,7 +230,6 @@ function getStream(name, streamerData, callback) {
 }
 
 function getRecentGamesPlayed(name, callback, streamerData) {
-    console.log(streamerData['id'])
     var options = {
         method: 'GET',
         url: "https://api.twitch.tv/kraken/channels/" + streamerData['id'] + "/videos?broadcast_type=archive&limit=50",
@@ -223,7 +241,12 @@ function getRecentGamesPlayed(name, callback, streamerData) {
     };
 
     request(options, function (error, response, body) {
-        if (error) throw new Error(error);
+        if(response && response.statusCode != '200') {
+            console.log(response.statusCode)
+            callback({error: response.statusCode})
+            return;
+        }
+
         body = JSON.parse(body);
         var videos = body.videos;
         var recentGames = new Set();
@@ -254,7 +277,11 @@ function getTopStreamers() {
     };
 
     request(options, function (error, response, body) {
-        if (error) throw new Error(error);
+        if(response && response.statusCode != '200') {
+            console.log(response.statusCode)
+            return;
+        }
+
         body = JSON.parse(body)['streams'];
 
         for([key, stream] of Object.entries(body)) {
@@ -278,7 +305,7 @@ function getTopStreamers() {
 
 function getRecentGamesBoxArt(recentGames, callback, streamerData) {
 
-    console.log(recentGames.length)
+    //console.log(recentGames.length)
 
     var requestParameters = '';
 
@@ -305,15 +332,21 @@ function getRecentGamesBoxArt(recentGames, callback, streamerData) {
     };
 
     request(options, function (error, response, body) {
-        if (error) throw new Error(error);
+        if(response && response.statusCode != '200') {
+            console.log(response.statusCode)
+            callback({error: response.statusCode})
+            return;
+        }
+
         body = body.replace(/{width}/g, '200')
         body = body.replace(/{height}/g, '300')
         body = JSON.parse(body);
 
 
+
         streamerData['game'] = body.data[0]['name'];
 
-        console.log(body)
+        //console.log(body)
         var boxArts = [body.data.shift()]
 
         boxArts.map(boxArt => {

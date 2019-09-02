@@ -68,13 +68,18 @@ class App extends Component {
                     />
                 </div>
                 <div className="mainBody">
-                    {/*
-                    <div className='divHeading'>
-                        <small>Top Streamers Live</small>
-                    </div>
-                    <hr className='split'></hr>
-                    */}
+                    
                     <div className="sidebar">
+                        {(this.state.winWidth > 800) ? (
+                            <div className='divHeading'>
+                                <small>Top Streamers Live</small>
+                            </div>
+                        ) : (
+                            <div className='divHeading'>
+                                <small>Top</small>
+                            </div>
+                        )}
+                        <hr className='split'></hr>
                         <TopStreamers winWidth={this.state.winWidth}/>
                     </div>
                   

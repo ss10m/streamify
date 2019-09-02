@@ -4,6 +4,9 @@
 
 .row {
     display: flex;  
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
 }
 
 .block {
@@ -16,18 +19,24 @@
 
 .innerbox {
     height: 200px;
+    min-width: 200px;
     border: 1px solid #122941; 
     overflow: scroll;
 }
 
 .flexContainer {
     display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
 } 
-  
-.left {
-    flex-basis : 0%;
+
+
+.flexContainerBlock1 {
+    width: 500px;
+    max-height: 200px;
+    overflow: scroll;
 }
+
+
   
-.right {
-    flex-basis : 50%;
-}

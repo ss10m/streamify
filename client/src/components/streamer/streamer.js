@@ -34,7 +34,10 @@ class Streamer extends Component {
                 }
             })
             .then(res => res.json())
-            .then(data => this.setState({ data }));
+            .then(data => {
+                console.log(data)
+                this.setState({ data })
+            });
         }
       }
     
@@ -97,7 +100,8 @@ class Streamer extends Component {
             },
             body: JSON.stringify({ name: this.state.data['name'],
                                    gameName: gameName})
-        })
+        }).then(res => res.json())
+          .then(res => console.log(res))
         
     }
     
@@ -144,33 +148,38 @@ class Streamer extends Component {
         )
     }
 
+    getBody() {
+        if(this.state.data["error"]) {
+            return (
+                <p>{this.state.data["error"]}</p>
+            )
+        }
 
-    render() {
 
         const followedGames = this.state.followedGames.map((name) => {
             return (
-                <div>
+                <p>
                     {name}
-                </div>
+                </p>
             )
         })
-
         return (
             <div>
                 <div className="flexContainer">
-                    <div className="left">
+                    <div className="flexContainerBlockImg">
                         <img src={this.state.data['logo']} width="200" height="200" alt="MISSING" />
                     </div>
 
-                    <div className="right">
+                    <div className="flexContainerBlock1">
                         <h1>{this.state.data['display_name']}</h1>
                         <p>{this.state.data['description']}</p>
                         {this.getFollowButton()}
                     </div>
                     
-                    <div className="right innerbox">
+                    <div className="flexContainerBlock innerbox">
                         {followedGames}
                     </div>
+
 
 
 
@@ -187,6 +196,18 @@ class Streamer extends Component {
                 <div>
                     {this.getRecentGames()}
                 </div>
+            </div>
+        )
+    }
+
+
+    render() {
+
+
+
+        return (
+            <div>
+                {this.getBody()}
             </div>
         );
     }

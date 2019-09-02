@@ -23,6 +23,7 @@ div.sidebar {
     display: flex;
     overflow: auto;
     flex-direction: column;
+    background-color: #122941;
 }
 
 div.streamers {

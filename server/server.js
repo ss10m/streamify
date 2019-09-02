@@ -134,8 +134,8 @@ app.get('/api/topStreamers', (req, res) => {
 app.get('/api/streamer/:name', (req, res) => {
     var auth = JSON.parse(req.get('Authorization'));
     var name = req.params.name;
-    twitchify.getStreamer(auth, name, function(retStreamer) {
-        res.json(retStreamer);
+    twitchify.getStreamer(auth, name, function(data) {
+        res.json(data);
     });
 });
 
@@ -154,6 +154,7 @@ app.post('/api/unfollow', auth.required, (req, res, next) => {
 app.post('/api/followGame', auth.required, (req, res, next) => {
     var auth = JSON.parse(req.get('Authorization'));
     console.log(auth.username + ' is trying to follow ' + req.body['gameName']  + " for " + req.body['name'] );
+    res.json({ user: req.body['gameName'] });
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
