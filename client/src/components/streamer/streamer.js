@@ -165,33 +165,46 @@ class Streamer extends Component {
         })
         return (
             <div>
-                <div className="flexContainer">
-                    <div className="flexContainerBlockImg">
-                        <img src={this.state.data['logo']} width="200" height="200" alt="MISSING" />
+                <div className="infoRow">
+                    <div className="boxLeft">
+                        <div className="card">
+                            <img src={this.state.data['logo']} width="200" height="200" alt="MISSING" />
+
+                            <p>{this.state.data['title']}</p>
+                            <p>{this.state.data['viewers']}</p>
+                            <p>{this.state.data['game']}</p>
+                        </div>
+
+                        <div className="card">
+                            <h1>{this.state.data['display_name']}</h1>
+                            <p>{this.state.data['title']}</p>
+                            {this.getFollowButton()}
+                        </div>
+                        
+
+
+                        <div className="card">
+                            <img src={this.state.data['preview']} width="450" height="250" className="roundedImg" alt="MISSING" />
+                        </div>
+
+
+
                     </div>
 
-                    <div className="flexContainerBlock1">
-                        <h1>{this.state.data['display_name']}</h1>
-                        <p>{this.state.data['description']}</p>
-                        {this.getFollowButton()}
+                    <div className="boxRight">
+                        <div className="card">
+                            <p>{this.state.data['description']}</p>
+                        </div>
+                        
+
+
+                        <div className="card">
+                            {followedGames}
+                        </div>
                     </div>
+
                     
-                    <div className="flexContainerBlock innerbox">
-                        {followedGames}
-                    </div>
 
-
-
-
-                </div>
-
-                <p>{this.state.data['title']}</p>
-                <p>{this.state.data['viewers']}</p>
-                <p>{this.state.data['game']}</p>
-
-
-                <div>
-                    <img src={this.state.data['preview']} width="450" height="250" className="roundedImg" alt="MISSING" />
                 </div>
                 <div>
                     {this.getRecentGames()}
