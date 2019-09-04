@@ -60,13 +60,11 @@ class App extends Component {
                 <div>
                     <Route render={() => <NavBar session={this.state.session} onLogout={this.onLogout.bind(this)} modalOpen={modalOpen}/>} />
                 </div>
-                <div>
-                    <LoginModal
-                        show={this.state.modalShow}
-                        onHide={modalClose}
-                        updateSession={this.updateSession.bind(this)}
-                    />
-                </div>
+                <LoginModal
+                    show={this.state.modalShow}
+                    onHide={modalClose}
+                    updateSession={this.updateSession.bind(this)}
+                />
                 <div className="mainBody">
                     
                     <div className="sidebar">
@@ -84,20 +82,18 @@ class App extends Component {
                     </div>
                   
                     <div className='streamers'>
-                        <div className="box">
-                            <Switch>
-                                <Route exact path='/' render={() => (
-                                            <h1>home page!</h1>
-                                        )}/>
-                                <Route path='/streamers' render={() => <Streamers session={this.state.session} modalOpen={modalOpen} />} />
-                                <Route exact path='/streamer/:id' render={(props) => <Streamer session={this.state.session} modalOpen={modalOpen} {...props}/>}  />
+                        <Switch>
+                            <Route exact path='/' render={() => (
+                                        <h1>home page!</h1>
+                                    )}/>
+                            <Route path='/streamers' render={() => <Streamers session={this.state.session} modalOpen={modalOpen} />} />
+                            <Route exact path='/streamer/:id' render={(props) => <Streamer session={this.state.session} modalOpen={modalOpen} {...props}/>}  />
 
-                                <Route path='/add' component={Add} />          
-                                <Route render={() => (
-                                            <h1>404</h1>
-                                        )}/>
-                            </Switch>
-                        </div>
+                            <Route path='/add' component={Add} />          
+                            <Route render={() => (
+                                        <h1>404</h1>
+                                    )}/>
+                        </Switch>
                     </div>
                 </div>
             </div>

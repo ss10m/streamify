@@ -167,16 +167,22 @@ class Streamer extends Component {
             <div>
                 <div className="infoRow">
                     <div className="boxLeft">
-                        <div className="card">
-                            <img src={this.state.data['logo']} width="200" height="200" alt="MISSING" />
-
-                            <p>{this.state.data['title']}</p>
-                            <p>{this.state.data['viewers']}</p>
-                            <p>{this.state.data['game']}</p>
+                        <div className="flex-container">
+                            <div className="fixed">
+                                <img src={this.state.data['logo']}  width="200" height="200" alt="MISSING" />
+                            </div>
+                            
+                            <div className="flex-item">
+                                <h1>{this.state.data['display_name']}</h1>
+                            </div>
+                            
                         </div>
 
                         <div className="card">
-                            <h1>{this.state.data['display_name']}</h1>
+                            <p>{this.state.data['title']}</p>
+                            <p>{this.state.data['viewers']}</p>
+                            <p>{this.state.data['game']}</p>
+                            
                             <p>{this.state.data['title']}</p>
                             {this.getFollowButton()}
                         </div>
@@ -186,9 +192,6 @@ class Streamer extends Component {
                         <div className="card">
                             <img src={this.state.data['preview']} width="450" height="250" className="roundedImg" alt="MISSING" />
                         </div>
-
-
-
                     </div>
 
                     <div className="boxRight">
@@ -196,19 +199,18 @@ class Streamer extends Component {
                             <p>{this.state.data['description']}</p>
                         </div>
                         
-
-
-                        <div className="card">
+                        <div className="card innerbox">
                             {followedGames}
                         </div>
                     </div>
 
-                    
 
                 </div>
+                
                 <div>
                     {this.getRecentGames()}
-                </div>
+                </div>   
+
             </div>
         )
     }

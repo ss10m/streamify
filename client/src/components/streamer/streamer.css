@@ -23,35 +23,22 @@
     margin: 1em;
 }
 
+
 .innerbox {
     height: 200px;
     min-width: 200px;
-    border: 1px solid #122941; 
-    overflow: scroll;
-}
-
-.flexContainer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: flex-start;
-} 
-
-
-.flexContainerBlock1 {
-    width: 500px;
-    max-height: 200px;
+    border: 1px solid yellow; 
     overflow: scroll;
 }
 
 .infoRow {
     display: flex;
-    width: 100%;
     flex-direction: row;
     flex-wrap: nowrap;
+    
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1200px) {
     .infoRow {
         flex-wrap: wrap;
     }
@@ -59,19 +46,35 @@
   
 
 .boxLeft {
-    flex-grow: 1;
+    flex-grow: 2;
+    flex-basis: 0;
     
 }
 
 .boxRight {
-    flex-grow: 2;
-    flex: 0 0 100%;
-    
-
+    flex-grow: 1;
+    flex-basis: 0;
 }
 
 .card {
     background-color: white;
     padding: 20px;
-    margin-top: 20px;
+    margin: 10px;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-container > div {
+    background-color: white;
+    font-size: 60px;
+    padding: 20px;
+    margin: 10px;
+}
+
+.flex-container > div > h1{
+    background-color: white;
+    font-size: 40px;
 }
