@@ -13,61 +13,133 @@ const User = mongoose.model('User');
     //update streamers
     //callback return
 
-function getStreamers(username, callback) {
+function getUser(mode, username, callback, optionalArg) {
     console.log(username);
     console.log("===IN GET STREAMERS===");
 
     User.findOne(
         {username: username}, 
-        function(err, obj) {
-            if(obj) {
+        function(err, user) {
+            if(user) {
                 console.log('found user');
-                getStreamersData(obj, callback);
+            
+                switch(mode) {
+                    case "getStreamers":
+                        getStreamersData(user, callback);
+                        break;
+                    case "followGame":
+                        followGame(user, optionalArg, callback);
+                        break;
+                }
             }
         }
     );
 }
 
+function followGame(user, streamerInfo, callback) {
+
+    //check if unqiue
+    for(let streamer of user.streamers) {
+        if(streamer.name == streamerInfo.streamerName) {
+            streamer.followedGames.push(streamerInfo.gameName)
+            user.save();
+        }
+    }
+}
+
 function getStreamersData(user, callback) {
-    var ret = [];
-    var streamers = user.streamers;
-    Array.from(streamers).forEach((streamer) => {
-        var options = {
-            method: 'GET',
-            url: 'https://api.twitch.tv/kraken/streams/' + streamer['name'],
-            headers:
-            {
-                'Client-ID': config.clientid
-            }
-        };
-        request(options, function(error, response, body) {
-            if(response && response.statusCode != '200') {
-                console.log(response.statusCode)
-                callback({error: response.statusCode})
-            }
-            var body = JSON.parse(body);
 
-            var streamerData = {};
-            streamerData['name'] = streamer['name'];
-            streamerData['display_name'] = streamer['display_name'];
-            streamerData['viewers'] = '0';
-            streamerData['game'] = 'Offline';
-            streamerData['logo'] = streamer['logo'];
-            streamerData['preview'] = streamer['logo'];
-    
-            if(body['stream']) {
-                streamerData['viewers'] = body['stream']['viewers'];
-                streamerData['game'] = body['stream']['game'];
+    var streamers = JSON.parse(JSON.stringify(user.streamers));
+
+    var params = ''
+    for(let streamer of streamers) {
+        params += '&user_login=' + streamer.name;
+        streamer['game'] = 'Offline';
+        streamer['viewers'] = '0';
+    }
+
+    console.log(streamers[0])
+    streamers[0]['game'] = 'Offline';
+    console.log(streamers[0])
+
+    var options = {
+        method: 'GET',
+        url: 'https://api.twitch.tv/helix/streams/?' + params,
+        headers:
+        {
+            'Client-ID': config.clientid
+        }
+    };
+
+    request(options, function(error, response, body) {
+        if(response && response.statusCode != '200') {
+            console.log(response.statusCode)
+            callback({error: response.statusCode})
+        }
+        var body = JSON.parse(body);
+
+
+        for(let streamer of streamers) {
+            for(let liveStream of body.data) {
+                if(streamer.id == liveStream.user_id) {
+                    streamer['viewers'] = liveStream.viewer_count;
+                    streamer['game'] = liveStream.game_id;
+                }
             }
 
-            
-            ret.push(streamerData);
-            if(ret.length == streamers.length) {
-                callback(ret);
-            }
-        });
+        }
+
+        convertGameIdToGameName(streamers, callback);
+
     });
 }
+
+function convertGameIdToGameName(streamers, callback) {
+    requestParameters = '';
+    for(let streamer of streamers) {
+        if(streamer.game != 'Offline') {
+            requestParameters += '&id=' + streamer.game;
+        }
+    }
+    requestParameters = requestParameters.substr(1);
+    var options = {
+        method: 'GET',
+        url: "https://api.twitch.tv/helix/games?" + requestParameters,
+        //qs: { offset: '0', limit: '2' },
+        headers:
+        {
+            'Client-ID': config.clientid
+        }
+    };
+
+    request(options, function (error, response, body) {
+        if(response && response.statusCode != '200') {
+            console.log(response.statusCode)
+            callback({error: response.statusCode})
+            return;
+        }
+
+        body = JSON.parse(body);
+        body = body.data;
+
+        var gameIdToGameName = {};
+        for(let game of body) {
+            gameIdToGameName[game.id] = game.name;
+        }
+
+        for(let streamer of streamers) {
+            if(streamer.game != "Offline") {
+                streamer.game = gameIdToGameName[streamer.game];
+            }
+        }
+
+        console.log(streamers)
+        
+        callback(JSON.stringify(streamers));
+    });
+}
+
+
 
 function unfollowStreamer(username, nameToUnfollow) {
     User.findOne({username: username}, 
@@ -261,48 +333,6 @@ function getRecentGamesPlayed(name, callback, streamerData) {
 
 }
 
-function getTopStreamers() {
-
-    console.log('getting top streamers')
-
-    var options = {
-        method: 'GET',
-        url: 'https://api.twitch.tv/kraken/streams?limit=20',
-        //qs: { offset: '0', limit: '2' },
-        headers:
-        {
-            'Client-ID': config.clientid,
-            'Accept': 'application/vnd.twitchtv.v5+json'
-        }
-    };
-
-    request(options, function (error, response, body) {
-        if(response && response.statusCode != '200') {
-            console.log(response.statusCode)
-            return;
-        }
-
-        body = JSON.parse(body)['streams'];
-
-        for([key, stream] of Object.entries(body)) {
-            var streamerData = {};
-            streamerData['name'] = stream['channel']['name'];
-            streamerData['display_name'] = stream['channel']['display_name'];
-            streamerData['viewers'] = stream['viewers'];
-            var game = stream['game'];
-            if(game.length > 20) {
-                game = game.substring(0,20) + '...';
-            } else if(game == '') {
-                game = 'Nothing'
-            }
-            streamerData['game'] = game;
-            streamerData['logo'] = stream['channel']['logo'];
-
-            topStreamers[key] = streamerData;
-        }
-    });
-}
-
 function getRecentGamesBoxArt(recentGames, callback, streamerData) {
 
     //console.log(recentGames.length)
@@ -362,6 +392,50 @@ function getRecentGamesBoxArt(recentGames, callback, streamerData) {
     });
 }
 
+function getTopStreamers() {
+
+    console.log('getting top streamers')
+
+    var options = {
+        method: 'GET',
+        url: 'https://api.twitch.tv/kraken/streams?limit=20',
+        //qs: { offset: '0', limit: '2' },
+        headers:
+        {
+            'Client-ID': config.clientid,
+            'Accept': 'application/vnd.twitchtv.v5+json'
+        }
+    };
+
+    request(options, function (error, response, body) {
+        if(response && response.statusCode != '200') {
+            console.log(response.statusCode)
+            return;
+        }
+
+        body = JSON.parse(body)['streams'];
+
+        for([key, stream] of Object.entries(body)) {
+            var streamerData = {};
+            streamerData['name'] = stream['channel']['name'];
+            streamerData['display_name'] = stream['channel']['display_name'];
+            streamerData['viewers'] = stream['viewers'];
+            var game = stream['game'];
+            if(game.length > 20) {
+                game = game.substring(0,20) + '...';
+            } else if(game == '') {
+                game = 'Nothing'
+            }
+            streamerData['game'] = game;
+            streamerData['logo'] = stream['channel']['logo'];
+
+            topStreamers[key] = streamerData;
+        }
+    });
+}
+
+
+
 function startTopStreamers() {
     getTopStreamers();
     setInterval(getTopStreamers, 60000)
@@ -374,5 +448,5 @@ module.exports.streamers = streamers;
 module.exports.getStreamer = getStreamer;
 module.exports.followStreamer = followStreamer;
 module.exports.unfollowStreamer = unfollowStreamer;
-module.exports.getStreamers = getStreamers;
+module.exports.getUser = getUser;
 module.exports.topStreamers = topStreamers;

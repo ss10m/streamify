@@ -122,7 +122,7 @@ app.post('/logout', auth.optional, (req, res, next) => {
 
 app.get('/api/streamers', auth.required, (req, res, next) => {
     var auth = JSON.parse(req.get('Authorization'));
-    twitchify.getStreamers(auth.username, function(data) {
+    twitchify.getUser("getStreamers", auth.username, function(data) {
         res.json(data);
     });
 });
@@ -154,7 +154,11 @@ app.post('/api/unfollow', auth.required, (req, res, next) => {
 app.post('/api/followGame', auth.required, (req, res, next) => {
     var auth = JSON.parse(req.get('Authorization'));
     console.log(auth.username + ' is trying to follow ' + req.body['gameName']  + " for " + req.body['name'] );
-    res.json({ user: req.body['gameName'] });
+    var args = {"gameName": req.body['gameName'],
+                "streamerName": req.body['name']}
+    twitchify.getUser("followGame", auth.username, function(data) {
+        res.json(data);
+    }, args);
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

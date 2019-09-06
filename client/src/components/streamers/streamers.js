@@ -25,7 +25,10 @@ class Streamers extends Component {
                     }
                 })
                 .then(res => res.json())
-                .then(streamers => this.setState({ streamers }));
+                .then(streamers => {
+                    var streamers = JSON.parse(streamers);
+                    this.setState({ streamers })
+                });
             }
         }
     }
@@ -39,12 +42,16 @@ class Streamers extends Component {
                 }
             })
             .then(res => res.json())
-            .then(streamers => this.setState({ streamers }));
+            .then(streamers => {
+                var streamers = JSON.parse(streamers);
+                this.setState({ streamers })
+            });
         }
 
     }
 
     getStreamers() {
+        console.log(this.state.streamers)
         return (
             <ul className="stList">
                 {this.state.streamers.map(streamer =>

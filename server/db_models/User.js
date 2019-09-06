@@ -7,7 +7,13 @@ const UserSchema = new mongoose.Schema({
     hash: String,
     salt: String,
     password: String,
-    streamers: []
+    streamers: [{
+        id: String,
+        name: String,
+        logo: String,
+        display_name: String,
+        followedGames: [String]
+      }]
 });
 
 UserSchema.methods.setPassword = function(password) {
