@@ -36,7 +36,7 @@ app.use((req, res, next) => {
 // User Authentication
 
 app.post('/login', auth.optional, (req, res, next) => {
-    console.log(req.body)
+
     return passport.authenticate('local', { session: false }, (err, verifiedUser) => {
         if(err) {
             console.log(err)
@@ -155,7 +155,19 @@ app.post('/api/followGame', auth.required, (req, res, next) => {
     var auth = JSON.parse(req.get('Authorization'));
     console.log(auth.username + ' is trying to follow ' + req.body['gameName']  + " for " + req.body['name'] );
     var args = {"gameName": req.body['gameName'],
-                "streamerName": req.body['name']}
+                "streamerName": req.body['name'],
+                "callType": 'follow'}
+    twitchify.getUser("followGame", auth.username, function(data) {
+        res.json(data);
+    }, args);
+});
+
+app.post('/api/unfollowGame', auth.required, (req, res, next) => {
+    var auth = JSON.parse(req.get('Authorization'));
+    console.log(auth.username + ' is trying to unfollow ' + req.body['gameName']  + " for " + req.body['name'] );
+    var args = {"gameName": req.body['gameName'],
+                "streamerName": req.body['name'],
+                "callType": 'unfollow'}
     twitchify.getUser("followGame", auth.username, function(data) {
         res.json(data);
     }, args);

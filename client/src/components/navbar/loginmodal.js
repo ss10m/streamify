@@ -75,7 +75,7 @@ class LogInModal extends React.Component {
             console.log('2')
             err.text().then( errorMessage => {
                 console.log(JSON.parse(errorMessage).error)
-              this.setState({error: JSON.parse(errorMessage).error})
+                this.setState({error: JSON.parse(errorMessage).error})
             })
           })
     }

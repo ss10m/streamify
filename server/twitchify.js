@@ -14,21 +14,17 @@ const User = mongoose.model('User');
     //callback return
 
 function getUser(mode, username, callback, optionalArg) {
-    console.log(username);
-    console.log("===IN GET STREAMERS===");
 
     User.findOne(
         {username: username}, 
         function(err, user) {
             if(user) {
-                console.log('found user');
-            
                 switch(mode) {
                     case "getStreamers":
                         getStreamersData(user, callback);
                         break;
                     case "followGame":
-                        followGame(user, optionalArg, callback);
+                        togglefollowGame(user, optionalArg, callback);
                         break;
                 }
             }
@@ -36,20 +32,46 @@ function getUser(mode, username, callback, optionalArg) {
     );
 }
 
-function followGame(user, streamerInfo, callback) {
+function togglefollowGame(user, streamerInfo, callback) {
 
-    //check if unqiue
     for(let streamer of user.streamers) {
         if(streamer.name == streamerInfo.streamerName) {
-            streamer.followedGames.push(streamerInfo.gameName)
-            user.save();
+
+            
+            switch(streamerInfo.callType) {
+                case "follow":
+                    if(!streamer.followedGames.includes(streamerInfo.gameName)) {
+                        streamer.followedGames.push(streamerInfo.gameName)
+                        user.save(function(err, obj) {
+                            if(err) throw err;
+                            callback(JSON.stringify(streamer.followedGames));
+                        })
+                    }
+                    break;
+                case "unfollow":
+                    if(streamer.followedGames.includes(streamerInfo.gameName)) {
+                        var index = streamer.followedGames.indexOf(streamerInfo.gameName)
+                        streamer.followedGames.splice(index, 1);
+                        user.save(function(err, obj) {
+                            if(err) throw err;
+                            callback(JSON.stringify(streamer.followedGames));
+                        })
+                    }
+                    break;
+            }
         }
     }
+
 }
 
 function getStreamersData(user, callback) {
 
     var streamers = JSON.parse(JSON.stringify(user.streamers));
+
+    if(streamers.length == 0) {
+        callback('[]')
+        return;
+    }
 
     var params = ''
     for(let streamer of streamers) {
@@ -58,9 +80,8 @@ function getStreamersData(user, callback) {
         streamer['viewers'] = '0';
     }
 
-    console.log(streamers[0])
-    streamers[0]['game'] = 'Offline';
-    console.log(streamers[0])
+    //streamers[0]['game'] = 'Offline';
+    console.log(params)
 
     var options = {
         method: 'GET',
@@ -73,8 +94,9 @@ function getStreamersData(user, callback) {
 
     request(options, function(error, response, body) {
         if(response && response.statusCode != '200') {
-            console.log(response.statusCode)
+            console.log('getStreamersData' + response.statusCode)
             callback({error: response.statusCode})
+            return;
         }
         var body = JSON.parse(body);
 
@@ -114,10 +136,12 @@ function convertGameIdToGameName(streamers, callback) {
 
     request(options, function (error, response, body) {
         if(response && response.statusCode != '200') {
-            console.log(response.statusCode)
+            console.log('convertGameIdToGameName' + response.statusCode)
             callback({error: response.statusCode})
             return;
         }
+
+        console.log('111')
 
         body = JSON.parse(body);
         body = body.data;
@@ -132,8 +156,6 @@ function convertGameIdToGameName(streamers, callback) {
                 streamer.game = gameIdToGameName[streamer.game];
             }
         }
-
-        console.log(streamers)
         
         callback(JSON.stringify(streamers));
     });
@@ -202,25 +224,29 @@ function getStreamer(auth, name, callback) {
 function checkIfFollowing(auth, name, callback) {
     User.findOne({username: auth.username}, 
         function(err, streamer) {
+            var streamerData = {};
+            streamerData['name'] = name;
             if(streamer) {
                 for(var [id, followedStreamer] of Object.entries(streamer.streamers)) {
                     if(followedStreamer.name == name) {
-                        console.log(auth.username + ' is following ' + name)
-                        getStreamerInfo(true, name, callback);
+                        streamerData['isFollowed'] = Boolean(true).toString();
+                        streamerData['followedGames'] = JSON.stringify(followedStreamer.followedGames);
+                        getStreamerInfo(streamerData, callback);
                         return;
                     }
                 }
             } 
-            getStreamerInfo(false, name, callback);
-            console.log('not following ' + name)
+            streamerData['isFollowed'] = Boolean(false).toString();
+            streamerData['followedGames'] = '[]';
+            getStreamerInfo(streamerData, callback);
         });
     
 }
 
-function getStreamerInfo(isFollowed, name, callback) {
+function getStreamerInfo(streamerData, callback) {
     var options = {
         method: 'GET',
-        url: 'https://api.twitch.tv/helix/users?login=' + name,
+        url: 'https://api.twitch.tv/helix/users?login=' + streamerData.name,
         //qs: { offset: '0', limit: '2' },
         headers:
         {
@@ -229,6 +255,8 @@ function getStreamerInfo(isFollowed, name, callback) {
     };
 
     request(options, function (error, response, body) {
+
+
         if(response && response.statusCode != '200') {
             console.log(response.statusCode);
             callback({error: response.statusCode});
@@ -239,17 +267,16 @@ function getStreamerInfo(isFollowed, name, callback) {
 
         body = body.data[0];
 
-        var streamerData = {};
+        
         
         streamerData['id'] = body['id'];
         streamerData['logo'] = body['profile_image_url'];
-        streamerData['name'] = body['login'];
-        streamerData['display_name'] = body['display_name'];
+        streamerData['display_name'] = body['login'];
         streamerData['description'] = body['description'];
         streamerData['preview'] = body['offline_image_url'];
-        streamerData['isFollowed'] = Boolean(isFollowed).toString();
+        
     
-        getStream(name, streamerData, callback)
+        getStream(body['login'], streamerData, callback)
         
 
 
@@ -257,7 +284,6 @@ function getStreamerInfo(isFollowed, name, callback) {
 }
 
 function getStream(name, streamerData, callback) {
-    console.log(name);
 
     var options = {
         method: 'GET',
@@ -325,7 +351,6 @@ function getRecentGamesPlayed(name, callback, streamerData) {
         for(var [id, video] of Object.entries(videos)) {
             recentGames.add(video.game.toLowerCase())
         }
-        console.log(recentGames)
 
         var recentGamesArray = Array.from(recentGames)
         getRecentGamesBoxArt(recentGamesArray, callback, streamerData)

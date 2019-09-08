@@ -52,7 +52,6 @@ class App extends Component {
     }
 
     render() {
-        console.log(this.state.winWidth)
         let modalClose = () => this.setState({ modalShow: false });
         let modalOpen = () => this.setState({ modalShow: true });
         return (

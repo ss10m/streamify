@@ -26,7 +26,6 @@ class Streamer extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if(prevProps.match.params.id !== this.state.name){
-            this.setState({ followedGames: [] });
             const jwt = this.props.session;
             fetch("/api/streamer/" + this.state.name, {
                 headers: {
@@ -34,9 +33,15 @@ class Streamer extends Component {
                 }
             })
             .then(res => res.json())
+            .then(function(res) {
+                if(res.error) { throw res }
+                return res;
+            })
             .then(data => {
-                console.log(data)
+                data.followedGames = JSON.parse(data.followedGames);
                 this.setState({ data })
+            }).catch(err => {
+                console.log(err)
             });
         }
       }
@@ -49,7 +54,16 @@ class Streamer extends Component {
             }
         })
         .then(res => res.json())
-        .then(data => this.setState({ data }));
+        .then(function(res) {
+            if(res.error) { throw res }
+            return res;
+        })
+        .then(data => { 
+            data.followedGames = JSON.parse(data.followedGames);
+            this.setState({ data })
+        }).catch(err => {
+            console.log(err)
+        });
     }
 
     handleSubmit = event => {
@@ -60,7 +74,6 @@ class Streamer extends Component {
             apiCall = '/api/unfollow';
         }
 
-
         fetch(apiCall, {
             method: 'POST',
             headers: {
@@ -68,31 +81,34 @@ class Streamer extends Component {
                 Authorization: JSON.stringify(jwt)
             },
             body: JSON.stringify({ name: this.state.data['name'] }),
-        }).then(response => {
+        }).then(res => res.json())
+        .then(function(res) {
+            if(res.error) { throw res }
+            return res;
+        })
+        .then(res => {
             this.props.history.push('/streamers');
-        }).catch(function(err) {
-            console.info(err);
-        });
+        }).catch(err => {
+            console.log(err)
+        })
     }
 
     toggleGameFollow = gameName => {
-        if(!this.props.session) {
+        if(!this.props.session || this.state.data.isFollowed !== 'true') {
             this.props.modalOpen();
             return;
         }
-        var unique = !this.state.followedGames.includes(gameName)
+        var unique = !this.state.data.followedGames.includes(gameName)
 
-        var newArray = [];
+
+        var requestUrl;
         if(unique) {
-            newArray = [...this.state.followedGames, gameName]
+            requestUrl = 'followGame';
         } else {
-            newArray = [...this.state.followedGames]
-            var index = newArray.indexOf(gameName)
-            newArray.splice(index, 1);
+            requestUrl = 'unfollowGame';
         }
-        this.setState({ followedGames: newArray});
 
-        fetch('/api/followGame', {
+        fetch('/api/' + requestUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -101,12 +117,21 @@ class Streamer extends Component {
             body: JSON.stringify({ name: this.state.data['name'],
                                    gameName: gameName})
         }).then(res => res.json())
-          .then(res => console.log(res))
+        .then(function(res) {
+            if(res.error) { throw res }
+            return res; 
+        })
+        .then(res => {
+            var updatedData = this.state.data
+            updatedData.followedGames = JSON.parse(res)
+            this.setState({ data : updatedData});
+        }).catch(err => {
+            console.log(err)
+        })
         
     }
     
     getFollowButton() {
-        // check if logged in
 
         if(!this.props.session) {
             return <button className="btn btn-primary" onClick={this.props.modalOpen}>Follow</button>
@@ -148,6 +173,21 @@ class Streamer extends Component {
         )
     }
 
+    getFollowedGames() {
+
+        if(!this.state.data.followedGames) {
+            return;
+        }
+
+        return (
+            <div>
+                {this.state.data.followedGames.map((gameName) => 
+                    <p key={gameName}>{gameName}</p>
+                )}
+            </div>
+        )
+    }
+
     getBody() {
         if(this.state.data["error"]) {
             return (
@@ -155,14 +195,6 @@ class Streamer extends Component {
             )
         }
 
-
-        const followedGames = this.state.followedGames.map((name) => {
-            return (
-                <p>
-                    {name}
-                </p>
-            )
-        })
         return (
             <div>
                 <div className="infoRow">
@@ -182,8 +214,6 @@ class Streamer extends Component {
                             <p>{this.state.data['title']}</p>
                             <p>{this.state.data['viewers']}</p>
                             <p>{this.state.data['game']}</p>
-                            
-                            <p>{this.state.data['title']}</p>
                             {this.getFollowButton()}
                         </div>
                         
@@ -200,7 +230,7 @@ class Streamer extends Component {
                         </div>
                         
                         <div className="card innerbox">
-                            {followedGames}
+                            {this.getFollowedGames()}
                         </div>
                     </div>
 
@@ -217,8 +247,6 @@ class Streamer extends Component {
 
 
     render() {
-
-
 
         return (
             <div>
