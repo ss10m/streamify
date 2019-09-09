@@ -81,7 +81,6 @@ function getStreamersData(user, callback) {
     }
 
     //streamers[0]['game'] = 'Offline';
-    console.log(params)
 
     var options = {
         method: 'GET',
@@ -292,8 +291,14 @@ function getStreamerInfo(streamerData, callback) {
         streamerData['id'] = body['id'];
         streamerData['logo'] = body['profile_image_url'];
         streamerData['display_name'] = body['login'];
-        streamerData['description'] = body['description'];
+        
         streamerData['preview'] = body['offline_image_url'];
+
+        if(body['description'] == '') {
+            streamerData['description'] = "I did not bother to write a description! -" + streamerData['display_name'];
+        } else {
+            streamerData['description'] = body['description'];
+        }
         
     
         getStream(body['login'], streamerData, callback)

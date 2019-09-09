@@ -26,7 +26,6 @@ class App extends Component {
 
     handleResize = event => {
         this.setState({winWidth: window.innerWidth});
-        console.log('resize')
     };
 
     componentWillMount() {
