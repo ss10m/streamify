@@ -142,13 +142,17 @@ app.get('/api/streamer/:name', (req, res) => {
 app.post('/api/follow', auth.required, (req, res, next) => {
     var auth = JSON.parse(req.get('Authorization'));
     console.log(auth.username + ' is trying to follow ' + req.body['name']);
-    twitchify.followStreamer(auth.username, req.body['name']);
+    twitchify.followStreamer(auth.username, req.body['name'], function(data) {
+        res.json(data);
+    });
 });
 
 app.post('/api/unfollow', auth.required, (req, res, next) => {
     var auth = JSON.parse(req.get('Authorization'));
     console.log(auth.username + ' is trying to unfollow ' + req.body['name']);
-    twitchify.unfollowStreamer(auth.username, req.body['name']);
+    twitchify.unfollowStreamer(auth.username, req.body['name'], function(data) {
+        res.json(data);
+    });
 });
 
 app.post('/api/followGame', auth.required, (req, res, next) => {
@@ -168,7 +172,7 @@ app.post('/api/unfollowGame', auth.required, (req, res, next) => {
     var args = {"gameName": req.body['gameName'],
                 "streamerName": req.body['name'],
                 "callType": 'unfollow'}
-    twitchify.getUser("followGame", auth.username, function(data) {
+    twitchify.getUser("unfollowGame", auth.username, function(data) {
         res.json(data);
     }, args);
 });

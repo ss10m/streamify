@@ -163,7 +163,7 @@ function convertGameIdToGameName(streamers, callback) {
 
 
 
-function unfollowStreamer(username, nameToUnfollow) {
+function unfollowStreamer(username, nameToUnfollow, callback) {
     User.findOne({username: username}, 
         function(err,streamer) {
             if(streamer) {
@@ -173,6 +173,7 @@ function unfollowStreamer(username, nameToUnfollow) {
                             streamer['streamers'].splice(index, 1);
                         }
                         streamer.save();
+                        callback({code : '200'})
                         break;
                     }
                 }
@@ -180,7 +181,22 @@ function unfollowStreamer(username, nameToUnfollow) {
         });
 }
 
-function followStreamer(username, nameToFollow) {
+function followStreamer(username, nameToFollow, callback) {
+    User.findOne({"username" : username, "streamers.name" : {"$in": nameToFollow}}, 
+        function(err, user) {
+
+            if(user) {
+                callback({error : 'already following ' + nameToFollow})
+            } else {
+                insertStreamerData(username, nameToFollow, callback);
+            }
+        }
+    );
+    
+}
+
+function insertStreamerData(username, nameToFollow, callback) {
+
 
     var options = {
         method: 'GET',
@@ -196,6 +212,7 @@ function followStreamer(username, nameToFollow) {
     request(options, function (error, response, body) {
         if(response && response.statusCode != '200') {
             console.log(response.statusCode)
+            callback({code : response.statusCode})
             return;
         }
 
@@ -212,6 +229,8 @@ function followStreamer(username, nameToFollow) {
                 if(streamer) {
                     streamer['streamers'].push(streamerData);
                     streamer.save();
+                    callback({code : '200'})
+                    return;
                }
             });
     });
@@ -229,17 +248,18 @@ function checkIfFollowing(auth, name, callback) {
             if(streamer) {
                 for(var [id, followedStreamer] of Object.entries(streamer.streamers)) {
                     if(followedStreamer.name == name) {
-                        streamerData['isFollowed'] = Boolean(true).toString();
+                        streamerData['isFollowed'] = true;
                         streamerData['followedGames'] = JSON.stringify(followedStreamer.followedGames);
                         getStreamerInfo(streamerData, callback);
                         return;
                     }
                 }
             } 
-            streamerData['isFollowed'] = Boolean(false).toString();
+            streamerData['isFollowed'] = false;
             streamerData['followedGames'] = '[]';
             getStreamerInfo(streamerData, callback);
-        });
+        }
+    );
     
 }
 

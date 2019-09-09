@@ -66,11 +66,11 @@ class Streamer extends Component {
         });
     }
 
-    handleSubmit = event => {
+    followStreamer = event => {
         event.preventDefault();
         const jwt = this.props.session;
         var apiCall = '/api/follow';
-        if(this.state.data.isFollowed === 'true') {
+        if(this.state.data.isFollowed) {
             apiCall = '/api/unfollow';
         }
 
@@ -83,18 +83,24 @@ class Streamer extends Component {
             body: JSON.stringify({ name: this.state.data['name'] }),
         }).then(res => res.json())
         .then(function(res) {
+            console.log(res)
             if(res.error) { throw res }
             return res;
         })
         .then(res => {
-            this.props.history.push('/streamers');
+            if(res.code === "200") {
+                var followed = this.state.data;
+                followed.isFollowed = !followed.isFollowed;
+                this.setState({ data : followed})
+            }
         }).catch(err => {
             console.log(err)
+            this.props.history.push('/streamers');
         })
     }
 
     toggleGameFollow = gameName => {
-        if(!this.props.session || this.state.data.isFollowed !== 'true') {
+        if(!this.props.session || !this.state.data.isFollowed) {
             this.props.modalOpen();
             return;
         }
@@ -137,13 +143,13 @@ class Streamer extends Component {
             return <button className="btn btn-primary" onClick={this.props.modalOpen}>Follow</button>
         }
 
-        if(this.state.data.isFollowed === 'true') {
+        if(this.state.data.isFollowed) {
             return (
-                <button className="btn btn-primary" onClick={this.handleSubmit}>Unfollow</button>
+                <button className="btn btn-primary" onClick={this.followStreamer}>Unfollow</button>
             )
         } else {
             return (
-                <button className="btn btn-primary" onClick={this.handleSubmit}>Follow</button>
+                <button className="btn btn-primary" onClick={this.followStreamer}>Follow</button>
             )
         }
     }
