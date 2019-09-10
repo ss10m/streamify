@@ -32,3 +32,15 @@
     padding-top: 30px;
     padding-bottom: 10px;
 }
+
+input.form-control.searchBar {
+    background-color:black;
+    color:white;
+    border: none
+}
+
+input.form-control:focus.searchBar {
+    background-color:black;
+    color:white;
+    border: none
+}

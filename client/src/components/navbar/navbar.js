@@ -20,6 +20,11 @@ class NavBar extends Component {
         this.setState({ navCollapsed: !this.state.navCollapsed })
     }
 
+    search = () => {
+        console.log('search')
+        this.props.history.push('/add');
+    }
+
     minimizeNav = () => {
         this.setState({ navCollapsed: true })
     }
@@ -80,19 +85,22 @@ class NavBar extends Component {
                 </button>
                 <div className={(this.state.navCollapsed ? 'collapse' : '') + ' navbar-collapse'}>
                     <ul className="navbar-nav mr-auto" onClick={this.minimizeNav}>
-                        
+
                         <li><Link to={'/'} className="nav-link"> Home </Link></li>
                         <li><Link to={'/add'} className="nav-link"> Add </Link></li>
-                        <li><Link to={'/streamers'}  className="nav-link"> Followed </Link></li>
-                        
-
-                        
+                        <li><Link to={'/streamers'}  className="nav-link"> Followed </Link></li>  
                     </ul>
 
-                    <form className="form-inline my-2 my-lg-0">
-                        <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
-                        <button className="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
-                    </form>
+                    <div className="form-inline my-2 my-lg-0">
+
+                        {//<div class="input-group-prepend">
+                          //  <div class="input-group-text">@</div>
+                        //</div>
+                        }
+                        <input className="form-control searchBar mr-sm-2" onClick={this.search} type="search" placeholder="Search" aria-label="Search" />
+                    </div>
+
+                    
 
                     <ul className="navbar-nav ml-auto">
                         {this.getButtons()}

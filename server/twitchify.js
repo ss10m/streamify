@@ -285,12 +285,10 @@ function getStreamerInfo(streamerData, callback) {
         body = JSON.parse(body);
 
         body = body.data[0];
-
-        
         
         streamerData['id'] = body['id'];
         streamerData['logo'] = body['profile_image_url'];
-        streamerData['display_name'] = body['login'];
+        streamerData['display_name'] = body['display_name'];
         
         streamerData['preview'] = body['offline_image_url'];
 

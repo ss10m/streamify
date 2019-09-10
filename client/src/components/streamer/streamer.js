@@ -211,23 +211,29 @@ class Streamer extends Component {
                             </div>
                             
                             <div className="flex-item">
-                                <h1>{this.state.data['display_name']}</h1>
+                                <h2 className="streamerName">{this.state.data['display_name']}</h2>
+                                {this.getFollowButton()}
                             </div>
                             
                         </div>
 
-                        <div className="card">
-                            <p>{this.state.data['title']}</p>
-                            <p>{this.state.data['viewers']}</p>
-                            <p>{this.state.data['game']}</p>
-                            {this.getFollowButton()}
-                        </div>
+
                         
+                        <div className="flex-container">
+                            <div className="fixed">
+                                    <img src={this.state.data['preview']} width="450" height="250" className="roundedImg" alt="MISSING" />
+                            </div>
+                            <div className="flex-item">
+                                <div className="card">
+                                    <p>{this.state.data['title']}</p>
+                                    <p>{this.state.data['viewers']}</p>
+                                    <p>{this.state.data['game']}</p>
+                                </div>
+                            </div>
 
-
-                        <div className="card">
-                            <img src={this.state.data['preview']} width="450" height="250" className="roundedImg" alt="MISSING" />
                         </div>
+
+
                     </div>
 
                     <div className="boxRight">

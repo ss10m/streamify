@@ -38,12 +38,18 @@
     
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1400px) {
     .infoRow {
         flex-wrap: wrap;
     }
+
 }
   
+@media screen and (max-width: 800px) {
+    .flex-container {
+        flex-wrap: wrap;
+    }
+}
 
 .boxLeft {
     flex-grow: 2;
@@ -69,12 +75,10 @@
 
 .flex-container > div {
     background-color: white;
-    font-size: 60px;
     padding: 20px;
     margin: 10px;
 }
 
-.flex-container > div > h1{
-    background-color: white;
-    font-size: 40px;
+.streamerName {
+    font-size: 5vw;
 }
