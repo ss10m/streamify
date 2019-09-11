@@ -483,6 +483,34 @@ function getTopStreamers() {
 }
 
 
+function searchChannels() {
+
+    var options = {
+        method: 'GET',
+        url: 'https://api.twitch.tv/kraken/search/channels?query=lir',
+        //qs: { offset: '0', limit: '2' },
+        headers:
+        {
+            'Client-ID': config.clientid,
+            'Accept': 'application/vnd.twitchtv.v5+json'
+        }
+    };
+
+    request(options, function (error, response, body) {
+        if(response && response.statusCode != '200') {
+            console.log(response.statusCode)
+            return;
+        }
+
+        body = JSON.parse(body);
+
+        console.log(body)
+    });
+}
+
+
+
+
 
 function startTopStreamers() {
     getTopStreamers();

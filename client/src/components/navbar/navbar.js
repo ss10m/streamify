@@ -3,26 +3,20 @@ import './navbar.css';
 import { ButtonToolbar } from 'react-bootstrap';
 import { withRouter, Link } from 'react-router-dom';
 
-import { NavDropdown } from './navComponents.js';
-
-
+import Search from './search';
 
 class NavBar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            navCollapsed: true
+            navCollapsed: true,
         };
+        this.myRef = React.createRef();
     }
 
     toggleNav = () => {
         console.log('toggleNav')
         this.setState({ navCollapsed: !this.state.navCollapsed })
-    }
-
-    search = () => {
-        console.log('search')
-        this.props.history.push('/add');
     }
 
     minimizeNav = () => {
@@ -77,6 +71,12 @@ class NavBar extends Component {
     }
 
     render() {
+        const node = this.myRef.current;
+        console.log(node)
+        console.log(this.state.autocompleteList)
+
+
+
         return (
             <nav className={(this.state.navCollapsed ? 'navbar-custom' : 'navbar-custom-expaneded') + " navbar navbar-custom navbar-expand-lg navbar-dark"}>
                 <Link onClick={this.minimizeNav} to={'/'} className="navbar-brand"> <b>Twitchify</b> </Link>
@@ -91,16 +91,7 @@ class NavBar extends Component {
                         <li><Link to={'/streamers'}  className="nav-link"> Followed </Link></li>  
                     </ul>
 
-                    <div className="form-inline my-2 my-lg-0">
-
-                        {//<div class="input-group-prepend">
-                          //  <div class="input-group-text">@</div>
-                        //</div>
-                        }
-                        <input className="form-control searchBar mr-sm-2" onClick={this.search} type="search" placeholder="Search" aria-label="Search" />
-                    </div>
-
-                    
+                    <Search />
 
                     <ul className="navbar-nav ml-auto">
                         {this.getButtons()}

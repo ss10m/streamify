@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
+import 'font-awesome/css/font-awesome.min.css';
 
 class Add extends Component {
     state = {
@@ -37,6 +37,18 @@ class Add extends Component {
                     />
                     <button type="submit">Submit</button>
                 </form>
+
+
+
+
+
+
+
+
+
+
+
+
                 <p>{this.state.responseToPost}</p>
             </div>
         )
