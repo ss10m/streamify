@@ -1,42 +1,41 @@
 .autocomplete {
-    /*the container must be positioned relative:*/
     position: relative;
     display: inline-block;
-  }
-  input {
+}
+
+input {
     border: 1px solid transparent;
     background-color: #122941;
     padding: 10px;
     font-size: 16px;
-  }
-  input[type=text] {
+}
+
+input[type=text] {
     background-color: #122941;
     color: #fff;
     width: 100%;
-  }
-  input[type=submit] {
-    background-color: DodgerBlue;
-    color: #fff;
-  }
-  .autocomplete-items {
+}
+
+.autocomplete-items {
     position: absolute;
     border: 5px solid #1c4269;
-    border-radius: 0px 0px 10px 10px;
-    border-top: none;
+    border-radius: 10px 0px 10px 10px;
     z-index: 99;
-    /*position the autocomplete items to be the same width as the container:*/
     top: 100%;
     left: 0;
     right: 0;
-  }
-  .autocomplete-items div {
+}
+.autocomplete-items div {
     padding: 10px 10px 10px 20px;
     color: white;
     cursor: pointer;
     background-color: #1c4269;
-    
-    
-  }
-  .autocomplete-items div:hover {
+}
+
+.autocomplete-items div:hover {
     background-color: #122941;
-  }
+}
+
+img.seachLogo {
+    border-radius: 50%;
+}

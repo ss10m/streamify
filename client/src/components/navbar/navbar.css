@@ -2,6 +2,10 @@
     background-color: #1c4269;
     height: 50px;
     z-index: 1;
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    left: 0px;
 }
 
 .navbar-custom-expaneded {
@@ -35,7 +39,7 @@
 
 input.form-control.searchBar {
     height: 30px;
-    width: 350px;
+    width: 450px;
     background-color:#122941;
     color:white;
     border: none

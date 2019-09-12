@@ -177,6 +177,13 @@ app.post('/api/unfollowGame', auth.required, (req, res, next) => {
     }, args);
 });
 
+app.get('/search/:query', auth.optional, (req, res) => {
+    var query = req.params.query;
+    twitchify.searchChannels(query, function(data) {
+        res.json(data);
+    });
+});
+
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
 console.log('============ server  started =============')

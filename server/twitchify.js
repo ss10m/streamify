@@ -483,11 +483,13 @@ function getTopStreamers() {
 }
 
 
-function searchChannels() {
+function searchChannels(query, callback) {
+
+    console.log(query)
 
     var options = {
         method: 'GET',
-        url: 'https://api.twitch.tv/kraken/search/channels?query=lir',
+        url: 'https://api.twitch.tv/kraken/search/channels?query=' + query + "&limit=10",
         //qs: { offset: '0', limit: '2' },
         headers:
         {
@@ -502,9 +504,8 @@ function searchChannels() {
             return;
         }
 
-        body = JSON.parse(body);
-
-        console.log(body)
+        body = JSON.parse(body).channels;
+        callback(body)
     });
 }
 
@@ -526,3 +527,4 @@ module.exports.followStreamer = followStreamer;
 module.exports.unfollowStreamer = unfollowStreamer;
 module.exports.getUser = getUser;
 module.exports.topStreamers = topStreamers;
+module.exports.searchChannels = searchChannels;
