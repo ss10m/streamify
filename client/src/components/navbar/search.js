@@ -8,27 +8,41 @@ class Search extends Component {
         super(props);
         this.state = {
             autocompleteList: [],
-            inputField : ''
+            inputField: '',
         };
+
+        this.getNewSuggestions.bind(this);
     }
+
     
     handleChange = event => {
         var requestName = event.target.value.trim();
-        this.setState({inputField : event.target.value})
-        if(requestName.length > 0) {
-            fetch("/search/" + requestName)
-                .then(res => res.json())
-                .then(function(res) {
-                    if(res.error) { throw res }
-                    return res;
-                })
-                .then(data => {
-                    this.setState({ autocompleteList : data })
-                }).catch(err => {
-                    console.log(err)
-                });
-        }
+        this.setState({inputField : event.target.value});
+        setTimeout(function() {
+            this.getNewSuggestions(requestName);
+        }.bind(this), 500)
     }
+
+    getNewSuggestions = (requestName) => {
+        if(requestName !== this.state.inputField || requestName.length === 0) {
+            return;
+        }
+        
+        console.log('fetching' + requestName)
+        fetch("/search/" + requestName)
+            .then(res => res.json())
+            .then(function(res) {
+                if(res.error) { throw res }
+                return res;
+            })
+            .then(data => {
+                this.setState({ autocompleteList : data })
+            }).catch(err => {
+                console.log(err)
+            });
+    }
+
+
 
     clearAutoInput = () => {
         this.setState({autocompleteList : [], inputField : ''});
