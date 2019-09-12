@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
+import ReactDOM from 'react-dom';
 import './search.css';
 
 class Search extends Component {
@@ -29,19 +30,19 @@ class Search extends Component {
         }
     }
 
-    clearInput = () => {
-        this.setState({inputField : ''})
+    clearAutoInput = () => {
+        this.setState({autocompleteList : [], inputField : ''});
     }
 
     getAutocompleteList = () => {
         var autoCompleteList = this.state.autocompleteList;
         return (
-            <div id="myInputautocomplete-list" className="autocomplete-items">
+            <div className="autocomplete-items">
                 {autoCompleteList.map(listItem =>
                     <Link to={"/streamer/" + listItem.name} key={listItem.name}>
-                        <div key={listItem.name} onClick={this.clearInput}>
+                        <div key={listItem.name} onClick={this.clearAutoInput}>
                             <img className="seachLogo" src={listItem.logo} width="40" height="40" alt="MISSING" />
-                            {listItem.name}
+                            {listItem.display_name}
                         </div> 
                     </Link>
                 )}
@@ -49,17 +50,24 @@ class Search extends Component {
         )
     }
 
-    toggleDropdown() {
-        if(this.state.autocompleteList !== []) {
-            setTimeout(function() {
-                this.setState({autocompleteList : [], inputField : ''});
-            }.bind(this), 100)
-        } 
+    componentDidMount() {
+        document.addEventListener('click', this.handleClickOutside, true);
+    }
+    
+    componentWillUnmount() {
+        document.removeEventListener('click', this.handleClickOutside, true);
+    }
+    
+    handleClickOutside = event => {
+        const domNode = ReactDOM.findDOMNode(this);
+        if (!domNode || !domNode.contains(event.target)) {
+            this.clearAutoInput();
+        }
     }
 
     render() {
         return (
-            <form autoComplete="off" action="/action_page.php"  onBlur={() => this.toggleDropdown()} onFocus={() => this.toggleDropdown()}>
+            <form autoComplete="off" action="/action_page.php">
                 <div className="form-inline my-2 my-lg-0">
                     <div className="form-group has-search autocomplete">
                         <span className="fa fa-search form-control-feedback"></span>

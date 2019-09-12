@@ -394,10 +394,11 @@ function getRecentGamesBoxArt(recentGames, callback, streamerData) {
         }
     })
 
-    requestParameters += '&id=' + streamerData['game']
-
+    if(streamerData['game'] != "Offline") {
+        requestParameters += '&id=' + streamerData['game']
+    }
+    
     requestParameters = requestParameters.substr(1);
-
 
     var options = {
         method: 'GET',
@@ -420,9 +421,14 @@ function getRecentGamesBoxArt(recentGames, callback, streamerData) {
         body = body.replace(/{height}/g, '300')
         body = JSON.parse(body);
 
+        console.log(body)
 
 
-        streamerData['game'] = body.data[0]['name'];
+
+
+        if(streamerData['game'] != "Offline") {
+            streamerData['game'] = body.data[0]['name'];
+        }
 
         //console.log(body)
         var boxArts = [body.data.shift()]

@@ -71,12 +71,6 @@ class NavBar extends Component {
     }
 
     render() {
-        const node = this.myRef.current;
-        console.log(node)
-        console.log(this.state.autocompleteList)
-
-
-
         return (
             <nav className={(this.state.navCollapsed ? 'navbar-custom' : 'navbar-custom-expaneded') + " navbar navbar-custom navbar-expand-lg navbar-dark"}>
                 <Link onClick={this.minimizeNav} to={'/'} className="navbar-brand"> <b>Twitchify</b> </Link>
