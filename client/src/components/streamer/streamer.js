@@ -206,11 +206,11 @@ class Streamer extends Component {
                 <div className="infoRow">
                     <div className="boxLeft">
                         <div className="flex-container">
-                            <div className="fixed">
+                            <div className="flex-container-div">
                                 <img src={this.state.data['logo']}  width="200" height="200" alt="MISSING" />
                             </div>
                             
-                            <div className="flex-item">
+                            <div className="flex-container-div">
                                 <h2 className="streamerName">{this.state.data['display_name']}</h2>
                                 {this.getFollowButton()}
                             </div>
@@ -220,10 +220,10 @@ class Streamer extends Component {
 
                         
                         <div className="flex-container">
-                            <div className="fixed">
-                                    <img src={this.state.data['preview']} width="450" height="250" className="roundedImg" alt="MISSING" />
+                            <div className="flex-container-div">
+                                <img src={this.state.data['preview']} width="400" height="220" className="roundedImg" alt="MISSING" />
                             </div>
-                            <div className="flex-item">
+                            <div>
                                 <div className="card">
                                     <p>{this.state.data['title']}</p>
                                     <p>{this.state.data['viewers']}</p>
@@ -249,7 +249,17 @@ class Streamer extends Component {
 
                 </div>
                 
-                <div>
+                <div className="recentGames">
+                    <div className="flex-container recentGamesSearch">
+                        <div className="searchGamesTextDiv">
+                            <h3 className="searchGamesText">Games recently played by {this.state.data['display_name']}</h3>
+                        </div>
+                        <div className="searchGamesButtonDiv">
+                            <button type="button" className="btn btn-primary btn-sm searchGamesButton">Search for more games</button>
+                        </div>
+                        
+                    </div>
+
                     {this.getRecentGames()}
                 </div>   
 

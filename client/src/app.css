@@ -26,7 +26,7 @@ div.streamers {
     overflow: auto;
     flex-direction: column;
     background-color: #c3c7cc;
-    padding: 10px;
+    
 }
   
 ::-webkit-scrollbar { 

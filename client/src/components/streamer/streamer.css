@@ -1,7 +1,6 @@
 * {
     box-sizing: border-box;
-}
-  
+}  
 
 .roundedImg {
     border-radius: 10px;
@@ -13,6 +12,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
+    margin: 0px 10px;
 }
 
 .block {
@@ -27,8 +27,9 @@
 .innerbox {
     height: 200px;
     min-width: 200px;
-    border: 1px solid yellow; 
+    border: 1px solid #122941; 
     overflow: scroll;
+    background: linear-gradient(#e66465, #9198e5);
 }
 
 .infoRow {
@@ -48,6 +49,9 @@
 @media screen and (max-width: 800px) {
     .flex-container {
         flex-wrap: wrap;
+    }
+    .searchGamesTextDiv {
+        width: 200px !important;
     }
 }
 
@@ -73,12 +77,47 @@
     flex-direction: row;
 }
 
-.flex-container > div {
+.flex-container-div {
     background-color: white;
-    padding: 20px;
+    padding: 10px;
     margin: 10px;
 }
 
 .streamerName {
     font-size: 5vw;
 }
+
+
+.recentGames {
+    background: linear-gradient(to bottom, #122941, DimGrey);
+}
+
+.recentGamesSearch {
+    margin-top: 10px;
+    height: 60px;
+    
+    background-color: #696969;
+}
+
+
+.searchGamesTextDiv {
+    height: 100%;
+    width: 350px;
+    display: flex;
+}
+.searchGamesText {
+    margin: auto;
+}
+
+.searchGamesButtonDiv {
+    height: 100%;
+    width: 250px;
+    display: flex;
+}
+.searchGamesButton {
+    margin: auto;
+}
+
+
+
+
