@@ -8,7 +8,7 @@
 
 .row {
     display: flex;  
-
+    
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
@@ -37,6 +37,15 @@
     flex-direction: row;
     flex-wrap: nowrap;
     
+}
+
+.upperBody {
+    background-color: #c3c7cc;
+}
+
+.streamerView {
+    background-color: #696969;
+    min-height: 100%;
 }
 
 @media screen and (max-width: 1400px) {
@@ -90,6 +99,7 @@
 
 .recentGames {
     background: linear-gradient(to bottom, #122941, DimGrey);
+    min-height: 350px;
 }
 
 .recentGamesSearch {

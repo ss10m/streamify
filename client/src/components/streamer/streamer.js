@@ -195,7 +195,7 @@ class Streamer extends Component {
         }
 
         return (
-            <div>
+            <div className="upperBody">
                 <div className="infoRow">
                     <div className="boxLeft">
                         <div className="flex-container">
@@ -267,7 +267,7 @@ class Streamer extends Component {
 
     render() {
         return (
-            <div>
+            <div className="streamerView">
                 <SearchModal
                     show={this.state.showSearchModal}
                     onHide={this.modalClose}

@@ -53,7 +53,7 @@ function togglefollowGame(user, streamerInfo, callback) {
                             callback(JSON.stringify(streamer.followedGames));
                         })
                     } else {
-                        callback({error: 'already following'});
+                        callback({error: 'not following'});
                     }
                     break;
             }
@@ -383,9 +383,8 @@ function getRecentGamesPlayed(name, callback, streamerData) {
 
 function getRecentGamesBoxArt(recentGames, callback, streamerData) {
 
-    //console.log(recentGames.length)
-
     var requestParameters = '';
+    var currentGameIncluded = false;
 
     Array.from(recentGames).forEach((recentGame) => {
         var alphaNumeric = /^[a-z\d\-_\s\'\!\:\+]+$/i;
@@ -396,6 +395,7 @@ function getRecentGamesBoxArt(recentGames, callback, streamerData) {
 
     if(streamerData['game'] != "Offline") {
         requestParameters += '&id=' + streamerData['game']
+        currentGameIncluded = true;
     }
     
     requestParameters = requestParameters.substr(1);
@@ -425,7 +425,14 @@ function getRecentGamesBoxArt(recentGames, callback, streamerData) {
             streamerData['game'] = body.data[0]['name'];
         }
 
-        var boxArts = [body.data.shift()]
+        var boxArts = [...body.data]
+        
+        if(currentGameIncluded && boxArts.length > 0) {
+            var currentGame =  boxArts[0].name;
+            if(recentGames.includes(currentGame.toLowerCase())) {
+                boxArts.shift();
+            }
+        }
 
         boxArts.map(boxArt => {
             if(boxArt.name.length > 20) {
@@ -433,10 +440,8 @@ function getRecentGamesBoxArt(recentGames, callback, streamerData) {
             }
         })
 
-        streamerData['recentGames'] = JSON.stringify(body.data);
-
+        streamerData['recentGames'] = JSON.stringify(boxArts);
         callback(streamerData);
-
     });
 }
 
