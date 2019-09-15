@@ -29,7 +29,7 @@ class Search extends Component {
         }
         
         console.log('fetching' + requestName)
-        fetch("/search/" + requestName)
+        fetch("/search/" + this.props.category + '/'  + requestName)
             .then(res => res.json())
             .then(function(res) {
                 if(res.error) { throw res }
@@ -50,18 +50,34 @@ class Search extends Component {
 
     getAutocompleteList = () => {
         var autoCompleteList = this.state.autocompleteList;
-        return (
-            <div className="autocomplete-items">
-                {autoCompleteList.map(listItem =>
-                    <Link to={"/streamer/" + listItem.name} key={listItem.name}>
-                        <div key={listItem.name} onClick={this.clearAutoInput}>
-                            <img className="seachLogo" src={listItem.logo} width="40" height="40" alt="MISSING" />
-                            {listItem.display_name}
-                        </div> 
-                    </Link>
-                )}
-            </div>
-        )
+        switch(this.props.category){
+            case('channels'):
+                return (
+                    <div className="autocomplete-items">
+                        {autoCompleteList.map(listItem =>
+                            <Link to={"/streamer/" + listItem.name} key={listItem.name}>
+                                <div key={listItem.name} onClick={this.clearAutoInput}>
+                                    <img className="seachLogo" src={listItem.logo} width="40" height="40" alt="MISSING" />
+                                    {listItem.display_name}
+                                </div> 
+                            </Link>
+                        )}
+                    </div>
+                )
+            case('games'):
+                return (
+                    <div className="autocomplete-items">
+                        {autoCompleteList.map(listItem =>
+                            <div key={listItem.name}>
+                                <img className="seachGames" src={listItem.box.small} width="40" height="56" alt="MISSING" />
+                                {listItem.name}
+                                <button type="button" onClick={() => this.props.followGame(listItem.name)} className="btn btn-primary btn-sm followGameButton">Follow</button>
+                            </div> 
+                        )}
+                    </div>
+                )
+        }
+
     }
 
     componentDidMount() {
@@ -81,16 +97,13 @@ class Search extends Component {
 
     render() {
         return (
-            <form autoComplete="off" action="/action_page.php">
-                <div className="form-inline my-2 my-lg-0">
-                    <div className="form-group has-search autocomplete">
-                        <span className="fa fa-search form-control-feedback"></span>
-                        <input id="myInput" type="text" className="form-control searchBar myInput" ref={this.myRef} onChange={this.handleChange} placeholder="Search" value={this.state.inputField}/>
-                        {this.getAutocompleteList()}
-                        
-                    </div>
+            <div className="form-inline my-2 my-lg-0">
+                <div className="form-group has-search autocomplete">
+                    <span className="fa fa-search form-control-feedback"></span>
+                    <input id="myInput" type="text" className="form-control searchBar myInput" ref={this.myRef} onChange={this.handleChange} placeholder="Search" value={this.state.inputField}/>
+                    {this.getAutocompleteList()}
                 </div>
-            </form> 
+            </div>
         );
     }
 }

@@ -177,9 +177,10 @@ app.post('/api/unfollowGame', auth.required, (req, res, next) => {
     }, args);
 });
 
-app.get('/search/:query', auth.optional, (req, res) => {
+app.get('/search/:category/:query', auth.optional, (req, res) => {
+    var category = req.params.category;
     var query = req.params.query;
-    twitchify.searchChannels(query, function(data) {
+    twitchify.search(category, query, function(data) {
         res.json(data);
     });
 });

@@ -7,12 +7,6 @@ var config = require('./config/config.js');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
-    //user id
-    //get streamers coresponding to user id from db
-    //channel is already there
-    //update streamers
-    //callback return
-
 function getUser(mode, username, callback, optionalArg) {
 
     User.findOne(
@@ -46,6 +40,8 @@ function togglefollowGame(user, streamerInfo, callback) {
                             if(err) throw err;
                             callback(JSON.stringify(streamer.followedGames));
                         })
+                    } else {
+                        callback({error: 'already following'});
                     }
                     break;
                 case "unfollow":
@@ -56,6 +52,8 @@ function togglefollowGame(user, streamerInfo, callback) {
                             if(err) throw err;
                             callback(JSON.stringify(streamer.followedGames));
                         })
+                    } else {
+                        callback({error: 'already following'});
                     }
                     break;
             }
@@ -73,14 +71,12 @@ function getStreamersData(user, callback) {
         return;
     }
 
-    var params = ''
+    var params = '';
     for(let streamer of streamers) {
         params += '&user_login=' + streamer.name;
         streamer['game'] = 'Offline';
         streamer['viewers'] = '0';
     }
-
-    //streamers[0]['game'] = 'Offline';
 
     var options = {
         method: 'GET',
@@ -123,6 +119,12 @@ function convertGameIdToGameName(streamers, callback) {
         }
     }
     requestParameters = requestParameters.substr(1);
+
+    if(requestParameters.length === 0) {
+        callback(JSON.stringify(streamers));
+        return;
+    }
+
     var options = {
         method: 'GET',
         url: "https://api.twitch.tv/helix/games?" + requestParameters,
@@ -139,8 +141,6 @@ function convertGameIdToGameName(streamers, callback) {
             callback({error: response.statusCode})
             return;
         }
-
-        console.log('111')
 
         body = JSON.parse(body);
         body = body.data;
@@ -421,16 +421,10 @@ function getRecentGamesBoxArt(recentGames, callback, streamerData) {
         body = body.replace(/{height}/g, '300')
         body = JSON.parse(body);
 
-        console.log(body)
-
-
-
-
         if(streamerData['game'] != "Offline") {
             streamerData['game'] = body.data[0]['name'];
         }
 
-        //console.log(body)
         var boxArts = [body.data.shift()]
 
         boxArts.map(boxArt => {
@@ -488,14 +482,12 @@ function getTopStreamers() {
     });
 }
 
-
-function searchChannels(query, callback) {
-
-    console.log(query)
+function search(category, query, callback) {
 
     var options = {
         method: 'GET',
-        url: 'https://api.twitch.tv/kraken/search/channels?query=' + query + "&limit=10",
+        url: 'https://api.twitch.tv/kraken/search/' + category + '?query=' + query + "&limit=10",
+        //url: 'https://api.twitch.tv/kraken/search/games?query=star',
         //qs: { offset: '0', limit: '2' },
         headers:
         {
@@ -507,17 +499,24 @@ function searchChannels(query, callback) {
     request(options, function (error, response, body) {
         if(response && response.statusCode != '200') {
             console.log(response.statusCode)
+            callback({error: response.statusCode})
             return;
         }
 
-        body = JSON.parse(body).channels;
+        switch(category) {
+            case 'channels':
+                body = JSON.parse(body).channels;
+                break;
+            case 'games':
+                body = JSON.parse(body).games;
+                if(!body) body = [];
+                body = body.slice(0, 5)
+                break;
+        }
+
         callback(body)
     });
 }
-
-
-
-
 
 function startTopStreamers() {
     getTopStreamers();
@@ -525,6 +524,9 @@ function startTopStreamers() {
 }
 
 startTopStreamers()
+
+
+
 console.log('=========== twitchify started ============')
 
 module.exports.streamers = streamers;
@@ -533,4 +535,4 @@ module.exports.followStreamer = followStreamer;
 module.exports.unfollowStreamer = unfollowStreamer;
 module.exports.getUser = getUser;
 module.exports.topStreamers = topStreamers;
-module.exports.searchChannels = searchChannels;
+module.exports.search = search;

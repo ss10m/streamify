@@ -40,3 +40,12 @@ img.seachLogo {
     border-radius: 50%;
     margin-right: 15px;
 }
+
+img.seachGames {
+    margin-right: 15px;
+}
+
+.followGameButton {
+    float: right;
+    margin-top: 10px;
+}

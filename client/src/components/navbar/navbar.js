@@ -85,7 +85,7 @@ class NavBar extends Component {
                         <li><Link to={'/streamers'}  className="nav-link"> Followed </Link></li>  
                     </ul>
 
-                    <Search />
+                    <Search category="channels"/>
 
                     <ul className="navbar-nav ml-auto">
                         {this.getButtons()}

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './streamer.css';
+import SearchModal from './searchModal.js'
 
 class Streamer extends Component {
     constructor(props) {
@@ -7,7 +8,8 @@ class Streamer extends Component {
         this.state = {
             name: this.props.match.params.id,
             data: {},
-            followedGames: []
+            followedGames: [],
+            showSearchModal: false
         };
 
 
@@ -99,22 +101,13 @@ class Streamer extends Component {
         })
     }
 
-    toggleGameFollow = gameName => {
+    followGame = gameName => {
         if(!this.props.session || !this.state.data.isFollowed) {
             this.props.modalOpen();
             return;
         }
-        var unique = !this.state.data.followedGames.includes(gameName)
 
-
-        var requestUrl;
-        if(unique) {
-            requestUrl = 'followGame';
-        } else {
-            requestUrl = 'unfollowGame';
-        }
-
-        fetch('/api/' + requestUrl, {
+        fetch('/api/followGame/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -128,7 +121,7 @@ class Streamer extends Component {
             return res; 
         })
         .then(res => {
-            var updatedData = this.state.data
+            var updatedData = this.state.data;
             updatedData.followedGames = JSON.parse(res)
             this.setState({ data : updatedData});
         }).catch(err => {
@@ -169,7 +162,7 @@ class Streamer extends Component {
             <div>
                 <div className="row">
                     {recentGames.map(recentGame =>
-                        <div className="block"  key={recentGame['name']} onClick={() => this.toggleGameFollow(recentGame['name'])}>
+                        <div className="block"  key={recentGame['name']} onClick={() => this.followGame(recentGame['name'])}>
                             {recentGame['name']}
                             <img src={recentGame['box_art_url']} width="150" height="220"  alt="MISSING" />
                         </div>
@@ -255,7 +248,7 @@ class Streamer extends Component {
                             <h3 className="searchGamesText">Games recently played by {this.state.data['display_name']}</h3>
                         </div>
                         <div className="searchGamesButtonDiv">
-                            <button type="button" className="btn btn-primary btn-sm searchGamesButton">Search for more games</button>
+                            <button type="button" className="btn btn-primary btn-sm searchGamesButton" onClick={this.modalOpen}>Search for more games</button>
                         </div>
                         
                     </div>
@@ -267,11 +260,19 @@ class Streamer extends Component {
         )
     }
 
+    modalClose = () => this.setState({ showSearchModal: false });
+
+    modalOpen = () => this.setState({ showSearchModal: true });
+
 
     render() {
-
         return (
             <div>
+                <SearchModal
+                    show={this.state.showSearchModal}
+                    onHide={this.modalClose}
+                    followGame={this.followGame}
+                />
                 {this.getBody()}
             </div>
         );
