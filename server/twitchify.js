@@ -18,6 +18,7 @@ function getUser(mode, username, callback, optionalArg) {
                         getStreamersData(user, callback);
                         break;
                     case "followGame":
+                    case "unfollowGame":
                         togglefollowGame(user, optionalArg, callback);
                         break;
                 }
@@ -45,6 +46,7 @@ function togglefollowGame(user, streamerInfo, callback) {
                     }
                     break;
                 case "unfollow":
+                    console.log('unfollow')
                     if(streamer.followedGames.includes(streamerInfo.gameName)) {
                         var index = streamer.followedGames.indexOf(streamerInfo.gameName)
                         streamer.followedGames.splice(index, 1);
@@ -434,11 +436,13 @@ function getRecentGamesBoxArt(recentGames, callback, streamerData) {
             }
         }
 
+        /*
         boxArts.map(boxArt => {
             if(boxArt.name.length > 20) {
                 boxArt.name = boxArt.name.substring(0,20) + '...';
             }
         })
+        */
 
         streamerData['recentGames'] = JSON.stringify(boxArts);
         callback(streamerData);

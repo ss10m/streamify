@@ -71,7 +71,7 @@ class Search extends Component {
                             <div key={listItem.name}>
                                 <img className="seachGames" src={listItem.box.small} width="40" height="56" alt="MISSING" />
                                 {listItem.name}
-                                <button type="button" onClick={() => this.props.followGame(listItem.name)} className="btn btn-primary btn-sm followGameButton">Follow</button>
+                                <button type="button" onClick={() => this.props.followGame('follow', listItem.name)} className="btn btn-primary btn-sm followGameButton">Follow</button>
                             </div> 
                         )}
                     </div>

@@ -101,13 +101,13 @@ class Streamer extends Component {
         })
     }
 
-    followGame = gameName => {
+    followGame = (type, gameName) => {
         if(!this.props.session || !this.state.data.isFollowed) {
             this.props.modalOpen();
             return;
         }
 
-        fetch('/api/followGame/', {
+        fetch('/api/' + type + 'Game/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -162,7 +162,7 @@ class Streamer extends Component {
             <div>
                 <div className="row">
                     {recentGames.map(recentGame =>
-                        <div className="block"  key={recentGame['name']} onClick={() => this.followGame(recentGame['name'])}>
+                        <div className="block"  key={recentGame['name']} onClick={() => this.followGame('follow', recentGame['name'])}>
                             {recentGame['name']}
                             <img src={recentGame['box_art_url']} width="150" height="220"  alt="MISSING" />
                         </div>
@@ -181,7 +181,10 @@ class Streamer extends Component {
         return (
             <div>
                 {this.state.data.followedGames.map((gameName) => 
-                    <p key={gameName}>{gameName}</p>
+                    <div className="tag">
+                        <p className="tag-text" key={gameName}>{gameName}</p>
+                        <p className="tag-remove" onClick={() => this.followGame('unfollow', gameName)}>&#x2715;</p>
+                    </div>
                 )}
             </div>
         )
@@ -234,7 +237,8 @@ class Streamer extends Component {
                             <p>{this.state.data['description']}</p>
                         </div>
                         
-                        <div className="card innerbox">
+                        <h3 className="followedGames">Followed Games</h3>
+                        <div className="tag-wrapper">
                             {this.getFollowedGames()}
                         </div>
                     </div>
