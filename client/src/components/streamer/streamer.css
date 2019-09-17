@@ -1,26 +1,41 @@
-* {
-    box-sizing: border-box;
-}  
-
 .roundedImg {
     border-radius: 10px;
 }
 
 .row {
     display: flex;  
-    
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: flex-start;
     margin: 0px 10px;
 }
 
 .block {
-    width: 150px;
+    flex: 0 0 150px;
     background-color: #122941;
-    color: white;
-    text-align: center;
+    border: 1px solid black;
     margin: 1em;
+    border-radius: 5px;
+}
+
+.recentGameName {
+    white-space: nowrap;
+    margin: 5px 3px;
+    text-align: center;
+    font: 14px Helvetica, Verdana, sans-serif; 
+    color: white;
+    text-overflow: ellipsis;
+    width: 144px;
+    overflow: hidden;
+}
+
+.recentGameImg {
+    width: 100%;
+    height: auto;
+}
+
+.block:hover {
+    background-color: #1c4269;
+    cursor: pointer;
 }
 
 
@@ -91,6 +106,7 @@
     background-color: white;
     padding: 10px;
     margin: 10px;
+    box-shadow: 10px 10px 5px grey;
 }
 
 .streamerName {

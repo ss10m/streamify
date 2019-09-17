@@ -1,16 +1,20 @@
+.streamersBody {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    
+}
+
 .streamerListWrapper {
     display: flex;
     flex-wrap: wrap;
 }
 
-
 div.streamerList {
-    flex: 1 1 41%;
+    width: 500px;
     margin: 20px;
-    border: 2px solid #122941;
-    min-width: 400px;
-    max-width: 600px;
-    box-shadow: 10px 10px 5px grey;
+    border: 2px solid black;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     background-color: #122941;
     border-radius: 10px;
 }

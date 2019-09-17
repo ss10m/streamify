@@ -88,7 +88,8 @@ class Streamers extends Component {
         }
 
         return (
-            <div>
+            <div className="streamersBody">
+                <h1>FILTER (LIVE, OFFLINE, > viewers)</h1>
                 {body}
             </div>
         );
