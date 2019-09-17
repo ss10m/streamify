@@ -1,29 +1,35 @@
-ul.stList {
-    list-style-type: none;
-    width: 700px;
+.streamerListWrapper {
+    display: flex;
+    flex-wrap: wrap;
 }
 
-h3 {
-    font: bold 15px Helvetica, Verdana, sans-serif;
-}
- 
-li.sList img {
-    float: left;
-    margin: 0 15px 0 0;
-}
- 
-li.sList p {
-    font: 200 12px/1.5 Georgia, Times New Roman, serif;
-    float: left;
-}
- 
-li.sList {
-    padding: 10px;
-    overflow: auto;
+
+div.streamerList {
+    flex: 1 1 41%;
+    margin: 20px;
+    border: 2px solid #122941;
+    min-width: 400px;
+    max-width: 600px;
+    box-shadow: 10px 10px 5px grey;
+    background-color: #122941;
+    border-radius: 10px;
 }
 
+div.streamerList h1 {
+    font: bold 30px Helvetica, Verdana, sans-serif;
+    color: #eee
+}
+
+div.streamerList h5, div.streamerList h6 {
+    color: #eee;
+}
  
-li:hover.sList {
-    background: #eee;
+div.streamerList img {
+    float: left;
+    margin: 0px 15px 0 0;
+}
+
+div:hover.streamerList {
+    background: #1c4269;
     cursor: pointer;
 }

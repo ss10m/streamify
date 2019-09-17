@@ -54,18 +54,18 @@ class Streamers extends Component {
 
     getStreamers() {
         return (
-            <ul className="stList">
+            <div className="streamerListWrapper">
                 {this.state.streamers.map(streamer =>
-                    <li className="sList" key={streamer.name}>
+                    <div className="streamerList" key={streamer.name}>
                         <Link to={'/streamer/' + streamer.name} className="nav-link">
                             <img src={streamer.logo} width="100" height="100" alt="MISSING" />
                             <h1>{streamer.display_name}</h1>
                             <h5>{streamer.game}</h5>
                             <h6>{streamer.viewers}</h6>
                         </Link>
-                    </li>
+                    </div>
                 )}
-            </ul>
+            </div>
         )
     }
 
