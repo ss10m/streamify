@@ -238,10 +238,6 @@ function insertStreamerData(username, nameToFollow, callback) {
 }
 
 function getStreamer(auth, name, callback) {
-    checkIfFollowing(auth, name, callback)
-}
-
-function checkIfFollowing(auth, name, callback) {
     User.findOne({username: auth.username}, 
         function(err, streamer) {
             var streamerData = {};
@@ -265,6 +261,7 @@ function checkIfFollowing(auth, name, callback) {
 }
 
 function getStreamerInfo(streamerData, callback) {
+
     var options = {
         method: 'GET',
         url: 'https://api.twitch.tv/helix/users?login=' + streamerData.name,
@@ -277,7 +274,6 @@ function getStreamerInfo(streamerData, callback) {
 
     request(options, function (error, response, body) {
 
-
         if(response && response.statusCode != '200') {
             console.log(response.statusCode);
             callback({error: response.statusCode});
@@ -287,7 +283,7 @@ function getStreamerInfo(streamerData, callback) {
         body = JSON.parse(body);
 
         body = body.data[0];
-        
+ 
         streamerData['id'] = body['id'];
         streamerData['logo'] = body['profile_image_url'];
         streamerData['display_name'] = body['display_name'];
@@ -299,12 +295,8 @@ function getStreamerInfo(streamerData, callback) {
         } else {
             streamerData['description'] = body['description'];
         }
-        
     
         getStream(body['login'], streamerData, callback)
-        
-
-
     });
 }
 
@@ -328,10 +320,7 @@ function getStream(name, streamerData, callback) {
         }
 
         body = JSON.parse(body);
-
         body = body.data[0];
-        //console.log(body)
-
 
         if(body) {
             streamerData['viewers'] = body['viewer_count'];
@@ -348,7 +337,6 @@ function getStream(name, streamerData, callback) {
         }
 
         getRecentGamesPlayed(name, callback, streamerData);
-
     });
 }
 
@@ -378,7 +366,12 @@ function getRecentGamesPlayed(name, callback, streamerData) {
         }
 
         var recentGamesArray = Array.from(recentGames)
-        getRecentGamesBoxArt(recentGamesArray, callback, streamerData)
+        if(recentGamesArray.length == 0) {
+            streamerData['recentGames'] = '[]';
+            callback(streamerData);
+        } else {
+            getRecentGamesBoxArt(recentGamesArray, callback, streamerData)
+        }
     });
 
 }
@@ -435,14 +428,6 @@ function getRecentGamesBoxArt(recentGames, callback, streamerData) {
                 boxArts.shift();
             }
         }
-
-        /*
-        boxArts.map(boxArt => {
-            if(boxArt.name.length > 20) {
-                boxArt.name = boxArt.name.substring(0,20) + '...';
-            }
-        })
-        */
 
         streamerData['recentGames'] = JSON.stringify(boxArts);
         callback(streamerData);

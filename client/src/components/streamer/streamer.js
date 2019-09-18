@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './streamer.css';
 import SearchModal from './searchModal.js'
+import twitchPreview from'../../images/preview.jpg';
+import twitchLogo from'../../images/logo.png';
 
 class Streamer extends Component {
     constructor(props) {
@@ -203,7 +205,12 @@ class Streamer extends Component {
                     <div className="boxLeft">
                         <div className="flex-container">
                             <div className="flex-container-div">
-                                <img src={this.state.data['logo']}  width="200" height="200" alt="MISSING" />
+                                
+                                {this.state.data['logo'] ? (
+                                    <img src={this.state.data['logo']}  width="200" height="200" alt="MISSING" />
+                                ) : (
+                                    <img src={twitchLogo} width="200" height="200" className="roundedImg" alt="MISSING" />
+                                )}
                             </div>
                             
                             <div className="flex-container-div">
@@ -217,7 +224,11 @@ class Streamer extends Component {
                         
                         <div className="flex-container">
                             <div className="flex-container-div">
-                                <img src={this.state.data['preview']} width="400" height="220" className="roundedImg" alt="MISSING" />
+                                {this.state.data['preview'] ? (
+                                    <img src={this.state.data['preview']} width="400" height="220" className="roundedImg" alt="MISSING" />
+                                ) : (
+                                    <img src={twitchPreview} width="400" height="220" className="roundedImg" alt="MISSING" />
+                                )}
                             </div>
                             <div>
                                 <div className="card">
