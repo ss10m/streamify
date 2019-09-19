@@ -57,14 +57,13 @@ class NavBar extends Component {
         } else {
             return (
                 <ButtonToolbar>
+                    <div className="logoButton1">
+                        <div className="logoButton2">
+                            <img src='https://static-cdn.jtvnw.net/jtv_user_pictures/7ed5e0c6-0191-4eef-8328-4af6e4ea5318-profile_image-300x300.png' width="30" height="30" alt="MISSING" />
+                        </div>
+                    </div>
                     
-                    <button 
-                        className="btn btn-link my-2 my-sm-0" 
-                        onClick={(event) => { this.logOut(event); this.minimizeNav() }}
-                    >   
-                        <img src='https://static-cdn.jtvnw.net/jtv_user_pictures/7ed5e0c6-0191-4eef-8328-4af6e4ea5318-profile_image-300x300.png' width="30" height="30" alt="MISSING" />
-                        Logout
-                    </button>
+                    
                 </ButtonToolbar>
             )
         }
@@ -87,9 +86,24 @@ class NavBar extends Component {
 
                     <Search category="channels"/>
 
-                    <ul className="navbar-nav ml-auto">
+                    <div className="navbar-nav ml-auto userOptions userLogo">
                         {this.getButtons()}
-                    </ul>
+                        <div className="userOptions-items">
+                            <div>
+                                <i class="fa fa-user userOptions-2"></i>
+                                <p className="userOptions-2">Profile</p>
+                            </div>
+                            <hr className="userOptionsSplit"/>
+                            <div>
+                                <i class="fa fa-sign-out userOptions-2"></i>
+                                <button className="btn btn-link my-2 my-sm-0 userOptions-2" onClick={(event) => { this.logOut(event); this.minimizeNav() }}>
+                                    Logout
+                                </button>
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
                 </div>
             </nav>
         )

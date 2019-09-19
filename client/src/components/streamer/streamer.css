@@ -109,6 +109,16 @@
     box-shadow: 10px 10px 5px grey;
 }
 
+.previewDiv {
+    max-width: 500px;
+    min-width: 400px;
+}
+
+.previewImg {
+    max-width: 100%;
+    height: auto;
+}
+
 .streamerName {
     font-size: 5vw;
     color: #122941;

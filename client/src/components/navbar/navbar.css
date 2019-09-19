@@ -6,6 +6,7 @@
     top: 0px;
     right: 0px;
     left: 0px;
+    padding-right: 0px;
 }
 
 .navbar-custom-expaneded {
@@ -25,6 +26,7 @@
 /* change the color of active or hovered links */
 .navbar-custom .navbar-nav .nav-link:focus  {
     color: white;
+    
 }
 
 .logInModal {
@@ -68,4 +70,54 @@ input.form-control:focus.searchBar {
 }
 input::-webkit-input-placeholder {
     color: white !important;
+}
+
+
+.userLogo {
+    width: 200px;
+}
+
+
+
+.logoButton2 {
+    float: right;
+}
+
+.userOptions {
+    position: relative;
+    display: inline-block;
+}
+
+.userOptions-items {
+    margin-top: 2px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    background-color: #1c4269;
+    color: white;
+    border-radius: 0 0 10px 10px;
+}
+
+.userOptions-items div {
+    margin-left: 5px;
+    margin-right: 5px;
+    color: white;
+    cursor: pointer;
+    padding: 20px;
+}
+
+.userOptions-2 {
+    float: left;
+    text-decoration: none;
+}
+
+.userOptions-items div:hover {
+    background-color: #122941;
+}
+
+hr.userOptionsSplit {
+    background-color: green;
+    border: 0;
+    border-color: yellow;
+    margin: 1px 10px 1px 10px;
 }

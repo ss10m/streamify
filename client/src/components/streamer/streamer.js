@@ -223,11 +223,11 @@ class Streamer extends Component {
 
                         
                         <div className="flex-container">
-                            <div className="flex-container-div">
+                            <div className="flex-container-div previewDiv">
                                 {this.state.data['preview'] ? (
-                                    <img src={this.state.data['preview']} width="400" height="220" className="roundedImg" alt="MISSING" />
+                                    <img src={this.state.data['preview']} className="roundedImg previewImg" alt="MISSING" />
                                 ) : (
-                                    <img src={twitchPreview} width="400" height="220" className="roundedImg" alt="MISSING" />
+                                    <img src={twitchPreview} className="roundedImg" alt="MISSING" />
                                 )}
                             </div>
                             <div>
