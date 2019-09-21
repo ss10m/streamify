@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import './navbar.css';
 import { ButtonToolbar } from 'react-bootstrap';
 import { withRouter, Link } from 'react-router-dom';
+import ReactDOM from 'react-dom';
 
+
+import './navbar.css';
 import Search from './search';
 
 class NavBar extends Component {
@@ -10,8 +12,9 @@ class NavBar extends Component {
         super(props);
         this.state = {
             navCollapsed: true,
+            showDropdown: false,
+            dropbownBtn: true
         };
-        this.myRef = React.createRef();
     }
 
     toggleNav = () => {
@@ -22,6 +25,14 @@ class NavBar extends Component {
     minimizeNav = () => {
         this.setState({ navCollapsed: true })
     }
+
+    setDropdownState= (newState) => {
+        this.setState({ showDropdown: newState })
+        
+        setTimeout(function() {
+            this.setState({dropbownBtn: true})
+        }.bind(this), 100)
+    }   
 
     logOut = event => {
         event.preventDefault();
@@ -57,10 +68,12 @@ class NavBar extends Component {
         } else {
             return (
                 <ButtonToolbar>
-                    <div className="logoButton1">
-                        <div className="logoButton2">
-                            <img src='https://static-cdn.jtvnw.net/jtv_user_pictures/7ed5e0c6-0191-4eef-8328-4af6e4ea5318-profile_image-300x300.png' width="30" height="30" alt="MISSING" />
-                        </div>
+                    <div className="logoButton">
+                        <img 
+                            className="loggedInLogo"
+                            src='https://static-cdn.jtvnw.net/jtv_user_pictures/7ed5e0c6-0191-4eef-8328-4af6e4ea5318-profile_image-300x300.png' 
+                            onClick={() => { if(!this.state.showDropdown && this.state.dropbownBtn) this.setState({showDropdown: true, dropbownBtn: false})}}
+                            width="30" height="30" alt="MISSING" />
                     </div>
                     
                     
@@ -88,24 +101,71 @@ class NavBar extends Component {
 
                     <div className="navbar-nav ml-auto userOptions userLogo">
                         {this.getButtons()}
-                        <div className="userOptions-items">
-                            <div>
-                                <i class="fa fa-user userOptions-2"></i>
-                                <p className="userOptions-2">Profile</p>
-                            </div>
-                            <hr className="userOptionsSplit"/>
-                            <div>
-                                <i class="fa fa-sign-out userOptions-2"></i>
-                                <button className="btn btn-link my-2 my-sm-0 userOptions-2" onClick={(event) => { this.logOut(event); this.minimizeNav() }}>
-                                    Logout
-                                </button>
-                            </div>
-                            
-                        </div>
-                        
+                        <UserDropdownOptions 
+                            showDropdown={this.state.showDropdown} 
+                            setDropdownState={this.setDropdownState}
+                            session={this.props.session} 
+                            minimizeNav={this.minimizeNav} 
+                            logOut={this.logOut} 
+                        />
                     </div>
                 </div>
             </nav>
+        )
+    }
+}
+
+class UserDropdownOptions extends Component {
+
+    componentDidMount() {
+        document.addEventListener('click', this.handleClickOutside, true);
+    }
+    
+    componentWillUnmount() {
+        document.removeEventListener('click', this.handleClickOutside, true);
+    }
+
+    handleClickOutside = event => {
+        const domNode = ReactDOM.findDOMNode(this);
+        if (!domNode || !domNode.contains(event.target)) {
+            console.log('clicked outside')
+            if(this.props.showDropdown) {
+                this.props.setDropdownState(false)
+            }
+            
+        }
+    }
+
+    getDropdown = () => {
+        if(this.props.showDropdown) {
+            return (
+                <div onClick={() => { this.props.setDropdownState(false) }} className="userOptions-items">
+                    <div className="userOptions-item">
+                        <i class="fa fa-user userOptions-2"></i>
+                        <p className="userOptions-2">Signed in as: {this.props.session.username}</p>
+                    </div>
+                    <div className="userOptions-item userOptions-items-selectable">
+                        <i class="fa fa-globe userOptions-2"></i>
+                        <p className="userOptions-2">About</p>
+                    </div>
+                    <hr className="userOptionsSplit"/>
+                    <div className="userOptions-item userOptions-items-selectable">
+                        <i class="fa fa-sign-out userOptions-2"></i>
+                        <button className="btn btn-link my-2 my-sm-0 userOptions-2" onClick={(event) => { this.props.logOut(event); this.props.minimizeNav() }}>
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            )
+        }
+    }
+
+    render() {
+        return (
+            <div>
+                {this.getDropdown()}
+            </div>
+            
         )
     }
 }

@@ -77,11 +77,19 @@ input::-webkit-input-placeholder {
     width: 200px;
 }
 
+.loggedInLogo:hover {
+    cursor: pointer;
+}
 
-
-.logoButton2 {
+.logoButton {
     float: right;
 }
+
+
+
+
+
+
 
 .userOptions {
     position: relative;
@@ -89,21 +97,29 @@ input::-webkit-input-placeholder {
 }
 
 .userOptions-items {
-    margin-top: 2px;
     position: absolute;
+    margin-top: 8px;
     left: 0;
     right: 0;
-    background-color: #1c4269;
+    background-color: #262626;
     color: white;
-    border-radius: 0 0 10px 10px;
+    border: 5px solid #262626;
+    border-radius: 0 0 3px 3px;
+
+}
+
+.userOptions-item {
+    text-align: center;
 }
 
 .userOptions-items div {
-    margin-left: 5px;
-    margin-right: 5px;
     color: white;
+    height: 50px;
+    
+}
+
+.userOptions-items-selectable {
     cursor: pointer;
-    padding: 20px;
 }
 
 .userOptions-2 {
@@ -111,8 +127,8 @@ input::-webkit-input-placeholder {
     text-decoration: none;
 }
 
-.userOptions-items div:hover {
-    background-color: #122941;
+.userOptions-items-selectable:hover {
+    background-color: #404040;
 }
 
 hr.userOptionsSplit {
