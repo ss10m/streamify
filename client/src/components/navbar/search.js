@@ -76,6 +76,7 @@ class Search extends Component {
                         )}
                     </div>
                 )
+            default:
         }
 
     }

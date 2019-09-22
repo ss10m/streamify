@@ -34,8 +34,7 @@ class NavBar extends Component {
         }.bind(this), 100)
     }   
 
-    logOut = event => {
-        event.preventDefault();
+    logOut = () => {
         
         fetch('/logout', {
             method: 'POST',
@@ -68,15 +67,13 @@ class NavBar extends Component {
         } else {
             return (
                 <ButtonToolbar>
-                    <div className="logoButton">
+                    <div className="loggedInLogoWrapper">
                         <img 
-                            className="loggedInLogo"
+                            className={(this.state.navCollapsed ? 'loggedInLogo' : 'loggedInLogoExpanded')}
                             src='https://static-cdn.jtvnw.net/jtv_user_pictures/7ed5e0c6-0191-4eef-8328-4af6e4ea5318-profile_image-300x300.png' 
                             onClick={() => { if(!this.state.showDropdown && this.state.dropbownBtn) this.setState({showDropdown: true, dropbownBtn: false})}}
                             width="30" height="30" alt="MISSING" />
-                    </div>
-                    
-                    
+                    </div>  
                 </ButtonToolbar>
             )
         }
@@ -139,21 +136,32 @@ class UserDropdownOptions extends Component {
     getDropdown = () => {
         if(this.props.showDropdown) {
             return (
-                <div onClick={() => { this.props.setDropdownState(false) }} className="userOptions-items">
+                <div className="userOptions-items"  onClick={() => { this.props.setDropdownState(false); this.props.minimizeNav() }}>
                     <div className="userOptions-item">
-                        <i class="fa fa-user userOptions-2"></i>
-                        <p className="userOptions-2">Signed in as: {this.props.session.username}</p>
+                        <i class="fa fa-user"></i>
+                        <div>
+                            <p className="userOptions-choices userOptions-signedin">Signed in as:</p>
+                            <p className="userOptions-choices userOptions-name">{this.props.session.username}</p>
+                        </div>
                     </div>
-                    <div className="userOptions-item userOptions-items-selectable">
-                        <i class="fa fa-globe userOptions-2"></i>
-                        <p className="userOptions-2">About</p>
-                    </div>
+
                     <hr className="userOptionsSplit"/>
-                    <div className="userOptions-item userOptions-items-selectable">
-                        <i class="fa fa-sign-out userOptions-2"></i>
-                        <button className="btn btn-link my-2 my-sm-0 userOptions-2" onClick={(event) => { this.props.logOut(event); this.props.minimizeNav() }}>
-                            Logout
-                        </button>
+
+                    <div className="userOptions-item userOptions-item-selectable">
+                        <i class="fa fa-globe"></i>
+                        <p className="userOptions-choices">About Twitchify</p>
+                    </div>
+
+                    <div className="userOptions-item userOptions-item-selectable">
+                        <i class="fa fa-cog"></i>
+                        <p className="userOptions-choices">Settings</p>
+                    </div>
+
+                    <hr className="userOptionsSplit"/>
+
+                    <div className="userOptions-item userOptions-item-selectable" onClick={() => { this.props.logOut() }}>
+                        <i class="fa fa-sign-out"></i>
+                        <p className="userOptions-choices">Logout</p>
                     </div>
                 </div>
             )

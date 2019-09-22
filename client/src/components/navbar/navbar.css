@@ -73,23 +73,22 @@ input::-webkit-input-placeholder {
 }
 
 
-.userLogo {
+.loggedInLogoWrapper {
     width: 200px;
+}
+
+.loggedInLogo {
+    float: right;
+    margin-right: 10px;
+}
+
+.loggedInLogoExpanded {
+    float: left;
 }
 
 .loggedInLogo:hover {
     cursor: pointer;
 }
-
-.logoButton {
-    float: right;
-}
-
-
-
-
-
-
 
 .userOptions {
     position: relative;
@@ -100,40 +99,54 @@ input::-webkit-input-placeholder {
     position: absolute;
     margin-top: 8px;
     left: 0;
-    right: 0;
+    right: 10px;
     background-color: #262626;
     color: white;
-    border: 5px solid #262626;
+    border: 10px solid #262626;
     border-radius: 0 0 3px 3px;
 
 }
 
+.userOptionsSplit {
+    background-color: white;
+    border: 1;
+    border-color: white;
+    margin: 5px 10px 5px 10px;
+}
+
 .userOptions-item {
-    text-align: center;
-}
-
-.userOptions-items div {
+    display: flex;
+    align-items: center;
     color: white;
-    height: 50px;
-    
+    height: 40px;
 }
 
-.userOptions-items-selectable {
+.userOptions-item i {
+    padding-left: 8px;
+}
+
+.userOptions-item p {
+    margin-top: auto;
+    margin-bottom: auto;
+    padding-left: 10px;
+}
+
+.userOptions-signedin {
+    font-size: 10px;
+}
+
+.userOptions-name {
+    font-size: 20px;
+    margin-left: 15px;
+    color: #8da0b4;
+    font-weight: bold;
+}
+
+.userOptions-item-selectable {
     cursor: pointer;
 }
 
-.userOptions-2 {
-    float: left;
-    text-decoration: none;
-}
-
-.userOptions-items-selectable:hover {
-    background-color: #404040;
-}
-
-hr.userOptionsSplit {
-    background-color: green;
-    border: 0;
-    border-color: yellow;
-    margin: 1px 10px 1px 10px;
+.userOptions-item-selectable:hover {
+    background-color: #1c4269;
+    border-radius: 5px;
 }
