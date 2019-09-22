@@ -72,9 +72,12 @@ input::-webkit-input-placeholder {
     color: white !important;
 }
 
-
 .loggedInLogoWrapper {
     width: 200px;
+}
+
+.loggedInLogoWrapper i {
+    color: white;
 }
 
 .loggedInLogo {
@@ -138,7 +141,10 @@ input::-webkit-input-placeholder {
 .userOptions-name {
     font-size: 20px;
     margin-left: 15px;
-    color: #8da0b4;
+    padding-right: 10px;
+    color: white;
+    background-color: #1c4269;
+    border-radius: 5px;
     font-weight: bold;
 }
 
