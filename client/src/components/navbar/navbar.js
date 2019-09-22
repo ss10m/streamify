@@ -66,37 +66,39 @@ class NavBar extends Component {
             )
         } else {
             return (
-                <ButtonToolbar>
-                    <div className="loggedInLogoWrapper">
-                        <img 
-                            className={(this.state.navCollapsed ? 'loggedInLogo' : 'loggedInLogoExpanded')}
-                            src='https://static-cdn.jtvnw.net/jtv_user_pictures/7ed5e0c6-0191-4eef-8328-4af6e4ea5318-profile_image-300x300.png' 
-                            onClick={() => { if(!this.state.showDropdown && this.state.dropbownBtn) this.setState({showDropdown: true, dropbownBtn: false})}}
-                            width="30" height="30" alt="MISSING" />
-                    </div>  
-                </ButtonToolbar>
+                <div className="loggedInLogoWrapper">
+                    <img 
+                        className={((window.innerWidth > 1000) ? 'loggedInLogo' : 'loggedInLogoExpanded')}
+                        src='https://static-cdn.jtvnw.net/jtv_user_pictures/7ed5e0c6-0191-4eef-8328-4af6e4ea5318-profile_image-300x300.png' 
+                        onClick={() => { if(!this.state.showDropdown && this.state.dropbownBtn) this.setState({showDropdown: true, dropbownBtn: false})}}
+                        width="30" height="30" alt="MISSING" />
+                </div>  
+                
             )
         }
     }
 
     render() {
+        var navbarClass = "t-navbar-mini";
+        var navbarDivClass = "t-navbar-div-mini";
+        var navbarDivClassRight = "t-navbar-div-right-mini"
+        if(window.innerWidth > 1000) {
+            navbarClass = "t-navbar";
+            navbarDivClass = "t-navbar-div";
+            navbarDivClassRight = "t-navbar-div-right"
+        }
+
         return (
-            <nav className={(this.state.navCollapsed ? 'navbar-custom' : 'navbar-custom-expaneded') + " navbar navbar-custom navbar-expand-lg navbar-dark"}>
-                <Link onClick={this.minimizeNav} to={'/'} className="navbar-brand"> <b>Twitchify</b> </Link>
-                <button onClick={this.toggleNav} className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className={(this.state.navCollapsed ? 'collapse' : '') + ' navbar-collapse'}>
-                    <ul className="navbar-nav mr-auto" onClick={this.minimizeNav}>
-
-                        <li><Link to={'/'} className="nav-link"> Home </Link></li>
-                        <li><Link to={'/add'} className="nav-link"> Add </Link></li>
-                        <li><Link to={'/streamers'}  className="nav-link"> Followed </Link></li>  
-                    </ul>
-
-                    <Search category="channels"/>
-
-                    <div className="navbar-nav ml-auto userOptions userLogo">
+            <div>
+                <div className={navbarClass}>
+                    <Link to={'/'} className="t-navbar-link"> <div className={navbarDivClass}>Twitchify</div> </Link>
+                    <Link to={'/'} className="t-navbar-link"> <div className={navbarDivClass}>Home</div> </Link>
+                    <Link to={'/streamers'} className="t-navbar-link"> <div className={navbarDivClass}>Followed</div> </Link>
+                    <div className="t-navbar-div-search ">
+                        <Search category="channels"/>
+                    </div>
+                    
+                    <div className={"userOptions userLogo t-navbar-div " + navbarDivClassRight}>
                         {this.getButtons()}
                         <UserDropdownOptions 
                             showDropdown={this.state.showDropdown} 
@@ -107,7 +109,7 @@ class NavBar extends Component {
                         />
                     </div>
                 </div>
-            </nav>
+            </div>
         )
     }
 }

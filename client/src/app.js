@@ -58,9 +58,7 @@ class App extends Component {
         let modalOpen = () => this.setState({ modalShow: true });
         return (
             <div>
-                <div>
-                    <Route render={() => <NavBar session={this.state.session} onLogout={this.onLogout.bind(this)} modalOpen={modalOpen}/>} />
-                </div>
+                <Route render={() => <NavBar session={this.state.session} onLogout={this.onLogout.bind(this)} modalOpen={modalOpen}/>} />
                 <LoginModal
                     show={this.state.modalShow}
                     onHide={modalClose}

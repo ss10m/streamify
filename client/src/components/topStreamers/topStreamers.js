@@ -32,7 +32,7 @@ class TopStreamers extends Component {
     }
 
     sidebar = () => {
-        if(this.props.winWidth > 800) {
+        if(window.innerWidth > 800) {
             return (
                 <div className="topStreamers list-group list-group-flush">
                     {this.state.topStreamers.map(streamer =>

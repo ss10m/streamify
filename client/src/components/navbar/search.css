@@ -1,26 +1,33 @@
 .autocomplete {
     position: relative;
     display: inline-block;
+    
 }
 
 input {
     border: 1px solid transparent;
     background-color: #122941;
     padding: 10px;
+
     font-size: 16px;
 }
 
 input[type=text] {
     background-color: #122941;
     color: #fff;
-    width: 100%;
+   
+    
+}
+
+.searchBar {
+    padding: 10px;
 }
 
 .autocomplete-items {
     position: absolute;
     border: 5px solid #1c4269;
     border-radius: 10px 0px 10px 10px;
-    z-index: 99;
+    z-index: 1;
     top: 100%;
     left: 0;
     right: 0;

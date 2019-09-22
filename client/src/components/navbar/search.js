@@ -98,7 +98,7 @@ class Search extends Component {
 
     render() {
         return (
-            <div className="form-inline my-2 my-lg-0">
+            <div className="form-inline my-2 my-lg-0 searchBar">
                 <div className="form-group has-search autocomplete">
                     <span className="fa fa-search form-control-feedback"></span>
                     <input id="myInput" type="text" className="form-control searchBar myInput" ref={this.myRef} onChange={this.handleChange} placeholder="Search" value={this.state.inputField}/>
