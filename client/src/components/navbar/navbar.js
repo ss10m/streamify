@@ -18,7 +18,7 @@ class NavBar extends Component {
     }
 
     toggleNav = () => {
-        console.log('toggleNav')
+        console.log(this.state.navCollapsed +' toggleNav')
         this.setState({ navCollapsed: !this.state.navCollapsed })
     }
 
@@ -35,7 +35,6 @@ class NavBar extends Component {
     }   
 
     logOut = () => {
-        
         fetch('/logout', {
             method: 'POST',
             headers: {
@@ -55,20 +54,18 @@ class NavBar extends Component {
     getButtons() {
         if(!this.props.session) {
             return(
-                <ButtonToolbar>
-                    <button 
-                        className="btn btn-outline-light my-2 my-sm-0" 
-                        onClick={() => { this.props.modalOpen(); this.minimizeNav() }}
-                    >
-                        Log in
-                    </button>
-                </ButtonToolbar>
+                <button 
+                    className="btn btn-outline-light btn-sm loginButton"
+                    onClick={() => { this.props.modalOpen(); this.minimizeNav() }}
+                >
+                    Log in
+                </button>
             )
         } else {
             return (
                 <div className="loggedInLogoWrapper">
                     <img 
-                        className={((window.innerWidth > 1000) ? 'loggedInLogo' : 'loggedInLogoExpanded')}
+                        className={((window.innerWidth > 800) ? 'loggedInLogo' : 'loggedInLogoExpanded')}
                         src='https://static-cdn.jtvnw.net/jtv_user_pictures/7ed5e0c6-0191-4eef-8328-4af6e4ea5318-profile_image-300x300.png' 
                         onClick={() => { if(!this.state.showDropdown && this.state.dropbownBtn) this.setState({showDropdown: true, dropbownBtn: false})}}
                         width="30" height="30" alt="MISSING" />
@@ -78,27 +75,36 @@ class NavBar extends Component {
         }
     }
 
-    render() {
-        var navbarClass = "t-navbar-mini";
-        var navbarDivClass = "t-navbar-div-mini";
-        var navbarDivClassRight = "t-navbar-div-right-mini"
-        if(window.innerWidth > 1000) {
-            navbarClass = "t-navbar";
-            navbarDivClass = "t-navbar-div";
-            navbarDivClassRight = "t-navbar-div-right"
+    getNavBarBody = () => {
+        var navbarClass = "flexboxContainerMini";
+        var navbarSearchClass= "centerSearchBarMini";
+        var navbarDivClassRight = "flexboxItemRightMini"
+        var navbarMini = true;
+        if(this.props.winWidth > 800) {
+            navbarClass = "flexboxContainer";
+            navbarSearchClass = "centerSearchBar";
+            navbarDivClassRight = "flexboxItemRight"
+            navbarMini = false;
+        }
+
+        if(this.state.navCollapsed) {
+            navbarClass = "flexboxContainer";
         }
 
         return (
-            <div>
-                <div className={navbarClass}>
-                    <Link to={'/'} className="t-navbar-link"> <div className={navbarDivClass}>Twitchify</div> </Link>
-                    <Link to={'/'} className="t-navbar-link"> <div className={navbarDivClass}>Home</div> </Link>
-                    <Link to={'/streamers'} className="t-navbar-link"> <div className={navbarDivClass}>Followed</div> </Link>
-                    <div className="t-navbar-div-search ">
+            <div className={navbarClass}>
+                <Link to={'/'} className="navbar-link-title"> <div className="flexboxItem"><p>Twitchify</p></div> </Link>
+                <Link to={'/'} className="navbar-link"> <div className="flexboxItem">Home</div> </Link>
+                <Link to={'/streamers'} className="navbar-link"> <div className="flexboxItem">Followed</div> </Link>
+
+                <div className={"flexboxitemSearch " + navbarSearchClass}>
+                    <div className="centerSearchBar">
                         <Search category="channels"/>
                     </div>
                     
-                    <div className={"userOptions userLogo t-navbar-div " + navbarDivClassRight}>
+                </div>
+                <div className="flexboxitemLogout">
+                    <div className={"userOptions userLogo " + navbarDivClassRight}>
                         {this.getButtons()}
                         <UserDropdownOptions 
                             showDropdown={this.state.showDropdown} 
@@ -108,7 +114,51 @@ class NavBar extends Component {
                             logOut={this.logOut} 
                         />
                     </div>
+                </div>            
+            </div>
+        )
+    }
+
+
+
+    getNavBar = () => {
+        var navbarClass = "flexboxContainerMini";
+        var navbarMini = true;
+        if(this.props.winWidth > 800) {
+            navbarClass = "flexboxContainer";
+            navbarMini = false;
+        }
+
+        if(this.state.navCollapsed) {
+            navbarClass = "flexboxContainer";
+        }
+    
+        if(!navbarMini) {
+            return (
+                this.getNavBarBody()
+            )
+        } else if(navbarMini && !this.state.navCollapsed) {
+            return (
+                this.getNavBarBody()
+            )
+        } else {
+            return (
+                <div className={navbarClass}>
+                    <Link to={'/'} className="navbar-link-title"> <div className="flexboxItem"><p>Twitchify</p></div> </Link>
                 </div>
+            )
+        }
+    }
+
+    render() {
+
+
+        return (
+            <div>
+                {this.getNavBar()}
+                <button onClick={this.toggleNav} style={{display: (this.props.winWidth <= 800) ? 'block' : 'none' }}>
+                    <i class="fa fa-bars fa-2x bars"></i>
+                </button>
             </div>
         )
     }

@@ -8,7 +8,6 @@ input {
     border: 1px solid transparent;
     background-color: #122941;
     padding: 10px;
-
     font-size: 16px;
 }
 
@@ -20,7 +19,7 @@ input[type=text] {
 }
 
 .searchBar {
-    padding: 10px;
+    padding: 0px 10px;
 }
 
 .autocomplete-items {
@@ -56,3 +55,37 @@ img.seachGames {
     float: right;
     margin-top: 10px;
 }
+
+input.form-control.searchBar {
+    height: 30px;
+    width: 350px;
+    background-color:#122941;
+    color:white;
+    border: none
+}
+
+input.form-control:focus.searchBar {
+    background-color:#122941;
+    color:white;
+    border: none
+}
+
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: white;
+}
+input::-webkit-input-placeholder {
+    color: white !important;
+}
+
