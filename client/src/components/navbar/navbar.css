@@ -1,13 +1,14 @@
-
 .logInModal {
     background-color: #1c4269;
 }
 
 .login {
-    padding-left: 30px;
-    padding-top: 30px;
-    padding-bottom: 10px;
+    padding: 30px 30px 30px 30px;
 }
+
+
+
+
 
 .loginButton {
     margin: 0px 10px;
@@ -32,76 +33,6 @@
 .loggedInLogo:hover {
     cursor: pointer;
 }
-
-.userOptions {
-    border-radius: 5px;
-    position: relative;
-    display: inline-block;
-}
-
-.userOptions-items {
-    position: absolute;
-    margin-top: 40px;
-    left: 10px;
-    right: 10px;
-    background-color: #262626;
-    color: white;
-    border: 10px solid #262626;
-    border-radius: 0 0 3px 3px;
-
-}
-
-.userOptionsSplit {
-    background-color: white;
-    border: 1;
-    border-color: white;
-    margin: 5px 10px 5px 10px;
-}
-
-.userOptions-item {
-    display: flex;
-    align-items: center;
-    color: white;
-    height: 40px;
-}
-
-.userOptions-item i {
-    padding-left: 8px;
-}
-
-.userOptions-item p {
-    margin-top: auto;
-    margin-bottom: auto;
-    padding-left: 10px;
-}
-
-.userOptions-signedin {
-    font-size: 10px;
-}
-
-.userOptions-name {
-    font-size: 20px;
-    margin-left: 15px;
-    padding-right: 10px;
-    color: white;
-    background-color: #1c4269;
-    border-radius: 5px;
-    font-weight: bold;
-}
-
-.userOptions-item-selectable {
-    cursor: pointer;
-}
-
-.userOptions-item-selectable:hover {
-    background-color: #1c4269;
-    border-radius: 5px;
-}
-
-
-
-
-
 
 
 .flexboxContainer{
