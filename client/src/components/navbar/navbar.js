@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { ButtonToolbar } from 'react-bootstrap';
 import { withRouter, Link } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 
@@ -23,7 +22,9 @@ class NavBar extends Component {
     }
 
     minimizeNav = () => {
-        this.setState({ navCollapsed: true })
+        if(!this.state.navCollapsed) {
+            this.setState({ navCollapsed: true })
+        }
     }
 
     setDropdownState= (newState) => {
@@ -65,7 +66,7 @@ class NavBar extends Component {
             return (
                 <div className="loggedInLogoWrapper">
                     <img 
-                        className={((window.innerWidth > 800) ? 'loggedInLogo' : 'loggedInLogoExpanded')}
+                        className={((this.props.winWidth > 800) ? 'loggedInLogo' : 'loggedInLogoExpanded')}
                         src='https://static-cdn.jtvnw.net/jtv_user_pictures/7ed5e0c6-0191-4eef-8328-4af6e4ea5318-profile_image-300x300.png' 
                         onClick={() => { if(!this.state.showDropdown && this.state.dropbownBtn) this.setState({showDropdown: true, dropbownBtn: false})}}
                         width="30" height="30" alt="MISSING" />
@@ -78,13 +79,13 @@ class NavBar extends Component {
     getNavBarBody = () => {
         var navbarClass = "flexboxContainerMini";
         var navbarSearchClass= "centerSearchBarMini";
-        var navbarDivClassRight = "flexboxItemRightMini"
-        var navbarMini = true;
+        var navbarDivClassRight = "flexboxItemRightMini";
+        var navbarLink = "navbar-link-mini";
         if(this.props.winWidth > 800) {
             navbarClass = "flexboxContainer";
             navbarSearchClass = "centerSearchBar";
             navbarDivClassRight = "flexboxItemRight"
-            navbarMini = false;
+            navbarLink = "navbar-link";
         }
 
         if(this.state.navCollapsed) {
@@ -93,13 +94,13 @@ class NavBar extends Component {
 
         return (
             <div className={navbarClass}>
-                <Link to={'/'} className="navbar-link-title"> <div className="flexboxItem"><p>Twitchify</p></div> </Link>
-                <Link to={'/'} className="navbar-link"> <div className="flexboxItem">Home</div> </Link>
-                <Link to={'/streamers'} className="navbar-link"> <div className="flexboxItem">Followed</div> </Link>
+                <Link to={'/'} className="navbar-link-title"> <div className="flexboxItem" onClick={() => this.minimizeNav()}><p>Twitchify</p></div> </Link>
+                <Link to={'/'} className={navbarLink}> <div className="flexboxItem" onClick={() => this.minimizeNav()}>Home</div> </Link>
+                <Link to={'/streamers'} className={navbarLink}> <div className="flexboxItem" onClick={() => this.minimizeNav()}>Followed</div> </Link>
 
                 <div className={"flexboxitemSearch " + navbarSearchClass}>
                     <div className="centerSearchBar">
-                        <Search category="channels"/>
+                        <Search category="channels" minimizeNav={this.minimizeNav}/>
                     </div>
                     
                 </div>
@@ -156,7 +157,7 @@ class NavBar extends Component {
         return (
             <div>
                 {this.getNavBar()}
-                <button onClick={this.toggleNav} style={{display: (this.props.winWidth <= 800) ? 'block' : 'none' }}>
+                <button className="barsButton" onClick={this.toggleNav} style={{display: (this.props.winWidth <= 800) ? 'block' : 'none' }}>
                     <i class="fa fa-bars fa-2x bars"></i>
                 </button>
             </div>

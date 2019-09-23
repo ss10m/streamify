@@ -130,7 +130,7 @@ class LogInModal extends React.Component {
                     </FormGroup>
                     {this.getAlert()}
                     <Button
-                        size="lg"
+                        btn-sm
                         block
                         disabled={!this.validateFormLogin()}
                         type="submit"
@@ -174,7 +174,7 @@ class LogInModal extends React.Component {
                     </FormGroup>
                     {this.getAlert()}
                     <Button
-                        size="lg"
+                        btn-sm
                         block
                         disabled={!this.validateFormRegister()}
                         type="submit"
@@ -211,7 +211,7 @@ class LogInModal extends React.Component {
                     </Tabs>
                 </Modal.Body>
                 <Modal.Footer className='logInModal'>
-                    <button className="btn btn-outline-light my-2 my-sm-0" onClick={this.hideModal}>Close</button>
+                    <button className="btn btn-outline-light btn-sm" onClick={this.hideModal}>Close</button>
                 </Modal.Footer>
     
             </Modal>

@@ -147,9 +147,6 @@
     padding-bottom: 10px;
 }
 
-
-
-
 .flexboxitemSearch {
     flex: 1 1 auto; 
 }
@@ -161,7 +158,7 @@
 }
 
 .centerSearchBar {
-    width: 500px;
+    width: 400px;
     margin: auto;
 }
 
@@ -196,7 +193,7 @@
     background-color: white;
 }
 
-.navbar-link {
+.navbar-link, .navbar-link-mini {
     color: white;
     overflow:hidden;
     text-decoration: none;
@@ -209,10 +206,16 @@
     border-bottom: 3px solid white;
 }
 
-.bars {
+.navbar-link-mini:hover {
     color: white;
-    text-shadow: 1px 1px 1px #ccc;
-    font-size: 1.5em;
+    background-color: #122941;
+    text-decoration: none;
+}
+
+.bars {
+    color: #122941;
+    text-shadow: 1px 1px 1px #1c4269;
+    
     position: fixed;
     top: 0;
     right: 0;
@@ -223,5 +226,7 @@
 }
 
 .bars:hover {
-    background-color: #122941;
+    
+    color: white;
 }
+

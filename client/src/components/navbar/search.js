@@ -51,7 +51,7 @@ class Search extends Component {
         switch(this.props.category){
             case('channels'):
                 return (
-                    <div className="autocomplete-items">
+                    <div className="autocomplete-items" onClick={this.props.minimizeNav}>
                         {autoCompleteList.map(listItem =>
                             <Link to={"/streamer/" + listItem.name} key={listItem.name}>
                                 <div key={listItem.name} onClick={this.clearAutoInput}>
