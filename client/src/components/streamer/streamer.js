@@ -227,7 +227,7 @@ class Streamer extends Component {
                                 {this.state.data['preview'] ? (
                                     <img src={this.state.data['preview']} className="roundedImg previewImg" alt="MISSING" />
                                 ) : (
-                                    <img src={twitchPreview} className="roundedImg" alt="MISSING" />
+                                    <img src={twitchPreview} className="roundedImg previewImg" alt="MISSING" />
                                 )}
                             </div>
                             <div>

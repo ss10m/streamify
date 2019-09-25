@@ -16,21 +16,13 @@ class LogInModal extends React.Component {
         };
 
     }
-
-    componentWillReceiveProps() {
-        this.setState({ username: '',
-            password: '',
-            confirmPassword: '',
-            error : '',
-            selectedTab: 'login'});
-    }
     
     validateFormLogin() {
         return this.state.username.length > 0 && this.state.password.length > 0;
     }
     
     validateFormRegister() {
-        return this.state.username.length > 0 && this.state.password.length > 0 &&
+        return this.state.username.length > 0 && this.state.username.length < 8 && this.state.password.length > 0 &&
             this.state.confirmPassword.length > 0 && this.state.password === this.state.confirmPassword;
     }
   
@@ -130,11 +122,11 @@ class LogInModal extends React.Component {
                     </FormGroup>
                     {this.getAlert()}
                     <Button
-                        btn-sm
-                        block
+                        btn-sm="true"
                         disabled={!this.validateFormLogin()}
                         type="submit"
                         variant="dark"
+                        block
                     >
                         Login
                     </Button>
@@ -174,7 +166,7 @@ class LogInModal extends React.Component {
                     </FormGroup>
                     {this.getAlert()}
                     <Button
-                        btn-sm
+                        btn-sm="true"
                         block
                         disabled={!this.validateFormRegister()}
                         type="submit"
@@ -191,8 +183,8 @@ class LogInModal extends React.Component {
         return (
             <Modal
                 {...this.props}
+                onHide={this.hideModal}
                 size="md"
-                aria-labelledby="example-modal-sizes-title-md"
                 centered
             >
                 <Modal.Header>

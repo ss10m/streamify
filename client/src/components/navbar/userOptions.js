@@ -29,7 +29,7 @@ class UserDropdownOptions extends Component {
             return (
                 <div className="userOptions-items"  onClick={() => { this.props.setDropdownState(false); this.props.minimizeNav() }}>
                     <div className="userOptions-item">
-                        <i class="fa fa-user"></i>
+                        <i className="fa fa-user"></i>
                         <div>
                             <p className="userOptions-choices userOptions-signedin">Signed in as:</p>
                             <p className="userOptions-choices userOptions-name">{this.props.session.username}</p>
@@ -39,19 +39,19 @@ class UserDropdownOptions extends Component {
                     <hr className="userOptionsSplit"/>
 
                     <div className="userOptions-item userOptions-item-selectable">
-                        <i class="fa fa-globe"></i>
+                        <i className="fa fa-globe"></i>
                         <p className="userOptions-choices">About Twitchify</p>
                     </div>
 
                     <div className="userOptions-item userOptions-item-selectable">
-                        <i class="fa fa-cog"></i>
+                        <i className="fa fa-cog"></i>
                         <p className="userOptions-choices">Settings</p>
                     </div>
 
                     <hr className="userOptionsSplit"/>
 
                     <div className="userOptions-item userOptions-item-selectable" onClick={() => { this.props.logOut() }}>
-                        <i class="fa fa-sign-out"></i>
+                        <i className="fa fa-sign-out"></i>
                         <p className="userOptions-choices">Logout</p>
                     </div>
                 </div>

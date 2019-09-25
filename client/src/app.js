@@ -8,7 +8,6 @@ import './app.css'
 
 import Streamer from './components/streamer/streamer';
 import Streamers from './components/streamers/streamers';
-import Add from './components/add/add';
 import NavBar from './components/navbar/navbar.js';
 import TopStreamers from './components/topStreamers/topStreamers'
 import LoginModal from './components/navbar/loginmodal'
@@ -23,15 +22,13 @@ class App extends Component {
         };
     }
 
-    componentDidMount() {
-        window.addEventListener("resize", this.handleResize);
-    }
-
     handleResize = event => {
         this.setState({winWidth: window.innerWidth});
     };
 
-    componentWillMount() {
+    componentDidMount() {
+        window.addEventListener("resize", this.handleResize);
+
         var jwt = JSON.parse(localStorage.getItem("jwt"));
 
         if(jwt) {
@@ -39,6 +36,7 @@ class App extends Component {
         } else {
             console.log('jwt not found')
         }
+        
     }
 
     onLogout() {
@@ -56,9 +54,13 @@ class App extends Component {
     render() {
         let modalClose = () => this.setState({ modalShow: false });
         let modalOpen = () => this.setState({ modalShow: true });
+        let topStreamersTitle = (this.state.winWidth > 800) ? "Top Streamers Live" : "Top";
         return (
             <div>
-                <Route render={() => <NavBar winWidth={this.state.winWidth} session={this.state.session} onLogout={this.onLogout.bind(this)} modalOpen={modalOpen}/>} />
+                <Route render={() => <NavBar winWidth={this.state.winWidth} 
+                                             session={this.state.session} 
+                                             onLogout={this.onLogout.bind(this)} 
+                                             modalOpen={modalOpen}/>} />
                 <LoginModal
                     show={this.state.modalShow}
                     onHide={modalClose}
@@ -67,15 +69,9 @@ class App extends Component {
                 <div className="mainBody">
                     
                     <div className="sidebar">
-                        {(this.state.winWidth > 800) ? (
-                            <div className='divHeading'>
-                                <small>Top Streamers Live</small>
-                            </div>
-                        ) : (
-                            <div className='divHeading'>
-                                <small>Top</small>
-                            </div>
-                        )}
+                        <div className='divHeading'>
+                            <small>{topStreamersTitle}</small>
+                        </div>
                         <hr className='split'></hr>
                         <TopStreamers winWidth={this.state.winWidth}/>
                     </div>
@@ -86,9 +82,7 @@ class App extends Component {
                                         <h1>home page!</h1>
                                     )}/>
                             <Route path='/streamers' render={() => <Streamers session={this.state.session} modalOpen={modalOpen} />} />
-                            <Route exact path='/streamer/:id' render={(props) => <Streamer session={this.state.session} modalOpen={modalOpen} {...props}/>}  />
-
-                            <Route path='/add' component={Add} />          
+                            <Route exact path='/streamer/:id' render={(props) => <Streamer session={this.state.session} modalOpen={modalOpen} {...props}/>}  />      
                             <Route render={() => (
                                         <h1>404</h1>
                                     )}/>

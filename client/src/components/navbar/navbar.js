@@ -169,7 +169,7 @@ class NavBar extends Component {
             <div>
                 {this.getNavBar()}
                 <button className="barsButton" onClick={this.toggleNav} style={{display: (this.props.winWidth <= 800) ? 'block' : 'none' }}>
-                    <i class="fa fa-bars fa-2x bars"></i>
+                    <i className="fa fa-bars fa-2x bars"></i>
                 </button>
             </div>
         )
