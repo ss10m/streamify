@@ -521,6 +521,133 @@ startTopStreamers()
 
 
 
+
+
+
+
+//////////////////////////////////////////
+/////////// UPDATE STREAMERS  ////////////
+//////////////////////////////////////////
+
+function getAllUsers() {
+
+    var streamers = new Set();
+    User.find(
+        {}, 
+        function(err, users) {
+            users.forEach((user) => {
+                user.streamers.forEach((followed) => {
+                    streamers.add(followed.name)
+                })
+            })
+            if(streamers.size > 0) updateStreamers(users, streamers);
+        }
+    );
+}
+
+function updateStreamers(users, streamers) {
+
+    var requestParameters = '';
+    streamers.forEach((streamer) => {
+        requestParameters += '&user_login=' + streamer
+    })
+
+    requestParameters = requestParameters.substring(1);
+    
+    var options = {
+        method: 'GET',
+        url: 'https://api.twitch.tv/helix/streams?' + requestParameters,
+        //qs: { offset: '0', limit: '2' },
+        headers:
+        {
+            'Client-ID': config.clientid
+        }
+    };
+
+    request(options, function (error, response, body) {
+        if(response && response.statusCode != '200') {
+            console.log(response.statusCode)
+            return;
+        }
+
+        body = JSON.parse(body).data;
+        if(body.length === 0) return;
+
+        var games = new Set();
+        for(let streamer of body) {
+            games.add(streamer.game_id)
+        }
+
+        if(games.size > 0) getGameNames(users, body, games);
+    });
+
+    
+}
+
+function getGameNames(users, liveStreames, games) {
+
+    var requestParameters = '';
+    for(let game of games) {
+        requestParameters += '&id=' + game
+    }
+
+
+    var options = {
+        method: 'GET',
+        url: "https://api.twitch.tv/helix/games?" + requestParameters,
+        //qs: { offset: '0', limit: '2' },
+        headers:
+        {
+            'Client-ID': config.clientid
+        }
+    };
+
+    request(options, function (error, response, body) {
+        if(response && response.statusCode != '200') {
+            console.log(response.statusCode)
+            callback({error: response.statusCode})
+            return;
+        }
+
+        body = JSON.parse(body).data;
+        var gameIdtoGameName = {};
+        for(let game of body) {
+            gameIdtoGameName[game.id] = game.name;
+        }
+
+        var useridToLivestream = {}
+        for(let current of liveStreames) {
+            current['game_id'] = gameIdtoGameName[current['game_id']];
+            useridToLivestream[current.user_id] = current;
+        }
+    
+        notifyAll(users, useridToLivestream);
+    });
+
+}
+
+function notifyAll(users, useridToLivestream) {
+    var liveStreames = Object.keys(useridToLivestream);
+    console.log(liveStreames)
+    for(let user of users) {
+        for(let streamer of user.streamers) {
+            if(liveStreames.includes(streamer.id) && streamer.followedGames.includes(useridToLivestream[streamer.id].game_id)) {
+                let livestream = useridToLivestream[streamer.id];
+                notify(user, livestream)
+            }
+        }
+    }
+}
+
+function notify(user, livestream) {
+    // keep track of what was already send to the client to remove duplicate notifications
+    console.log('>>>  Notifying ' + user.username + ' ||| ' + livestream.user_name + ' is currently playing ' + livestream.game_id)
+}
+
+getAllUsers()
+
+
+
 console.log('=========== twitchify started ============')
 
 module.exports.streamers = streamers;
