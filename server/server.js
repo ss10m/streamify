@@ -4,19 +4,23 @@ var passport = require('passport');
 var session = require('express-session')
 const mongoose = require('mongoose');
 
-const app = express();
-const port = 5000;
 
 require('./db_models/User.js');
-require('./db_models/users.js');
 
 require('./config/passport.js');
 
 const twitchify = require('./twitchify.js');
 const auth = require('./config/auth.js')
+const User = mongoose.model('User');
 
 mongoose.connect('mongodb://localhost:27017/twitchify',  { useNewUrlParser: true });
-const User = mongoose.model('User');
+
+
+const app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+const port = 5000;
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,6 +28,46 @@ app.use(session({ secret: 'secret', cookie: { maxAge: 60000 }, resave: false, sa
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+
+//app.listen(port, () => console.log(`Listening on port ${port}`));
+server.listen(port);
+
+var mySocket = null;
+
+
+io.on('connection', function (socket) {
+    socket.emit('news', { hello: 'world' });
+
+    socket.on('my other event', function (data) {
+      console.log(data);
+    });
+});
+
+io.on('connection', function (socket) {
+    mySocket = socket;
+
+
+
+
+    socket.on('logout', (userTokenOrId) => {
+        // remove this from onlineUsers or redis
+        console.log('logout')
+    });
+
+    socket.on('disconnect', (userTokenOrId) => {
+        // remove this from onlineUsers or redis
+        console.log('disconnect',)
+    });
+
+    socket.emit('news', { hello: 'world' });
+
+    socket.on('my other event', function (data) {
+      console.log(data);
+    });
+
+});
+
 
 
 app.use((req, res, next) => {
@@ -34,7 +78,6 @@ app.use((req, res, next) => {
 
 
 // User Authentication
-
 app.post('/login', auth.optional, (req, res, next) => {
 
     return passport.authenticate('local', { session: false }, (err, verifiedUser) => {
@@ -149,6 +192,7 @@ app.post('/api/follow', auth.required, (req, res, next) => {
 
 app.post('/api/unfollow', auth.required, (req, res, next) => {
     var auth = JSON.parse(req.get('Authorization'));
+    console.log(req.user)
     console.log(auth.username + ' is trying to unfollow ' + req.body['name']);
     twitchify.unfollowStreamer(auth.username, req.body['name'], function(data) {
         res.json(data);
@@ -164,6 +208,15 @@ app.post('/api/followGame', auth.required, (req, res, next) => {
     twitchify.getUser("followGame", auth.username, function(data) {
         res.json(data);
     }, args);
+
+
+
+
+
+
+
+    mySocket.emit('follow', { data: auth.username + ' followed ' + req.body['gameName']  + " for " + req.body['name']  });
+    console.log(mySocket)
 });
 
 app.post('/api/unfollowGame', auth.required, (req, res, next) => {
@@ -185,7 +238,7 @@ app.get('/search/:category/:query', auth.optional, (req, res) => {
     });
 });
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+
 
 console.log('============ server  started =============')
 

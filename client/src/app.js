@@ -11,6 +11,9 @@ import Streamers from './components/streamers/streamers';
 import NavBar from './components/navbar/navbar.js';
 import TopStreamers from './components/topStreamers/topStreamers'
 import LoginModal from './components/navbar/loginmodal'
+
+import socketIO from "socket.io-client";
+
     
 class App extends Component {
     constructor(props) {
@@ -18,7 +21,9 @@ class App extends Component {
         this.state = {
             session: '',
             modalShow: false,
-            winWidth: window.innerWidth
+            winWidth: window.innerWidth,
+            response: false,
+            endpoint: "http://127.0.0.1:5000"
         };
     }
 
@@ -36,6 +41,23 @@ class App extends Component {
         } else {
             console.log('jwt not found')
         }
+
+
+
+
+
+
+        
+        const { endpoint } = this.state;
+        const socket = socketIO(endpoint);
+        socket.on('news', function (data) {
+            console.log(data);
+            socket.emit('my other event', { my: 'simon is trying to follow koil' });
+        });
+
+        socket.on('follow', function (data) {
+            console.log(data);
+        });
         
     }
 
