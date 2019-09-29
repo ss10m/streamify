@@ -36,16 +36,56 @@ server.listen(port);
 var mySocket = null;
 
 
-io.on('connection', function (socket) {
-    socket.emit('news', { hello: 'world' });
+var onlineUsers = {};
+var socketIdToSocket = {};
 
-    socket.on('my other event', function (data) {
-      console.log(data);
+
+io.use((socket, next) => {
+
+    //AUTHENTICATE SOCKET
+    if(JSON.parse(socket.handshake.query.token)) {
+        next();
+    } 
+
+    /*
+    passport.authenticate('local', { session: false }, (err, verifiedUser) => {
+        console.log('passport')
+        next();
+    })(socket, next)
+    */
+    
+ }).on('connection', socket => {
+    console.log('('+ socket.id + ') client connected');
+    var token = JSON.parse(socket.handshake.query.token).user;
+
+    socketIdToSocket[socket.id] = socket;
+
+    if(token.username in onlineUsers) {
+        var current = onlineUsers[token.username];
+        current.push(socket.id)
+        onlineUsers[token.username] = current;
+    } else {
+        onlineUsers[token.username] = [socket.id]
+    }
+
+    socket.on('disconnect', () => {
+        console.log('('+ socket.id + ') client disconnected')
+        var token = JSON.parse(socket.handshake.query.token).user;
+        var current = onlineUsers[token.username]
+        onlineUsers[token.username] = current.splice(current.indexOf(socket.id), 1);
+        if(current.length > 0) {
+            onlineUsers[token.username] = current;
+        } else {
+            delete onlineUsers[token.username];
+        }
+        delete socketIdToSocket[socket.id];
     });
-});
+})
 
-io.on('connection', function (socket) {
+/*
+io.on('connection', isAuthenticated, function (socket, next) {
     mySocket = socket;
+    console.log('connection')
 
 
 
@@ -68,6 +108,12 @@ io.on('connection', function (socket) {
 
 });
 
+
+function isAuthenticated(req, res, next) {
+    console.log('isAuthenticated')
+
+  }
+*/
 
 
 app.use((req, res, next) => {

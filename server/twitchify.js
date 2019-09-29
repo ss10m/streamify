@@ -628,7 +628,6 @@ function getGameNames(users, liveStreames, games) {
 
 function notifyAll(users, useridToLivestream) {
     var liveStreames = Object.keys(useridToLivestream);
-    console.log(liveStreames)
     for(let user of users) {
         for(let streamer of user.streamers) {
             if(liveStreames.includes(streamer.id) && streamer.followedGames.includes(useridToLivestream[streamer.id].game_id)) {

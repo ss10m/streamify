@@ -183,7 +183,7 @@ class Streamer extends Component {
         return (
             <div>
                 {this.state.data.followedGames.map((gameName) => 
-                    <div className="tag">
+                    <div className="tag" key={gameName}>
                         <p className="tag-text" key={gameName}>{gameName}</p>
                         <p className="tag-remove" onClick={() => this.followGame('unfollow', gameName)}>&#x2715;</p>
                     </div>
