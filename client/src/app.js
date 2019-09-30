@@ -52,11 +52,11 @@ class App extends Component {
         const socket = socketIO(endpoint, {
             query: {token: JSON.stringify(jwt)}
           });
-          /*
-        socket.on('news', function (data) {
+          
+        socket.on('notification', function (data) {
             console.log(data);
-            socket.emit('my other event', { my: JSON.stringify(jwt) });
         });
+        /*
 
         socket.on('follow', function (data) {
             console.log(data);

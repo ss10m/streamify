@@ -7,6 +7,9 @@ var config = require('./config/config.js');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
+var onlineUsers = {};
+var socketIdToSocket = {};
+
 function getUser(mode, username, callback, optionalArg) {
 
     User.findOne(
@@ -512,19 +515,6 @@ function search(category, query, callback) {
     });
 }
 
-function startTopStreamers() {
-    getTopStreamers();
-    setInterval(getTopStreamers, 60000)
-}
-
-startTopStreamers()
-
-
-
-
-
-
-
 //////////////////////////////////////////
 /////////// UPDATE STREAMERS  ////////////
 //////////////////////////////////////////
@@ -640,11 +630,30 @@ function notifyAll(users, useridToLivestream) {
 
 function notify(user, livestream) {
     // keep track of what was already send to the client to remove duplicate notifications
-    console.log('>>>  Notifying ' + user.username + ' ||| ' + livestream.user_name + ' is currently playing ' + livestream.game_id)
+    var msg = '>>>  Notifying ' + user.username + ' ||| ' + livestream.user_name + ' is currently playing ' + livestream.game_id;
+    console.log(msg)
+    if(user.username in onlineUsers) {
+        //console.log(user.username, onlineUsers[user.username])
+        for(var socketid of onlineUsers[user.username]) {
+            if(socketIdToSocket[socketid]) socketIdToSocket[socketid].emit('notification', msg);
+        }
+    }
 }
 
-getAllUsers()
+function setNotificationVariables(onlineUsersImport, socketIdToSocketImport) {
+    onlineUsers = onlineUsersImport;
+    socketIdToSocket = socketIdToSocketImport;
+}
 
+function startTopStreamers() {
+    getTopStreamers();
+    setInterval(getTopStreamers, 60000)
+}
+
+startTopStreamers()
+
+
+setInterval(getAllUsers, 10000);
 
 
 console.log('=========== twitchify started ============')
@@ -656,3 +665,4 @@ module.exports.unfollowStreamer = unfollowStreamer;
 module.exports.getUser = getUser;
 module.exports.topStreamers = topStreamers;
 module.exports.search = search;
+module.exports.setNotificationVariables = setNotificationVariables;

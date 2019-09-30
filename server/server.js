@@ -35,10 +35,10 @@ server.listen(port);
 
 var mySocket = null;
 
-
 var onlineUsers = {};
 var socketIdToSocket = {};
 
+twitchify.setNotificationVariables(onlineUsers, socketIdToSocket);
 
 io.use((socket, next) => {
 
@@ -54,12 +54,22 @@ io.use((socket, next) => {
     })(socket, next)
     */
     
- }).on('connection', socket => {
+}).on('connection', socket => {
     console.log('('+ socket.id + ') client connected');
+    
+
+    addToOnlineUsers(socket);
+
+    socket.on('disconnect', () => {
+        console.log('('+ socket.id + ') client disconnected')
+        var token = JSON.parse(socket.handshake.query.token).user;
+        removeFromOnlineUsers(socket.id, token);
+    });
+})
+
+function addToOnlineUsers(socket) {
     var token = JSON.parse(socket.handshake.query.token).user;
-
     socketIdToSocket[socket.id] = socket;
-
     if(token.username in onlineUsers) {
         var current = onlineUsers[token.username];
         current.push(socket.id)
@@ -68,19 +78,22 @@ io.use((socket, next) => {
         onlineUsers[token.username] = [socket.id]
     }
 
-    socket.on('disconnect', () => {
-        console.log('('+ socket.id + ') client disconnected')
-        var token = JSON.parse(socket.handshake.query.token).user;
-        var current = onlineUsers[token.username]
-        onlineUsers[token.username] = current.splice(current.indexOf(socket.id), 1);
-        if(current.length > 0) {
-            onlineUsers[token.username] = current;
-        } else {
-            delete onlineUsers[token.username];
-        }
-        delete socketIdToSocket[socket.id];
-    });
-})
+    console.log(onlineUsers)
+}
+
+function removeFromOnlineUsers(socketId, token) {
+    var current = onlineUsers[token.username]
+    onlineUsers[token.username] = current.splice(current.indexOf(socketId), 1);
+    if(current.length > 0) {
+        onlineUsers[token.username] = current;
+    } else {
+        delete onlineUsers[token.username];
+    }
+    delete socketIdToSocket[socketId];
+
+    console.log(onlineUsers)
+}
+
 
 /*
 io.on('connection', isAuthenticated, function (socket, next) {
@@ -287,7 +300,5 @@ app.get('/search/:category/:query', auth.optional, (req, res) => {
 
 
 console.log('============ server  started =============')
-
-
 
 //"C:\Program Files\MongoDB\Server\4.0\bin\mongod.exe"
