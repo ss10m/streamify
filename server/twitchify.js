@@ -653,7 +653,7 @@ function startTopStreamers() {
 startTopStreamers()
 
 
-setInterval(getAllUsers, 10000);
+setInterval(getAllUsers, 30000);
 
 
 console.log('=========== twitchify started ============')

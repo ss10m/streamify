@@ -123,10 +123,17 @@ class NavBar extends Component {
                     </div>
                     
                 </div>
+                <div className="flexboxitemNotifications">
+                    <div className={"notifications " + navbarDivClassRight }>
+                        <i className="fa fa-bell fa-2x notifications"></i>
+                    </div>
+                    
+                </div>
                 <div className="flexboxitemLogout">
-                    <div className={"userOptions userLogo " + navbarDivClassRight}>
+                    <div className={"userOptions " + navbarDivClassRight}>
                         {this.getButtons()}
                         <UserDropdownOptions 
+                            winWidth={this.props.winWidth}
                             showDropdown={this.state.showDropdown} 
                             setDropdownState={this.setDropdownState}
                             session={this.props.session} 
@@ -168,9 +175,25 @@ class NavBar extends Component {
         return (
             <div>
                 {this.getNavBar()}
-                <button className="barsButton" onClick={this.toggleNav} style={{display: (this.props.winWidth <= 800) ? 'block' : 'none' }}>
+                <button onClick={this.toggleNav} style={{display: (this.props.winWidth <= 800) ? 'block' : 'none' }}>
                     <i className="fa fa-bars fa-2x bars"></i>
                 </button>
+                <div className="notifications2" style={{display: (this.props.winWidth <= 800) ? 'block' : 'none' }}>
+                    <i className="fa fa-bell fa-2x notifications"></i>
+                </div>
+                <div className="userOptions2" style={{display: (this.props.winWidth <= 800) ? 'block' : 'none' }}>
+                    <div className={"userOptions"}>
+                        {this.getButtons()}
+                        <UserDropdownOptions 
+                            winWidth={this.props.winWidth}
+                            showDropdown={this.state.showDropdown} 
+                            setDropdownState={this.setDropdownState}
+                            session={this.props.session} 
+                            minimizeNav={this.minimizeNav} 
+                            logOut={this.logOut} 
+                        />
+                    </div>
+                </div>   
             </div>
         )
     }

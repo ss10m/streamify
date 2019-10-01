@@ -7,7 +7,7 @@
 .userOptions-items {
     position: absolute;
     margin-top: 40px;
-    left: 10px;
+    left: -150px;
     right: 10px;
     background-color: #262626;
     color: white;
@@ -15,6 +15,7 @@
     border-radius: 0 0 3px 3px;
 
 }
+
 
 .userOptionsSplit {
     background-color: white;

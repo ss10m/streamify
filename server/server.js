@@ -33,8 +33,6 @@ app.use(passport.session());
 //app.listen(port, () => console.log(`Listening on port ${port}`));
 server.listen(port);
 
-var mySocket = null;
-
 var onlineUsers = {};
 var socketIdToSocket = {};
 
@@ -267,15 +265,6 @@ app.post('/api/followGame', auth.required, (req, res, next) => {
     twitchify.getUser("followGame", auth.username, function(data) {
         res.json(data);
     }, args);
-
-
-
-
-
-
-
-    mySocket.emit('follow', { data: auth.username + ' followed ' + req.body['gameName']  + " for " + req.body['name']  });
-    console.log(mySocket)
 });
 
 app.post('/api/unfollowGame', auth.required, (req, res, next) => {
