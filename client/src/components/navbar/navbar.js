@@ -96,6 +96,9 @@ class NavBar extends Component {
     }
 
     getNavBarBody = () => {
+        if(this.props.winWidth <= 800) {
+            this.getNavBarBodyMini();
+        }
         var navbarClass = "flexboxContainerMini";
         var navbarSearchClass= "centerSearchBarMini";
         var navbarDivClassRight = "flexboxItemRightMini";
@@ -110,6 +113,8 @@ class NavBar extends Component {
         if(this.state.navCollapsed) {
             navbarClass = "flexboxContainer";
         }
+
+        console.log(this.state.showDropdown)
 
         return (
             <div className={navbarClass}>
@@ -130,19 +135,93 @@ class NavBar extends Component {
                     
                 </div>
                 <div className="flexboxitemLogout">
-                    <div className={"userOptions " + navbarDivClassRight}>
+                    <div className="dropdown userOptions">
                         {this.getButtons()}
-                        <UserDropdownOptions 
-                            winWidth={this.props.winWidth}
-                            showDropdown={this.state.showDropdown} 
-                            setDropdownState={this.setDropdownState}
-                            session={this.props.session} 
-                            minimizeNav={this.minimizeNav} 
-                            logOut={this.logOut} 
-                        />
+                        <div class="dropdown-content">
+                            <UserDropdownOptions 
+                                winWidth={this.props.winWidth}
+                                showDropdown={this.state.showDropdown} 
+                                setDropdownState={this.setDropdownState}
+                                session={this.props.session} 
+                                minimizeNav={this.minimizeNav} 
+                                logOut={this.logOut} 
+                            />
+                        </div>
                     </div>
                 </div>            
             </div>
+        )
+    }
+
+    getNavBarBodyMini = () => {
+
+        var navbarClass = "flexboxContainerMini";
+        var navbarSearchClass= "centerSearchBarMini";
+        var navbarDivClassRight = "flexboxItemRightMini";
+        var navbarLink = "navbar-link-mini";
+
+        if(this.state.navCollapsed) {
+            navbarClass = "flexboxContainer";
+        }
+
+        return (
+            <div className={navbarClass}>
+                <Link to={'/'} className="navbar-link-title"> <div className="flexboxItem" onClick={() => this.minimizeNav()}><p>Twitchify</p></div> </Link>
+                <Link to={'/'} className={navbarLink}> <div className="flexboxItem" onClick={() => this.minimizeNav()}>Home</div> </Link>
+                <Link to={'/streamers'} className={navbarLink}> <div className="flexboxItem" onClick={() => this.minimizeNav()}>Followed</div> </Link>
+
+                <div className={"flexboxitemSearch " + navbarSearchClass}>
+                    <div className="centerSearchBar">
+                        <Search category="channels" minimizeNav={this.minimizeNav}/>
+                    </div>
+                    
+                    
+                </div>
+                <div className="userOptions2">
+                        {this.getButtons()}
+                        <div class="dropdown-content">
+                            <UserDropdownOptions 
+                                winWidth={this.props.winWidth}
+                                showDropdown={this.state.showDropdown} 
+                                setDropdownState={this.setDropdownState}
+                                session={this.props.session} 
+                                minimizeNav={this.minimizeNav} 
+                                logOut={this.logOut} 
+                            />
+                        </div>
+                </div> 
+         
+            </div>
+        )
+
+
+
+
+        return (
+            
+            <div className="flexboxContainerMini">
+                <Link to={'/'} className="navbar-link-title"> <div className="flexboxItem" onClick={() => this.minimizeNav()}><p>Twitchify</p></div> </Link>
+                <Link to={'/'} className="navbar-link-mini"> <div className="flexboxItem" onClick={() => this.minimizeNav()}>Home</div> </Link>
+                <Link to={'/streamers'} className="navbar-link-mini"> <div className="flexboxItem" onClick={() => this.minimizeNav()}>Followed</div> </Link>
+
+                <div className="notifications2">
+                    <i className="fa fa-bell fa-2x notifications"></i>
+                </div>
+                <div className="userOptions2">
+                        {this.getButtons()}
+                        <div class="dropdown-content">
+                            <UserDropdownOptions 
+                                winWidth={this.props.winWidth}
+                                showDropdown={this.state.showDropdown} 
+                                setDropdownState={this.setDropdownState}
+                                session={this.props.session} 
+                                minimizeNav={this.minimizeNav} 
+                                logOut={this.logOut} 
+                            />
+                        </div>
+                </div>   
+            </div>
+
         )
     }
 
@@ -166,6 +245,19 @@ class NavBar extends Component {
             return (
                 <div className={navbarClass}>
                     <Link to={'/'} className="navbar-link-title"> <div className="flexboxItem"><p>Twitchify</p></div> </Link>
+                    <div className="userOptions2">
+                        {this.getButtons()}
+                        <div class="dropdown-content">
+                            <UserDropdownOptions 
+                                winWidth={this.props.winWidth}
+                                showDropdown={this.state.showDropdown} 
+                                setDropdownState={this.setDropdownState}
+                                session={this.props.session} 
+                                minimizeNav={this.minimizeNav} 
+                                logOut={this.logOut} 
+                            />
+                        </div>
+                </div>   
                 </div>
             )
         }
@@ -175,25 +267,9 @@ class NavBar extends Component {
         return (
             <div>
                 {this.getNavBar()}
-                <button onClick={this.toggleNav} style={{display: (this.props.winWidth <= 800) ? 'block' : 'none' }}>
+                <button onClick={this.toggleNav} style={{display: (this.props.winWidth <= 800) ? 'block' : 'none' }}>>
                     <i className="fa fa-bars fa-2x bars"></i>
                 </button>
-                <div className="notifications2" style={{display: (this.props.winWidth <= 800) ? 'block' : 'none' }}>
-                    <i className="fa fa-bell fa-2x notifications"></i>
-                </div>
-                <div className="userOptions2" style={{display: (this.props.winWidth <= 800) ? 'block' : 'none' }}>
-                    <div className={"userOptions"}>
-                        {this.getButtons()}
-                        <UserDropdownOptions 
-                            winWidth={this.props.winWidth}
-                            showDropdown={this.state.showDropdown} 
-                            setDropdownState={this.setDropdownState}
-                            session={this.props.session} 
-                            minimizeNav={this.minimizeNav} 
-                            logOut={this.logOut} 
-                        />
-                    </div>
-                </div>   
             </div>
         )
     }

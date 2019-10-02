@@ -5,15 +5,10 @@
 }
 
 .userOptions-items {
-    position: absolute;
-    margin-top: 40px;
-    left: -150px;
-    right: 10px;
     background-color: #262626;
     color: white;
     border: 10px solid #262626;
     border-radius: 0 0 3px 3px;
-
 }
 
 
