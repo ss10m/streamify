@@ -25,13 +25,9 @@ class UserDropdownOptions extends Component {
     }
 
     getDropdown = () => {
-        var userOptionsClass = "userOptions-items-mini";
-        if(this.props.winWidth > 800) {
-            userOptionsClass = "userOptions-items";
-        }
         if(this.props.showDropdown) {
             return (
-                <div className={userOptionsClass}  onClick={() => { this.props.setDropdownState(false); this.props.minimizeNav() }}>
+                <div className="userOptions-items"  onClick={() => { this.props.setDropdownState(false); this.props.minimizeNav() }}>
                     <div className="userOptions-item">
                         <i className="fa fa-user"></i>
                         <div>

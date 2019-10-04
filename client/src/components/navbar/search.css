@@ -14,8 +14,6 @@ input {
 input[type=text] {
     background-color: #122941;
     color: #fff;
-   
-    
 }
 
 .searchBar {
@@ -26,7 +24,6 @@ input[type=text] {
     position: absolute;
     border: 5px solid #1c4269;
     border-radius: 10px 0px 10px 10px;
-    z-index: 1;
     top: 100%;
     left: 0;
     right: 0;

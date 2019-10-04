@@ -6,35 +6,36 @@
     padding: 30px 30px 30px 30px;
 }
 
-
-
-
-
 .loginButton {
-    margin: 0px 10px;
+    
+    padding: 3px;
+
+}
+
+.loginButtonWrapper {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
 }
 
 .loggedInLogoWrapper {
     width: 50px;
-    padding-top: 0px;
+    height: 50px;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
 }
-
-.loggedInLogo {
-    float: right;
-    margin-right: 10px;
-}
-
-
 
 .loggedInLogo:hover {
     cursor: pointer;
 }
 
-
 .flexboxContainer{
     position: fixed;
-    top: 0;
     display: flex;
+    top: 0;
     left: 0;
     right: 0;
     height: 50px;
@@ -45,8 +46,8 @@
 
 .flexboxContainerMini {
     position: fixed;
-    top: 0;
     display: flex;
+    top: 0;
     left: 0;
     right: 0;
     height: auto;
@@ -61,34 +62,24 @@
     flex: 0 0 auto;
 }
 
-.flexboxItemRight {
-    float: right;
-    padding-top: 10px;
-    padding-bottom: 10px;
 
-}
-
-.flexboxItemRightMini {
-    float: left;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
 
 .flexboxitemSearch {
     flex: 1 1 auto; 
 }
 
 .flexboxitemNotifications {
-    width: 50px;
+    width: 30px;
     flex: 0 0 auto;
 }
 
-.notifications {
+.notificationsIcon {
     color: white;
-
+    font-size: 25px;
 }
 
-.notifications:hover {
+
+.notificationsIcon:hover {
     color: #122941;
     cursor: pointer;
 }
@@ -104,10 +95,6 @@
     margin: auto;
 }
 
-.centerSearchBarMini {
-    width: 400px;
-    margin-left: 0;
-}
 
 .navbar-link-title {
     font-weight: bold;
@@ -171,34 +158,42 @@
     color: white;
 }
 
-.notifications2 {
-    position: fixed;
-    top: 0;
-    right: 100px;
-    z-index: 1;
-    width: 50px;
-    height: 50px;
-    padding-top: 10px;
-}
 
-.userOptions2 {
-    position: fixed;
-    top: 0;
-    right: 50px;
-    z-index: 2;
-    width: 50px;
-    height: 50px;
-    padding-top: 10px;
-}
+
+
 
 .userOptions {
     position: fixed;
     top: 0;
     width: 50px;
     height: 50px;
-    padding-top: 10px;
 }
 
+.userOptionsMini {
+    position: fixed;
+    height: 50px;
+    top: 0px;
+    right: 50px;
+    width: 50px;
+}
+
+
+.notifications {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+
+.notificationsMini {
+    position: fixed;
+    top: 0px;
+    right: 100px;
+    width: 30px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
 
 
 
@@ -206,7 +201,7 @@
 .dropdown-content {
     display: show;
     position: absolute;
-    background-color: #262626;
+    
     left: -150px;
     top: 50px;
     right: 10px;

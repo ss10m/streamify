@@ -74,18 +74,20 @@ class NavBar extends Component {
     getButtons() {
         if(!this.props.session) {
             return(
-                <button 
-                    className="btn btn-outline-light btn-sm loginButton"
-                    onClick={() => { this.props.modalOpen(); this.minimizeNav() }}
-                >
-                    Log in
+                <div className="loginButtonWrapper">
+                    <button 
+                        className="btn btn-outline-light btn-sm loginButton"
+                        onClick={() => { this.props.modalOpen(); this.minimizeNav() }}
+                    >
+                        Log in
                 </button>
+                </div>
+
             )
         } else {
             return (
                 <div className="loggedInLogoWrapper">
                     <img 
-                        className="loggedInLogo"
                         src='https://static-cdn.jtvnw.net/jtv_user_pictures/7ed5e0c6-0191-4eef-8328-4af6e4ea5318-profile_image-300x300.png' 
                         onClick={() => { if(!this.state.showDropdown && this.state.dropbownBtn) this.setState({showDropdown: true, dropbownBtn: false})}}
                         width="30" height="30" alt="MISSING" />
@@ -97,6 +99,7 @@ class NavBar extends Component {
 
 
     getNavBarBody = () => {
+        
         return (
             <div className="flexboxContainer">
                 <Link to={'/'} className="navbar-link-title"> <div className="flexboxItem" onClick={() => this.minimizeNav()}><p>Twitchify</p></div> </Link>
@@ -109,14 +112,13 @@ class NavBar extends Component {
                     </div>
                     
                 </div>
-                <div className="flexboxitemNotifications">
-                    <div className="notifications flexboxItemRight">
-                        <i className="fa fa-bell fa-2x notifications"></i>
-                    </div>
-                    
+
+                <div className="flexboxitemNotifications notifications">
+                    <i className="fa fa-bell fa-2x notifications notificationsIcon"></i>
                 </div>
+
                 <div className="flexboxitemLogout">
-                    <div className="dropdown userOptions">
+                    <div className="userOptions">
                         {this.getButtons()}
                         <div class="dropdown-content">
                             <UserDropdownOptions 
@@ -148,16 +150,14 @@ class NavBar extends Component {
                 <Link to={'/'} className="navbar-link-mini" style={{display: displayStyle}}> <div className="flexboxItem" onClick={() => this.minimizeNav()}>Home</div> </Link>
                 <Link to={'/streamers'} className="navbar-link-mini" style={{display: displayStyle}}> <div className="flexboxItem" onClick={() => this.minimizeNav()}>Followed</div> </Link>
 
-                <div className="flexboxitemSearch centerSearchBarMini" style={{display: displayStyle}}>>
-                    <div className="centerSearchBar">
+                <div className="centerSearchBarMini" style={{display: displayStyle}}>>
                         <Search category="channels" minimizeNav={this.minimizeNav}/>
-                    </div>
                 </div>
 
-                <div className="notifications2">
-                    <i className="fa fa-bell fa-2x notifications"></i>
+                <div className="notificationsMini">
+                    <i className="fa fa-bell notificationsIcon"></i>
                 </div>
-                <div className="userOptions2">
+                <div className="userOptionsMini">
                     {this.getButtons()}
                     <div class="dropdown-content">
                         <UserDropdownOptions 
@@ -170,9 +170,8 @@ class NavBar extends Component {
                         />
                     </div>
                 </div>   
-
             </div>
-            
+
         )
     } 
 
