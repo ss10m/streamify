@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 
 import './navbar.css';
 import UserDropdownOptions from './userOptions.js'
+import Notifications from './notifications.js'
 import Search from './search';
 
 class NavBar extends Component {
@@ -13,7 +14,9 @@ class NavBar extends Component {
         this.state = {
             navCollapsed: true,
             showDropdown: false,
-            dropbownBtn: true
+            showNotifications: false,
+            dropbownBtn: true,
+            notificationsBtn: true
         };
     }
 
@@ -28,13 +31,21 @@ class NavBar extends Component {
         }
     }
 
-    setDropdownState= (newState) => {
+    setDropdownState = (newState) => {
         this.setState({ showDropdown: newState })
         
         setTimeout(function() {
             this.setState({dropbownBtn: true})
         }.bind(this), 100)
     }   
+
+    setNotificationsState = (newState) => {
+        this.setState({ showNotifications: newState })
+
+        setTimeout(function() {
+            this.setState({notificationsBtn: true})
+        }.bind(this), 100)
+    }  
 
 
     componentDidMount() {
@@ -114,13 +125,26 @@ class NavBar extends Component {
                 </div>
 
                 <div className="flexboxitemNotifications notifications">
-                    <i className="fa fa-bell fa-2x notifications notificationsIcon"></i>
+                    <i className="fa fa-bell fa-2x notifications notificationsIcon" 
+                        onClick={() => { if(!this.state.showNotifications && this.state.notificationsBtn) this.setState({showNotifications: true, notificationsBtn: false})}}>
+                    </i>
+
+                    <div class="notificationsDropdownMini notificationsDropdown">
+                        <Notifications 
+                            winWidth={this.props.winWidth}
+                            notifications={this.props.notifications}
+                            showNotifications={this.state.showNotifications} 
+                            setNotificationsState={this.setNotificationsState}
+                            session={this.props.session} 
+                            logOut={this.logOut} 
+                        />
+                    </div>
                 </div>
 
                 <div className="flexboxitemLogout">
                     <div className="userOptions">
                         {this.getButtons()}
-                        <div class="dropdown-content">
+                        <div class="userOptionsDropdownMini userOptionsDropdown">
                             <UserDropdownOptions 
                                 winWidth={this.props.winWidth}
                                 showDropdown={this.state.showDropdown} 
@@ -155,11 +179,23 @@ class NavBar extends Component {
                 </div>
 
                 <div className="notificationsMini">
-                    <i className="fa fa-bell notificationsIcon"></i>
+                    <i className="fa fa-bell notificationsIcon" 
+                        onClick={() => { if(!this.state.showNotifications && this.state.notificationsBtn) this.setState({showNotifications: true, notificationsBtn: false})}}>
+                    </i>
+                    <div class="notificationsDropdownMini">
+                        <Notifications 
+                            winWidth={this.props.winWidth}
+                            notifications={this.props.notifications}
+                            showNotifications={this.state.showNotifications} 
+                            setNotificationsState={this.setNotificationsState}
+                            session={this.props.session} 
+                            logOut={this.logOut} 
+                        />
+                    </div>
                 </div>
                 <div className="userOptionsMini">
                     {this.getButtons()}
-                    <div class="dropdown-content">
+                    <div class="userOptionsDropdownMini">
                         <UserDropdownOptions 
                             winWidth={this.props.winWidth}
                             showDropdown={this.state.showDropdown} 

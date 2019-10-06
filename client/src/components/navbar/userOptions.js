@@ -17,7 +17,6 @@ class UserDropdownOptions extends Component {
     handleClickOutside = event => {
         const domNode = ReactDOM.findDOMNode(this);
         if (!domNode || !domNode.contains(event.target)) {
-            console.log('clicked outside')
             if(this.props.showDropdown) {
                 this.props.setDropdownState(false)
             }

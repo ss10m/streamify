@@ -20,6 +20,7 @@ class App extends Component {
         super(props);
         this.state = {
             session: '',
+            notifications: [],
             modalShow: false,
             winWidth: window.innerWidth,
             response: false,
@@ -42,27 +43,18 @@ class App extends Component {
             console.log('jwt not found')
         }
 
-
-
-
-
-
-        
         const { endpoint } = this.state;
         const socket = socketIO(endpoint, {
             query: {token: JSON.stringify(jwt)}
           });
           
-        socket.on('notification', function (data) {
-            console.log(data);
-        });
-        /*
+        socket.on('notification', this.handleNotifictaions);
+    }
 
-        socket.on('follow', function (data) {
-            console.log(data);
-        });
-        */
-        
+    handleNotifictaions = (data) => {
+        var temp = [...this.state.notifications]
+        temp.push(data)
+        this.setState({notifications: temp});
     }
 
     onLogout() {
@@ -85,6 +77,7 @@ class App extends Component {
             <div>
                 <Route render={() => <NavBar winWidth={this.state.winWidth} 
                                              session={this.state.session} 
+                                             notifications={this.state.notifications}
                                              onLogout={this.onLogout.bind(this)} 
                                              modalOpen={modalOpen}/>} />
                 <LoginModal
