@@ -55,7 +55,7 @@ class Search extends Component {
                         {autoCompleteList.map(listItem =>
                             <Link to={"/streamer/" + listItem.name} key={listItem.name}>
                                 <div key={listItem.name} onClick={this.clearAutoInput}>
-                                    <img className="seachLogo" src={listItem.logo} width="40" height="40" alt="MISSING" />
+                                    <img className="searchLogo" src={listItem.logo} width="40" height="40" alt="MISSING" />
                                     {listItem.display_name}
                                 </div> 
                             </Link>

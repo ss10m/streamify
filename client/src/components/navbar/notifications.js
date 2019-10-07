@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import ReactDOM from 'react-dom';
+
 
 import './notifications.css';
 
@@ -23,27 +24,52 @@ class Notifications extends Component {
         }
     }
 
+    removeNotification = (index, streamerName) => {
+        console.log('removing ' + index + streamerName)
+    }
+
     getNotifications = () => {
-        if(this.props.showNotifications) {
+        if(this.props.showNotifications && this.props.notifications.length > 0) {
             return (
-                <div>
-                    {this.props.notifications.map(listItem =>
-                        <div>
-                            {listItem}
-                        </div> 
-                    )}
+                <div className="notificiationsBackground">
+                    <div className="notificiationTitle">
+                        <b>Notifications</b>
+                        <i className="fa fa-times closeNotifications" onClick={() => this.props.setNotificationsState(false)}/>
+                    </div>
+                    <div className="notificiationItems">
+                        {this.props.notifications.map((notification, index) =>
+                            <Link style={{ textDecoration: 'none', color: 'white' }} to={"/streamer/" + notification.name} key={index} onClick={() => this.props.setNotificationsState(false)}>
+                                <div className="notificiationItem">
+                                    <img src={notification.logo} width="25" height="25" alt="MISSING" />                              
+                                    <div className="notificationMsg">{notification.name + ' is playing '}<b>{notification.game}</b></div>
+                                    <div className="deleteNotificationWrapper" onClick={() => this.removeNotification(index, notification.name)}><i className="fa fa-times deleteNotification"/></div>
+                                </div> 
+                            </Link>
+                        )}
+                    </div>
+                </div>
+            )
+        } else if(this.props.showNotifications) {
+            return (
+                <div className="notificiationsBackground">
+                    <div className="notificiationTitle">
+                        <b>Notifications</b>
+                        <i className="fa fa-times closeNotifications" onClick={() => this.props.setNotificationsState(false)}/>
+                    </div>
+                    <div className="notificiationsEmpty">
+                        <b>Nothing appears to be here :(</b>
+                    </div>
                 </div>
             )
         }
+
     }
 
     render() {
-        console.log(this.props.notifications)
         return (
-            <div className="notficiationsBackground">
+            <div>
                 {this.getNotifications()}
             </div>
-            
         )
     }
 }

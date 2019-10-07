@@ -52,6 +52,7 @@ class App extends Component {
     }
 
     handleNotifictaions = (data) => {
+        console.log(data)
         var temp = [...this.state.notifications]
         temp.push(data)
         this.setState({notifications: temp});

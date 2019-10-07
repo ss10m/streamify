@@ -129,7 +129,7 @@ class NavBar extends Component {
                         onClick={() => { if(!this.state.showNotifications && this.state.notificationsBtn) this.setState({showNotifications: true, notificationsBtn: false})}}>
                     </i>
 
-                    <div class="notificationsDropdownMini notificationsDropdown">
+                    <div className="notificationsDropdownMini notificationsDropdown">
                         <Notifications 
                             winWidth={this.props.winWidth}
                             notifications={this.props.notifications}
@@ -144,7 +144,7 @@ class NavBar extends Component {
                 <div className="flexboxitemLogout">
                     <div className="userOptions">
                         {this.getButtons()}
-                        <div class="userOptionsDropdownMini userOptionsDropdown">
+                        <div className="userOptionsDropdownMini userOptionsDropdown">
                             <UserDropdownOptions 
                                 winWidth={this.props.winWidth}
                                 showDropdown={this.state.showDropdown} 

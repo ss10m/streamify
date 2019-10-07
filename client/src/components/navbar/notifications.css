@@ -1,3 +1,82 @@
-.notficiationsBackground {
+.notificationsWrapper {
     background-color: red;
+}
+
+.notificiationItems {
+    max-height: 350px;
+    overflow: auto;
+}
+
+.notificiationsBackground {
+    background-color: #1c4269;
+    color: white;
+}
+
+.notificiationItem {
+    padding: 10px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.notificationMsg {
+    padding-left: 10px;
+    width: 100%;
+}
+
+.notificiationItem:hover {
+    background-color: #122941;
+    
+}
+
+.notificiationTitle {
+    height: 60px;
+    width: 100%;
+    background-color: #262626;
+    position: relative;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+}
+
+
+.notificiationsEmpty {
+    width: 100%;
+    height: 150px;
+    margin: auto;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+}
+
+.notificationText {
+    text-decoration: none;
+}
+
+.closeNotifications {
+    color: white;
+    position: absolute;
+    padding: 7px;
+    right: 10px;
+    border-radius: 5px;
+}
+
+.closeNotifications:hover {
+    background-color: #404040;
+    padding: 7px;
+}
+
+.deleteNotificationWrapper {
+    width: 20px;
+    
+    padding: 2px;
+}
+
+.deleteNotification:hover {
+    
+    background-color: red;
+    padding: 2px;
+    border-radius: 5px;
+    
 }
