@@ -28,7 +28,7 @@
     justify-content: center;
 }
 
-.loggedInLogo:hover {
+.logoButton:hover {
     cursor: pointer;
 }
 
@@ -75,12 +75,12 @@
 
 .notificationsIcon {
     color: white;
-    font-size: 25px;
 }
 
-
 .notificationsIcon:hover {
-    color: #122941;
+    background-color: #122941;
+    padding: 8px;
+    border-radius: 5px;
     cursor: pointer;
 }
 

@@ -99,6 +99,7 @@ class NavBar extends Component {
             return (
                 <div className="loggedInLogoWrapper">
                     <img 
+                        className="logoButton"
                         src='https://static-cdn.jtvnw.net/jtv_user_pictures/7ed5e0c6-0191-4eef-8328-4af6e4ea5318-profile_image-300x300.png' 
                         onClick={() => { if(!this.state.showDropdown && this.state.dropbownBtn) this.setState({showDropdown: true, dropbownBtn: false})}}
                         width="30" height="30" alt="MISSING" />
@@ -125,7 +126,7 @@ class NavBar extends Component {
                 </div>
 
                 <div className="flexboxitemNotifications notifications">
-                    <i className="fa fa-bell fa-2x notifications notificationsIcon" 
+                    <i className="fa fa-bell notifications notificationsIcon" 
                         onClick={() => { if(!this.state.showNotifications && this.state.notificationsBtn) this.setState({showNotifications: true, notificationsBtn: false})}}>
                     </i>
 
@@ -134,6 +135,7 @@ class NavBar extends Component {
                             winWidth={this.props.winWidth}
                             notifications={this.props.notifications}
                             showNotifications={this.state.showNotifications} 
+                            removeNotification={this.props.removeNotification}
                             setNotificationsState={this.setNotificationsState}
                             session={this.props.session} 
                             logOut={this.logOut} 
@@ -178,24 +180,25 @@ class NavBar extends Component {
                         <Search category="channels" minimizeNav={this.minimizeNav}/>
                 </div>
 
-                <div className="notificationsMini">
-                    <i className="fa fa-bell notificationsIcon" 
+                <div className="notificationsMini" onClick={() => this.minimizeNav()}>
+                    <i className="fa fa-bell notificationsIcon"
                         onClick={() => { if(!this.state.showNotifications && this.state.notificationsBtn) this.setState({showNotifications: true, notificationsBtn: false})}}>
                     </i>
-                    <div class="notificationsDropdownMini">
+                    <div className="notificationsDropdownMini">
                         <Notifications 
                             winWidth={this.props.winWidth}
                             notifications={this.props.notifications}
-                            showNotifications={this.state.showNotifications} 
+                            showNotifications={this.state.showNotifications}
+                            removeNotification={this.props.removeNotification}
                             setNotificationsState={this.setNotificationsState}
                             session={this.props.session} 
                             logOut={this.logOut} 
                         />
                     </div>
                 </div>
-                <div className="userOptionsMini">
+                <div className="userOptionsMini" onClick={() => this.minimizeNav()}>
                     {this.getButtons()}
-                    <div class="userOptionsDropdownMini">
+                    <div className="userOptionsDropdownMini">
                         <UserDropdownOptions 
                             winWidth={this.props.winWidth}
                             showDropdown={this.state.showDropdown} 

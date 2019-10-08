@@ -1,6 +1,3 @@
-.notificationsWrapper {
-    background-color: red;
-}
 
 .notificiationItems {
     max-height: 350px;
@@ -18,11 +15,13 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
+    border-bottom: 1px solid #122941;;
 }
 
 .notificationMsg {
     padding-left: 10px;
     width: 100%;
+    
 }
 
 .notificiationItem:hover {
@@ -30,8 +29,15 @@
     
 }
 
+.clickableNotification {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
 .notificiationTitle {
-    height: 60px;
+    height: 50px;
     width: 100%;
     background-color: #262626;
     position: relative;
@@ -46,7 +52,7 @@
     height: 150px;
     margin: auto;
     display: flex;
-    align-items: center; 
+    align-items: center;
     justify-content: center;
 }
 
@@ -67,16 +73,33 @@
     padding: 7px;
 }
 
+.clearNotifications {
+    position: absolute;
+    padding: 7px;
+    left: 10px;
+    border-radius: 5px;
+}
+
+.clearNotifications:hover {
+    background-color: #404040;
+    padding: 7px;
+}
+
+
 .deleteNotificationWrapper {
     width: 20px;
-    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.deleteNotification { 
     padding: 2px;
 }
 
-.deleteNotification:hover {
-    
+.deleteNotification:hover { 
     background-color: red;
     padding: 2px;
     border-radius: 5px;
-    
 }

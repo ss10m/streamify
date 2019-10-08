@@ -24,27 +24,26 @@ class Notifications extends Component {
         }
     }
 
-    removeNotification = (index, streamerName) => {
-        console.log('removing ' + index + streamerName)
-    }
-
     getNotifications = () => {
         if(this.props.showNotifications && this.props.notifications.length > 0) {
             return (
                 <div className="notificiationsBackground">
                     <div className="notificiationTitle">
+                        <i className="fa fa-trash clearNotifications" onClick={() => this.props.removeNotification(null, null, true)}/>
                         <b>Notifications</b>
                         <i className="fa fa-times closeNotifications" onClick={() => this.props.setNotificationsState(false)}/>
                     </div>
                     <div className="notificiationItems">
                         {this.props.notifications.map((notification, index) =>
-                            <Link style={{ textDecoration: 'none', color: 'white' }} to={"/streamer/" + notification.name} key={index} onClick={() => this.props.setNotificationsState(false)}>
-                                <div className="notificiationItem">
+                             <div className="notificiationItem">
+                                <Link className="clickableNotification" style={{ textDecoration: 'none', color: 'white' }} to={"/streamer/" + notification.name} key={index} onClick={() => this.props.setNotificationsState(false)}>
                                     <img src={notification.logo} width="25" height="25" alt="MISSING" />                              
                                     <div className="notificationMsg">{notification.name + ' is playing '}<b>{notification.game}</b></div>
-                                    <div className="deleteNotificationWrapper" onClick={() => this.removeNotification(index, notification.name)}><i className="fa fa-times deleteNotification"/></div>
-                                </div> 
-                            </Link>
+                                </Link>
+                                <div className="deleteNotificationWrapper" >
+                                    <i onClick={() => this.props.removeNotification(index, notification.name, false)} className="fa fa-times deleteNotification"/>
+                                </div>    
+                            </div>
                         )}
                     </div>
                 </div>
@@ -53,6 +52,7 @@ class Notifications extends Component {
             return (
                 <div className="notificiationsBackground">
                     <div className="notificiationTitle">
+                        <i className="fa fa-trash clearNotifications" onClick={() => this.props.removeNotification(null, null, true)}/>
                         <b>Notifications</b>
                         <i className="fa fa-times closeNotifications" onClick={() => this.props.setNotificationsState(false)}/>
                     </div>

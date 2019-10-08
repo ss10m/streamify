@@ -48,15 +48,30 @@ class App extends Component {
             query: {token: JSON.stringify(jwt)}
           });
           
-        socket.on('notification', this.handleNotifictaions);
+        socket.on('notification', this.handleNotifications);
     }
 
-    handleNotifictaions = (data) => {
+    handleNotifications = (data) => {
         console.log(data)
         var temp = [...this.state.notifications]
         temp.push(data)
         this.setState({notifications: temp});
     }
+
+    removeNotification = (index, streamerName, clearAll) => {
+        if(clearAll) {
+            this.setState({notifications: []})
+            return;
+        }
+        var temp = [...this.state.notifications]
+        if (index >= 0 && index < this.state.notifications.length) {
+            if(temp[index].name === streamerName) {
+                temp.splice(index, 1);
+                this.setState({notifications: temp})
+            }
+        }
+    }
+
 
     onLogout() {
         console.log('on logout')
@@ -79,6 +94,7 @@ class App extends Component {
                 <Route render={() => <NavBar winWidth={this.state.winWidth} 
                                              session={this.state.session} 
                                              notifications={this.state.notifications}
+                                             removeNotification={this.removeNotification}
                                              onLogout={this.onLogout.bind(this)} 
                                              modalOpen={modalOpen}/>} />
                 <LoginModal
