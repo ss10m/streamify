@@ -3,6 +3,7 @@ import { Modal, Button } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 
 import Search from '../navbar/search.js'
+import './searchModal.css'
 
 class SearchModal extends React.Component {
 
@@ -17,7 +18,7 @@ class SearchModal extends React.Component {
         return (
             <Modal
                 {...this.props}
-                size="lg"
+                size="md"
                 aria-labelledby="contained-modal-title-vcenter"
 
                 
@@ -28,10 +29,13 @@ class SearchModal extends React.Component {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Search 
-                        {...this.props}
-                        category="games"
-                    />
+                    <div className="mainWrapper">
+                        <Search 
+                            {...this.props}
+                            category="games"
+                        />
+                    </div>
+
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.props.onHide}>Close</Button>

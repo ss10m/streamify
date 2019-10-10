@@ -1,7 +1,7 @@
 .autocomplete {
     position: relative;
     display: inline-block;
-    
+    width: 100%;
 }
 
 input {
@@ -22,20 +22,40 @@ input[type=text] {
 
 .autocomplete-items {
     position: absolute;
+    background-color: #1c4269;
     border: 5px solid #1c4269;
-    border-radius: 10px 0px 10px 10px;
+    border-top: 0;
     top: 100%;
+    padding-top: 5px;
     left: 0;
     right: 0;
 }
-.autocomplete-items div {
-    padding: 10px 10px 10px 20px;
+.autocomplete-item {
+    padding: 10px;
     color: white;
     cursor: pointer;
+
+    height: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
     background-color: #1c4269;
 }
 
-.autocomplete-items div:hover {
+.resultName {
+    width: 95%;
+    display: flex;
+    align-items: center; 
+}
+
+.resultGame {
+    
+    display: flex;
+    align-items: center; 
+    
+}
+
+.autocomplete-item:hover {
     background-color: #122941;
 }
 
@@ -48,14 +68,18 @@ img.seachGames {
     margin-right: 15px;
 }
 
-.followGameButton {
-    float: right;
-    margin-top: 10px;
+.followGameButtonWrapper {
+    padding-left: 10px;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
 }
+
+
 
 input.form-control.searchBar {
     height: 30px;
-    width: 350px;
+    width: 100%;
     background-color:#122941;
     color:white;
     border: none

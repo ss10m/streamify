@@ -258,12 +258,14 @@ class Streamer extends Component {
                 </div>
                 
                 <div className="recentGames">
-                    <div className="flex-container recentGamesSearch">
-                        <div className="searchGamesTextDiv">
-                            <h3 className="searchGamesText">Games recently played by {this.state.data['display_name']}</h3>
-                        </div>
-                        <div className="searchGamesButtonDiv">
-                            <button type="button" className="btn btn-primary btn-sm searchGamesButton" onClick={this.modalOpen}>Search for more games</button>
+                    <div className="recentGamesSearch">
+                        <div className="recentGamesSearchBar">
+                            <div className="searchGamesTextDiv">
+                                <h3 className="searchGamesText">Games recently played by {this.state.data['display_name']}</h3>
+                            </div>
+                            <div className="searchGamesButtonDiv">
+                                <button type="button" className="btn btn-primary btn-sm searchGamesButton" onClick={this.modalOpen}>Search for more games</button>
+                            </div>
                         </div>
                         
                     </div>

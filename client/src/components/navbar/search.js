@@ -48,12 +48,15 @@ class Search extends Component {
 
     getAutocompleteList = () => {
         var autoCompleteList = this.state.autocompleteList;
+        var displayStyle = "none";
+        if(autoCompleteList.length > 0) displayStyle = "block";
+        console.log(displayStyle)
         switch(this.props.category){
             case('channels'):
                 return (
-                    <div className="autocomplete-items" onClick={this.props.minimizeNav}>
+                    <div className="autocomplete-items" style={{display: displayStyle}} onClick={this.props.minimizeNav}>
                         {autoCompleteList.map(listItem =>
-                            <Link to={"/streamer/" + listItem.name} key={listItem.name}>
+                            <Link className="autocomplete-item" style={{ textDecoration: 'none', color: 'white' }} to={"/streamer/" + listItem.name} key={listItem.name}>
                                 <div key={listItem.name} onClick={this.clearAutoInput}>
                                     <img className="searchLogo" src={listItem.logo} width="40" height="40" alt="MISSING" />
                                     {listItem.display_name}
@@ -64,12 +67,20 @@ class Search extends Component {
                 )
             case('games'):
                 return (
-                    <div className="autocomplete-items">
+                    <div className="autocomplete-items" style={{display: displayStyle}}>
                         {autoCompleteList.map(listItem =>
-                            <div key={listItem.name}>
-                                <img className="seachGames" src={listItem.box.small} width="40" height="56" alt="MISSING" />
-                                {listItem.name}
-                                <button type="button" onClick={() => this.props.followGame('follow', listItem.name)} className="btn btn-primary btn-sm followGameButton">Follow</button>
+                            <div className="autocomplete-item" key={listItem.name}>
+                                <div className="resultGame">
+                                    <img className="seachGames" src={listItem.box.small} width="36" height="50" alt="MISSING" /> 
+                                </div>
+                                
+                                <div className="resultName">
+                                    <div>{listItem.name}</div>
+                                </div>
+                                <div className="followGameButtonWrapper">
+                                    <button type="button" onClick={() => this.props.followGame('follow', listItem.name)} className="btn btn-primary btn-sm followGameButton">Follow</button>
+                                </div>
+                                
                             </div> 
                         )}
                     </div>
@@ -95,9 +106,10 @@ class Search extends Component {
     }
 
     render() {
+        
         return (
             <div className="form-inline my-2 my-lg-0 searchBar">
-                <div className="form-group has-search autocomplete">
+                <div className="form-group has-search autocomplete" >
                     <span className="fa fa-search form-control-feedback"></span>
                     <input autoComplete="off" id="myInput" type="text" className="form-control searchBar myInput" ref={this.myRef} onChange={this.handleChange} placeholder="Search" value={this.state.inputField}/>
                     {this.getAutocompleteList()}

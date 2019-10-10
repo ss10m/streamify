@@ -176,7 +176,7 @@ class NavBar extends Component {
                 <Link to={'/'} className="navbar-link-mini" style={{display: displayStyle}}> <div className="flexboxItem" onClick={() => this.minimizeNav()}>Home</div> </Link>
                 <Link to={'/streamers'} className="navbar-link-mini" style={{display: displayStyle}}> <div className="flexboxItem" onClick={() => this.minimizeNav()}>Followed</div> </Link>
 
-                <div className="centerSearchBarMini" style={{display: displayStyle}}>>
+                <div style={{display: displayStyle}}>
                         <Search category="channels" minimizeNav={this.minimizeNav}/>
                 </div>
 
