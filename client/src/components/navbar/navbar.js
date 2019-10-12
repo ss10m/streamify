@@ -113,10 +113,22 @@ class NavBar extends Component {
     getNavBarBody = () => {
         
         return (
-            <div className="flexboxContainer">
-                <Link to={'/'} className="navbar-link-title"> <div className="flexboxItem" onClick={() => this.minimizeNav()}><p>Twitchify</p></div> </Link>
-                <Link to={'/'} className="navbar-link"> <div className="flexboxItem" onClick={() => this.minimizeNav()}>Home</div> </Link>
-                <Link to={'/streamers'} className="navbar-link"> <div className="flexboxItem" onClick={() => this.minimizeNav()}>Followed</div> </Link>
+            <div className="cus-navbar cus-navbar__full">
+                <Link className="cus-navbar--link cus-navbar--link__highlighted" to={'/'}> 
+                    <div className="flexboxItem" onClick={() => this.minimizeNav()}>
+                        <p>Twitchify</p>
+                    </div>
+                </Link>
+                <Link className="cus-navbar--link cus-navbar--link__underline" to={'/'} >
+                    <div className="flexboxItem" onClick={() => this.minimizeNav()}>
+                        Home
+                    </div> 
+                </Link>
+                <Link className="cus-navbar--link cus-navbar--link__underline" to={'/streamers'} >
+                    <div className="flexboxItem" onClick={() => this.minimizeNav()}>
+                        Followed
+                    </div>
+                </Link>
 
                 <div className="flexboxitemSearch centerSearchBar">
                     <div className="centerSearchBar">
@@ -163,18 +175,30 @@ class NavBar extends Component {
     }
 
     getNavBarMiniBody = () => {
-        var MainClassName = "flexboxContainerMini";
+        var MainClassName = "cus-navbar cus-navbar__collapsed";
         var displayStyle = "block";
         if(this.state.navCollapsed) {
-            MainClassName = "flexboxContainer";
+            MainClassName = "cus-navbar cus-navbar__full";
             displayStyle = "none";
         }
 
         return (
             <div className={MainClassName}>
-                <Link to={'/'} className="navbar-link-title"> <div className="flexboxItem" onClick={() => this.minimizeNav()}><p>Twitchify</p></div> </Link>
-                <Link to={'/'} className="navbar-link-mini" style={{display: displayStyle}}> <div className="flexboxItem" onClick={() => this.minimizeNav()}>Home</div> </Link>
-                <Link to={'/streamers'} className="navbar-link-mini" style={{display: displayStyle}}> <div className="flexboxItem" onClick={() => this.minimizeNav()}>Followed</div> </Link>
+                <Link to={'/'} className="cus-navbar--link__highlighted">
+                    <div className="flexboxItem" onClick={() => this.minimizeNav()}>
+                        <p>Twitchify</p>
+                    </div>
+                </Link>
+                <Link to={'/'} className="cus-navbar--link" style={{display: displayStyle}}>
+                    <div className="flexboxItem" onClick={() => this.minimizeNav()}>
+                        Home
+                    </div>
+                </Link>
+                <Link to={'/streamers'} className="cus-navbar--link" style={{display: displayStyle}}>
+                    <div className="flexboxItem" onClick={() => this.minimizeNav()}>
+                        Followed
+                    </div>
+                </Link>
 
                 <div style={{display: displayStyle}}>
                         <Search category="channels" minimizeNav={this.minimizeNav}/>

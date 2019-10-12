@@ -1,3 +1,72 @@
+.cus-navbar {
+    position: fixed;
+    display: flex;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    background-color: #1c4269;
+}
+
+.cus-navbar__full {
+    height: 50px;
+    flex-direction: row;
+}
+
+.cus-navbar__collapsed {
+    height: auto;
+    flex-direction: column;
+}
+
+
+
+
+
+.cus-navbar--link {
+    color: white;
+    overflow:hidden;
+    text-decoration: none;
+}
+
+.cus-navbar--link__highlighted {
+    font-weight: bold;
+}
+
+.cus-navbar--link__highlighted:hover {
+    font-weight: bold;
+    color: black;
+    overflow:hidden;
+    text-decoration: none;
+}
+
+.cus-navbar--link__highlighted p {
+    color: #1c4269;
+    width: max-content;
+    padding: 1px 5px;
+    background-color: #122941;
+    border-radius: 5px;
+}
+
+.cus-navbar--link__highlighted p:hover {
+    background-color: white;
+}
+
+.cus-navbar--link:not(.cus-navbar--link__highlighted):hover {
+    color: white;
+    background-color: #122941;
+    text-decoration: none;
+}
+
+.cus-navbar--link__underline:hover {
+    border-bottom: 3px solid white;
+}
+
+
+
+
+
+
+
 .logInModal {
     background-color: #1c4269;
 }
@@ -96,50 +165,6 @@
 }
 
 
-.navbar-link-title {
-    font-weight: bold;
-    color: white;
-    overflow:hidden;
-    text-decoration: none;
-}
-
-.navbar-link-title:hover {
-    font-weight: bold;
-    color: black;
-    overflow:hidden;
-    text-decoration: none;
-}
-
-.navbar-link-title p {
-    color: #1c4269;
-    width: max-content;
-    padding: 1px 5px;
-    background-color: #122941;
-    border-radius: 5px;
-}
-
-.navbar-link-title p:hover {
-    background-color: white;
-}
-
-.navbar-link, .navbar-link-mini {
-    color: white;
-    overflow:hidden;
-    text-decoration: none;
-}
-
-.navbar-link:hover {
-    color: white;
-    background-color: #122941;
-    text-decoration: none;
-    border-bottom: 3px solid white;
-}
-
-.navbar-link-mini:hover {
-    color: white;
-    background-color: #122941;
-    text-decoration: none;
-}
 
 .bars {
     color: #122941;
