@@ -21,6 +21,7 @@ class App extends Component {
         this.state = {
             session: '',
             notifications: [],
+            newNotifications: false,
             modalShow: false,
             winWidth: window.innerWidth,
             response: false,
@@ -55,7 +56,8 @@ class App extends Component {
         console.log(data)
         var temp = [...this.state.notifications]
         temp.push(data)
-        this.setState({notifications: temp});
+        this.setState({notifications: temp,
+                       newNotifications: true});
     }
 
     removeNotification = (index, streamerName, clearAll) => {
@@ -72,6 +74,9 @@ class App extends Component {
         }
     }
 
+    resetNewNotifications = () => {
+        this.setState({newNotifications: false})
+    }
 
     onLogout() {
         console.log('on logout')
@@ -94,6 +99,8 @@ class App extends Component {
                 <Route render={() => <NavBar winWidth={this.state.winWidth} 
                                              session={this.state.session} 
                                              notifications={this.state.notifications}
+                                             newNotifications={this.state.newNotifications}
+                                             resetNewNotifications={this.resetNewNotifications}
                                              removeNotification={this.removeNotification}
                                              onLogout={this.onLogout.bind(this)} 
                                              modalOpen={modalOpen}/>} />

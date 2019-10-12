@@ -35,7 +35,7 @@ class Notifications extends Component {
                     </div>
                     <div className="notificiationItems">
                         {this.props.notifications.map((notification, index) =>
-                             <div className="notificiationItem">
+                             <div className="notificiationItem" key={index}>
                                 <Link className="clickableNotification" style={{ textDecoration: 'none', color: 'white' }} to={"/streamer/" + notification.name} key={index} onClick={() => this.props.setNotificationsState(false)}>
                                     <img src={notification.logo} width="25" height="25" alt="MISSING" />                              
                                     <div className="notificationMsg">{notification.name + ' is playing '}<b>{notification.game}</b></div>

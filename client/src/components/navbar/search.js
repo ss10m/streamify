@@ -50,7 +50,6 @@ class Search extends Component {
         var autoCompleteList = this.state.autocompleteList;
         var displayStyle = "none";
         if(autoCompleteList.length > 0) displayStyle = "block";
-        console.log(displayStyle)
         switch(this.props.category){
             case('channels'):
                 return (

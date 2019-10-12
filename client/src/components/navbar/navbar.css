@@ -85,15 +85,31 @@
     align-items: center; 
 }
 
-.cus-navbar__notifications-icon {
-    color: white;
+
+.cus-navbar__notifications-icon-container {
+    position: relative;
 }
 
-.cus-navbar__notifications-icon:hover {
+.cus-navbar__notifications-icon-container:hover {
     background-color: #122941;
-    padding: 8px;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.cus-navbar__notifications-icon {
+    color: white;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.cus-navbar__notifications-badge {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    height: 10px;
+    width: 10px;
+    background-color: red;
+    border-radius: 50%;
 }
 
 .cus-navbar__notifications-dropdown {
@@ -102,6 +118,16 @@
     width: 400px;
     top: 50px;
     right: 0px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.cus-navbar__notifications-dropdown-collapsed {
+    display: show;
+    position: fixed;
+    top: 50px;
+    left:0;
+    right:0;
     overflow: auto;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }

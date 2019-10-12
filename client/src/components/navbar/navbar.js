@@ -16,7 +16,7 @@ class NavBar extends Component {
             showDropdown: false,
             showNotifications: false,
             dropbownBtn: true,
-            notificationsBtn: true
+            notificationsBtn: true,
         };
     }
 
@@ -47,6 +47,12 @@ class NavBar extends Component {
         }.bind(this), 100)
     }  
 
+    componentDidUpdate(prevProps) {
+        if(this.props.newNotifications === true && this.state.showNotifications) {
+            this.props.resetNewNotifications()
+        } 
+
+    }
 
     componentDidMount() {
         document.addEventListener('click', this.handleClickOutside, true);
@@ -126,13 +132,18 @@ class NavBar extends Component {
                 </div>
 
                 <div className="cus-navbar__notifications">
-                    <i className="fa fa-bell cus-navbar__notifications-icon" 
+
+                    <div className="cus-navbar__notifications-icon-container" 
                         onClick={() => {
-                            if(!this.state.showNotifications && this.state.notificationsBtn)
+                            if(!this.state.showNotifications && this.state.notificationsBtn) {
                                 this.setState({showNotifications: true, notificationsBtn: false})
                             }
+                            this.props.resetNewNotifications()
+                            }
                         }>
-                    </i>
+                        <i className="fa fa-bell cus-navbar__notifications-icon" />
+                        <span className="cus-navbar__notifications-badge" style={{display: (this.props.newNotifications) ? 'block' : 'none' }}></span>
+                    </div>
 
                     <div className="cus-navbar__notifications-dropdown cus-navbar__notifications-dropdown-full">
                         <Notifications 
@@ -169,9 +180,14 @@ class NavBar extends Component {
     getNavBarMiniBody = () => {
         var mainClassName = "cus-navbar cus-navbar--collapsed";
         var displayStyle = "block";
+        var notificationsClass = "cus-navbar__notifications-dropdown";
+
         if(this.state.navCollapsed) {
             mainClassName = "cus-navbar cus-navbar--full";
             displayStyle = "none";
+        }
+        if(this.props.winWidth <= 600) {
+            notificationsClass = "cus-navbar__notifications-dropdown-collapsed";
         }
 
         return (
@@ -191,13 +207,18 @@ class NavBar extends Component {
                 </div>
 
                 <div className="cus-navbar__notifications-collapsed" onClick={this.minimizeNav}>
-                    <i className="fa fa-bell cus-navbar__notifications-icon"
-                        onClick={() => { 
-                            if(!this.state.showNotifications && this.state.notificationsBtn) 
+                    <div className="cus-navbar__notifications-icon-container" 
+                        onClick={() => {
+                            if(!this.state.showNotifications && this.state.notificationsBtn) {
                                 this.setState({showNotifications: true, notificationsBtn: false})
-                        }}>
-                    </i>
-                    <div className="cus-navbar__notifications-dropdown">
+                            }
+                            this.props.resetNewNotifications()
+                            }
+                        }>
+                        <i className="fa fa-bell cus-navbar__notifications-icon" />
+                        <span className="cus-navbar__notifications-badge" style={{display: (this.props.newNotifications) ? 'block' : 'none' }}></span>
+                    </div>
+                    <div className={notificationsClass}>
                         <Notifications 
                             winWidth={this.props.winWidth}
                             notifications={this.props.notifications}
