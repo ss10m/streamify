@@ -12,7 +12,7 @@ class LogInModal extends React.Component {
             password: "",
             confirmPassword: "",
             error: '',
-            selectedTab: 'login'
+            selectedTab: 'Login'
         };
 
     }
@@ -34,9 +34,9 @@ class LogInModal extends React.Component {
     }
   
     handleSubmit = event => {
-        event.preventDefault(); // Prevent the form from submitting
+        event.preventDefault();
 
-        fetch('/' + this.state.selectedTab, {
+        fetch('/' + this.state.selectedTab.toLowerCase(), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ class LogInModal extends React.Component {
                         password: '',
                         confirmPassword: '',
                         error : '',
-                        selectedTab: 'login'});
+                        selectedTab: 'Login'});
         this.props.onHide();
     }
 
@@ -189,15 +189,15 @@ class LogInModal extends React.Component {
             >
                 <Modal.Header>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        Log in to Twitchify
+                        {this.state.selectedTab}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Tabs defaultActiveKey="login" id="uncontrolled-tab-example" onSelect={this.handleTabChange}>
-                        <Tab eventKey="login" title="Login">
+                    <Tabs defaultActiveKey="Login" id="uncontrolled-tab-example" onSelect={this.handleTabChange}>
+                        <Tab eventKey="Login" title="Login">
                             {this.getLoginForm()}
                         </Tab>
-                        <Tab eventKey="register" title="Register">
+                        <Tab eventKey="Register" title="Register">
                             {this.getRegisterForm()}
                         </Tab>
                     </Tabs>

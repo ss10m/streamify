@@ -85,21 +85,20 @@ class NavBar extends Component {
     getButtons() {
         if(!this.props.session) {
             return(
-                <div className="loginButtonWrapper">
+                <div className="cus-navbar__user-options-btn-container">
                     <button 
-                        className="btn btn-outline-light btn-sm loginButton"
+                        className="btn btn-outline-light btn-sm cus-navbar__user-options-login-btn"
                         onClick={() => { this.props.modalOpen(); this.minimizeNav() }}
                     >
                         Log in
-                </button>
+                    </button>
                 </div>
-
             )
         } else {
             return (
-                <div className="loggedInLogoWrapper">
+                <div className="cus-navbar__user-options-btn-container">
                     <img 
-                        className="logoButton"
+                        className="cus-navbar__user-options-loggedin-btn"
                         src='https://static-cdn.jtvnw.net/jtv_user_pictures/7ed5e0c6-0191-4eef-8328-4af6e4ea5318-profile_image-300x300.png' 
                         onClick={() => { if(!this.state.showDropdown && this.state.dropbownBtn) this.setState({showDropdown: true, dropbownBtn: false})}}
                         width="30" height="30" alt="MISSING" />
@@ -109,40 +108,33 @@ class NavBar extends Component {
         }
     }
 
-
     getNavBarBody = () => {
-        
         return (
-            <div className="cus-navbar cus-navbar__full">
-                <Link className="cus-navbar--link cus-navbar--link__highlighted" to={'/'}> 
-                    <div className="flexboxItem" onClick={() => this.minimizeNav()}>
-                        <p>Twitchify</p>
-                    </div>
+            <div className="cus-navbar cus-navbar--full">
+                <Link className="cus-navbar__link cus-navbar__link--highlighted" to={'/'}> 
+                    <p>Twitchify</p>
                 </Link>
-                <Link className="cus-navbar--link cus-navbar--link__underline" to={'/'} >
-                    <div className="flexboxItem" onClick={() => this.minimizeNav()}>
-                        Home
-                    </div> 
+                <Link className="cus-navbar__link cus-navbar__link--underline" to={'/'}>
+                    Home
                 </Link>
-                <Link className="cus-navbar--link cus-navbar--link__underline" to={'/streamers'} >
-                    <div className="flexboxItem" onClick={() => this.minimizeNav()}>
-                        Followed
-                    </div>
+                <Link className="cus-navbar__link cus-navbar__link--underline" to={'/streamers'}>
+                    Followed
                 </Link>
 
-                <div className="flexboxitemSearch centerSearchBar">
-                    <div className="centerSearchBar">
-                        <Search category="channels" minimizeNav={this.minimizeNav}/>
-                    </div>
-                    
+                <div className="cus-navbar__search">
+                    <Search category="channels" minimizeNav={this.minimizeNav}/>
                 </div>
 
-                <div className="flexboxitemNotifications notifications">
-                    <i className="fa fa-bell notifications notificationsIcon" 
-                        onClick={() => { if(!this.state.showNotifications && this.state.notificationsBtn) this.setState({showNotifications: true, notificationsBtn: false})}}>
+                <div className="cus-navbar__notifications">
+                    <i className="fa fa-bell cus-navbar__notifications-icon" 
+                        onClick={() => {
+                            if(!this.state.showNotifications && this.state.notificationsBtn)
+                                this.setState({showNotifications: true, notificationsBtn: false})
+                            }
+                        }>
                     </i>
 
-                    <div className="notificationsDropdownMini notificationsDropdown">
+                    <div className="cus-navbar__notifications-dropdown cus-navbar__notifications-dropdown-full">
                         <Notifications 
                             winWidth={this.props.winWidth}
                             notifications={this.props.notifications}
@@ -155,10 +147,10 @@ class NavBar extends Component {
                     </div>
                 </div>
 
-                <div className="flexboxitemLogout">
-                    <div className="userOptions">
+                <div className="cus-navbar__user-options-container">
+                    <div className="cus-navbar__user-options">
                         {this.getButtons()}
-                        <div className="userOptionsDropdownMini userOptionsDropdown">
+                        <div className="cus-navbar__user-options-dropdown cus-navbar__user-options-dropdown--full">
                             <UserDropdownOptions 
                                 winWidth={this.props.winWidth}
                                 showDropdown={this.state.showDropdown} 
@@ -175,40 +167,37 @@ class NavBar extends Component {
     }
 
     getNavBarMiniBody = () => {
-        var MainClassName = "cus-navbar cus-navbar__collapsed";
+        var mainClassName = "cus-navbar cus-navbar--collapsed";
         var displayStyle = "block";
         if(this.state.navCollapsed) {
-            MainClassName = "cus-navbar cus-navbar__full";
+            mainClassName = "cus-navbar cus-navbar--full";
             displayStyle = "none";
         }
 
         return (
-            <div className={MainClassName}>
-                <Link to={'/'} className="cus-navbar--link__highlighted">
-                    <div className="flexboxItem" onClick={() => this.minimizeNav()}>
-                        <p>Twitchify</p>
-                    </div>
+            <div className={mainClassName}>
+                <Link to={'/'} className="cus-navbar__link cus-navbar__link--highlighted" onClick={this.minimizeNav}>
+                    <p>Twitchify</p>
                 </Link>
-                <Link to={'/'} className="cus-navbar--link" style={{display: displayStyle}}>
-                    <div className="flexboxItem" onClick={() => this.minimizeNav()}>
-                        Home
-                    </div>
+                <Link to={'/'} className="cus-navbar__link" style={{display: displayStyle}} onClick={this.minimizeNav}>
+                    Home
                 </Link>
-                <Link to={'/streamers'} className="cus-navbar--link" style={{display: displayStyle}}>
-                    <div className="flexboxItem" onClick={() => this.minimizeNav()}>
-                        Followed
-                    </div>
+                <Link to={'/streamers'} className="cus-navbar__link" style={{display: displayStyle}} onClick={this.minimizeNav}>
+                    Followed
                 </Link>
 
                 <div style={{display: displayStyle}}>
                         <Search category="channels" minimizeNav={this.minimizeNav}/>
                 </div>
 
-                <div className="notificationsMini" onClick={() => this.minimizeNav()}>
-                    <i className="fa fa-bell notificationsIcon"
-                        onClick={() => { if(!this.state.showNotifications && this.state.notificationsBtn) this.setState({showNotifications: true, notificationsBtn: false})}}>
+                <div className="cus-navbar__notifications-collapsed" onClick={this.minimizeNav}>
+                    <i className="fa fa-bell cus-navbar__notifications-icon"
+                        onClick={() => { 
+                            if(!this.state.showNotifications && this.state.notificationsBtn) 
+                                this.setState({showNotifications: true, notificationsBtn: false})
+                        }}>
                     </i>
-                    <div className="notificationsDropdownMini">
+                    <div className="cus-navbar__notifications-dropdown">
                         <Notifications 
                             winWidth={this.props.winWidth}
                             notifications={this.props.notifications}
@@ -220,9 +209,10 @@ class NavBar extends Component {
                         />
                     </div>
                 </div>
-                <div className="userOptionsMini" onClick={() => this.minimizeNav()}>
+                
+                <div className="cus-navbar__user-options cus-navbar__user-options-collapsed" onClick={this.minimizeNav}>
                     {this.getButtons()}
-                    <div className="userOptionsDropdownMini">
+                    <div className="cus-navbar__user-options-dropdown">
                         <UserDropdownOptions 
                             winWidth={this.props.winWidth}
                             showDropdown={this.state.showDropdown} 
@@ -255,7 +245,7 @@ class NavBar extends Component {
             <div>
                 {this.getNavBar()}
                 <button onClick={this.toggleNav} style={{display: (this.props.winWidth <= 800) ? 'block' : 'none' }}>
-                    <i className="fa fa-bars fa-2x bars"></i>
+                    <i className="fa fa-bars fa-2x cus-navbar__toggle-navbar-btn"></i>
                 </button>
             </div>
         )

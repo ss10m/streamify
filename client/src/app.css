@@ -54,3 +54,11 @@ hr.split {
     margin-top: 10px;
     margin-bottom: 1px;
 }
+
+.logInModal {
+    background-color: #1c4269;
+}
+
+.login {
+    padding: 30px 30px 30px 30px;
+}

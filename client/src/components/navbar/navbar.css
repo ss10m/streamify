@@ -8,38 +8,37 @@
     background-color: #1c4269;
 }
 
-.cus-navbar__full {
+.cus-navbar--full {
     height: 50px;
     flex-direction: row;
 }
 
-.cus-navbar__collapsed {
+.cus-navbar--collapsed {
     height: auto;
     flex-direction: column;
 }
 
-
-
-
-
-.cus-navbar--link {
+.cus-navbar__link {
     color: white;
     overflow:hidden;
     text-decoration: none;
+    width: auto;
+    padding: 14px 16px;
+    flex: 0 0 auto;
 }
 
-.cus-navbar--link__highlighted {
+.cus-navbar__link--highlighted {
     font-weight: bold;
 }
 
-.cus-navbar--link__highlighted:hover {
+.cus-navbar__link--highlighted:hover {
     font-weight: bold;
     color: black;
     overflow:hidden;
     text-decoration: none;
 }
 
-.cus-navbar--link__highlighted p {
+.cus-navbar__link--highlighted p {
     color: #1c4269;
     width: max-content;
     padding: 1px 5px;
@@ -47,126 +46,120 @@
     border-radius: 5px;
 }
 
-.cus-navbar--link__highlighted p:hover {
+.cus-navbar__link--highlighted p:hover {
     background-color: white;
 }
 
-.cus-navbar--link:not(.cus-navbar--link__highlighted):hover {
+.cus-navbar__link:not(.cus-navbar__link--highlighted):hover {
     color: white;
     background-color: #122941;
     text-decoration: none;
 }
 
-.cus-navbar--link__underline:hover {
+.cus-navbar__link--underline:hover {
     border-bottom: 3px solid white;
 }
 
-
-
-
-
-
-
-.logInModal {
-    background-color: #1c4269;
-}
-
-.login {
-    padding: 30px 30px 30px 30px;
-}
-
-.loginButton {
-    
-    padding: 3px;
-
-}
-
-.loginButtonWrapper {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center; 
-    justify-content: center;
-}
-
-.loggedInLogoWrapper {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center; 
-    justify-content: center;
-}
-
-.logoButton:hover {
-    cursor: pointer;
-}
-
-.flexboxContainer{
-    position: fixed;
-    display: flex;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 50px;
-    z-index: 1;
-    background-color: #1c4269;
-    flex-direction: row;
-}
-
-.flexboxContainerMini {
-    position: fixed;
-    display: flex;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: auto;
-    z-index: 1;
-    background-color: #1c4269;
-    flex-direction: column;
-}
-
-.flexboxItem{
-    width: auto;
-    padding: 14px 16px;
-    flex: 0 0 auto;
-}
-
-
-
-.flexboxitemSearch {
+.cus-navbar__search {
     flex: 1 1 auto; 
+    max-width: 500px;
+    margin: auto;
 }
 
-.flexboxitemNotifications {
-    width: 30px;
+.cus-navbar__notifications {
     flex: 0 0 auto;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
 }
 
-.notificationsIcon {
+.cus-navbar__notifications-collapsed {
+    position: fixed;
+    top: 0px;
+    right: 100px;
+    width: 30px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+
+.cus-navbar__notifications-icon {
     color: white;
 }
 
-.notificationsIcon:hover {
+.cus-navbar__notifications-icon:hover {
     background-color: #122941;
     padding: 8px;
     border-radius: 5px;
     cursor: pointer;
 }
 
+.cus-navbar__notifications-dropdown {
+    display: show;
+    position: absolute;
+    width: 400px;
+    top: 50px;
+    right: 0px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
 
-.flexboxitemLogout {
+.cus-navbar__notifications-dropdown-full {
+    right: 50px;
+}
+
+.cus-navbar__user-options-container {
     width: 50px;
     flex: 0 0 auto;
 }
 
-.centerSearchBar {
-    max-width: 500px;
-    margin: auto;
+.cus-navbar__user-options {
+    position: fixed;
+    height: 50px;
+    top: 0px;
+    width: 50px;
+    right: 0px;
+    
 }
 
+.cus-navbar__user-options-collapsed {
+    right: 50px;
 
+}
 
-.bars {
+.cus-navbar__user-options-dropdown {
+    display: show;
+    position: absolute;
+    width: 200px;
+    top: 50px;
+    right: 10px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.cus-navbar__user-options-dropdown--full {
+    right: 10px;
+}
+
+.cus-navbar__user-options-btn-container {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+}
+
+.cus-navbar__user-options-login-btn {
+    padding: 3px;
+}
+
+.cus-navbar__user-options-loggedin-btn {
+    cursor: pointer;
+}
+
+.cus-navbar__toggle-navbar-btn {
     color: #122941;
     text-shadow: 1px 1px 1px #1c4269;
     
@@ -179,74 +172,6 @@
     padding-top: 10px;
 }
 
-.bars:hover {
+.cus-navbar__toggle-navbar-btn:hover {
     color: white;
-}
-
-
-
-
-
-.userOptions {
-    position: fixed;
-    top: 0;
-    width: 50px;
-    height: 50px;
-}
-
-.userOptionsMini {
-    position: fixed;
-    height: 50px;
-    top: 0px;
-    right: 50px;
-    width: 50px;
-}
-
-
-.notifications {
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-}
-
-.notificationsMini {
-    position: fixed;
-    top: 0px;
-    right: 100px;
-    width: 30px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-}
-
-
-
-
-.notificationsDropdownMini {
-    display: show;
-    position: absolute;
-    width: 400px;
-    top: 50px;
-    right: 0px;
-    overflow: auto;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-}
-
-.userOptionsDropdownMini {
-    display: show;
-    position: absolute;
-    width: 200px;
-    top: 50px;
-    right: 10px;
-    overflow: auto;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-}
-
-.notificationsDropdown {
-    right: 50px;
-}
-
-.userOptionsDropdown {
-    right: 10px;
 }
