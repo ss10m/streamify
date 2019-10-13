@@ -27,21 +27,21 @@ class Notifications extends Component {
     getNotifications = () => {
         if(this.props.showNotifications && this.props.notifications.length > 0) {
             return (
-                <div className="notificiationsBackground">
-                    <div className="notificiationTitle">
-                        <i className="fa fa-trash clearNotifications" onClick={() => this.props.removeNotification(null, null, true)}/>
+                <div className="notifications--background">
+                    <div className="notifications__header">
+                        <i className="fa fa-trash notifications__clear-btn" onClick={() => this.props.removeNotification(null, null, true)}/>
                         <b>Notifications</b>
-                        <i className="fa fa-times closeNotifications" onClick={() => this.props.setNotificationsState(false)}/>
+                        <i className="fa fa-times notifications__close-btn" onClick={() => this.props.setNotificationsState(false)}/>
                     </div>
-                    <div className="notificiationItems">
+                    <div className="notifications__list">
                         {this.props.notifications.map((notification, index) =>
-                             <div className="notificiationItem" key={index}>
-                                <Link className="clickableNotification" style={{ textDecoration: 'none', color: 'white' }} to={"/streamer/" + notification.name} key={index} onClick={() => this.props.setNotificationsState(false)}>
+                             <div className="notificiation" key={index}>
+                                <Link className="notification__link" style={{ textDecoration: 'none', color: 'white' }} to={"/streamer/" + notification.name} key={index} onClick={() => this.props.setNotificationsState(false)}>
                                     <img src={notification.logo} width="25" height="25" alt="MISSING" />                              
-                                    <div className="notificationMsg">{notification.name + ' is playing '}<b>{notification.game}</b></div>
+                                    <div className="notification__msg">{notification.name + ' is playing '}<b>{notification.game}</b></div>
                                 </Link>
-                                <div className="deleteNotificationWrapper" >
-                                    <i onClick={() => this.props.removeNotification(index, notification.name, false)} className="fa fa-times deleteNotification"/>
+                                <div className="notification__remove__container" >
+                                    <i onClick={() => this.props.removeNotification(index, notification.name, false)} className="fa fa-times notification__remove-btn"/>
                                 </div>    
                             </div>
                         )}
@@ -50,13 +50,13 @@ class Notifications extends Component {
             )
         } else if(this.props.showNotifications) {
             return (
-                <div className="notificiationsBackground">
-                    <div className="notificiationTitle">
-                        <i className="fa fa-trash clearNotifications" onClick={() => this.props.removeNotification(null, null, true)}/>
+                <div className="notifications--background">
+                    <div className="notifications__header">
+                        <i className="fa fa-trash notifications__clear-btn" onClick={() => this.props.removeNotification(null, null, true)}/>
                         <b>Notifications</b>
-                        <i className="fa fa-times closeNotifications" onClick={() => this.props.setNotificationsState(false)}/>
+                        <i className="fa fa-times notifications__close-btn" onClick={() => this.props.setNotificationsState(false)}/>
                     </div>
-                    <div className="notificiationsEmpty">
+                    <div className="notification__empty">
                         <b>Nothing appears to be here :(</b>
                     </div>
                 </div>
