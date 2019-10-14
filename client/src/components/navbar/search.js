@@ -53,11 +53,15 @@ class Search extends Component {
         switch(this.props.category){
             case('channels'):
                 return (
-                    <div className="autocomplete-items" style={{display: displayStyle}} onClick={this.props.minimizeNav}>
+                    <div className="cus-search__results" style={{display: displayStyle}} >
                         {autoCompleteList.map(listItem =>
-                            <Link className="autocomplete-item" style={{ textDecoration: 'none', color: 'white' }} to={"/streamer/" + listItem.name} key={listItem.name}>
-                                <div key={listItem.name} onClick={this.clearAutoInput}>
-                                    <img className="searchLogo" src={listItem.logo} width="40" height="40" alt="MISSING" />
+                            <Link className="cus-search__result" 
+                                  style={{ textDecoration: 'none', color: 'white' }} 
+                                  to={"/streamer/" + listItem.name} 
+                                  key={listItem.name}
+                                  onClick={() => {this.props.minimizeNav(); this.clearAutoInput()}}>
+                                <div key={listItem.name}>
+                                    <img className="cus-search__result__channel-logo" src={listItem.logo} width="40" height="40" alt="MISSING" />
                                     {listItem.display_name}
                                 </div> 
                             </Link>
@@ -66,17 +70,17 @@ class Search extends Component {
                 )
             case('games'):
                 return (
-                    <div className="autocomplete-items" style={{display: displayStyle}}>
+                    <div className="cus-search__results" style={{display: displayStyle}}>
                         {autoCompleteList.map(listItem =>
-                            <div className="autocomplete-item" key={listItem.name}>
-                                <div className="resultGame">
-                                    <img className="seachGames" src={listItem.box.small} width="36" height="50" alt="MISSING" /> 
+                            <div className="cus-search__result" key={listItem.name}>
+                                <div className="cus-search__result__game-logo">
+                                    <img src={listItem.box.small} width="36" height="50" alt="MISSING" /> 
                                 </div>
                                 
-                                <div className="resultName">
+                                <div className="cus-search__result__game-name">
                                     <div>{listItem.name}</div>
                                 </div>
-                                <div className="followGameButtonWrapper">
+                                <div className="cus-search__result__game-follow-btn">
                                     <button type="button" onClick={() => this.props.followGame('follow', listItem.name)} className="btn btn-primary btn-sm followGameButton">Follow</button>
                                 </div>
                                 
@@ -107,10 +111,10 @@ class Search extends Component {
     render() {
         
         return (
-            <div className="form-inline my-2 my-lg-0 searchBar">
-                <div className="form-group has-search autocomplete" >
+            <div className="form-inline my-2 my-lg-0">
+                <div className="form-group has-search cus-search" >
                     <span className="fa fa-search form-control-feedback"></span>
-                    <input autoComplete="off" id="myInput" type="text" className="form-control searchBar myInput" ref={this.myRef} onChange={this.handleChange} placeholder="Search" value={this.state.inputField}/>
+                    <input autoComplete="off" spellcheck="false" type="text" className="form-control cus-search__search-bar" ref={this.myRef} onChange={this.handleChange} placeholder="Search" value={this.state.inputField}/>
                     {this.getAutocompleteList()}
                 </div>
             </div>

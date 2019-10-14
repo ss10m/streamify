@@ -1,91 +1,12 @@
-.autocomplete {
+.cus-search {
     position: relative;
     display: inline-block;
     width: 100%;
 }
 
-input {
-    border: 1px solid transparent;
-    background-color: #122941;
-    padding: 10px;
-    font-size: 16px;
-}
-
-input[type=text] {
-    background-color: #122941;
-    color: #fff;
-}
-
-.searchBar {
-    padding: 0px 10px;
-}
-
-.autocomplete-items {
-    position: absolute;
-    background-color: #1c4269;
-    border: 5px solid #1c4269;
-    border-top: 0;
-    top: 100%;
-    padding-top: 5px;
-    left: 0;
-    right: 0;
-}
-.autocomplete-item {
-    padding: 10px;
-    color: white;
-    cursor: pointer;
-
-    height: 60px;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    background-color: #1c4269;
-}
-
-.resultName {
-    width: 95%;
-    display: flex;
-    align-items: center; 
-}
-
-.resultGame {
-    
-    display: flex;
-    align-items: center; 
-    
-}
-
-.autocomplete-item:hover {
-    background-color: #122941;
-}
-
-img.searchLogo {
-    border-radius: 50%;
-    margin-right: 15px;
-}
-
-img.seachGames {
-    margin-right: 15px;
-}
-
-.followGameButtonWrapper {
-    padding-left: 10px;
-    display: flex;
-    align-items: center; 
-    justify-content: center;
-}
-
-
-
-input.form-control.searchBar {
+.cus-search__search-bar.form-control {
     height: 30px;
     width: 100%;
-    background-color:#122941;
-    color:white;
-    border: none
-}
-
-input.form-control:focus.searchBar {
     background-color:#122941;
     color:white;
     border: none
@@ -97,7 +18,6 @@ input.form-control:focus.searchBar {
 
 .has-search .form-control-feedback {
     position: absolute;
-    
     display: block;
     width: 2.375rem;
     height: 2.375rem;
@@ -106,7 +26,57 @@ input.form-control:focus.searchBar {
     pointer-events: none;
     color: white;
 }
-input::-webkit-input-placeholder {
+
+.cus-search__search-bar::-webkit-input-placeholder {
     color: white !important;
 }
 
+.cus-search__results {
+    position: absolute;
+    background-color: #1c4269;
+    border: 5px solid #1c4269;
+    border-top: 0;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding-top: 5px;
+}
+
+.cus-search__result {
+    height: 60px;
+    width: 100%;
+    padding: 10px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    background-color: #1c4269;
+}
+
+.cus-search__result:hover {
+    background-color: #122941;
+    cursor: pointer;
+}
+
+.cus-search__result__channel-logo {
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.cus-search__result__game-logo {
+    display: flex;
+    align-items: center; 
+    margin-right: 15px;
+}
+
+.cus-search__result__game-name {
+    width: 95%;
+    display: flex;
+    align-items: center; 
+}
+
+.cus-search__result__game-follow-btn {
+    padding-left: 10px;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+}
