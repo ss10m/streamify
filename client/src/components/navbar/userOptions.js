@@ -26,32 +26,32 @@ class UserDropdownOptions extends Component {
     getDropdown = () => {
         if(this.props.showDropdown) {
             return (
-                <div className="userOptions-items"  onClick={() => { this.props.setDropdownState(false); this.props.minimizeNav() }}>
-                    <div className="userOptions-item">
+                <div className="user-options">
+                    <div className="user-option">
                         <i className="fa fa-user"></i>
                         <div>
-                            <p className="userOptions-choices userOptions-signedin">Signed in as:</p>
-                            <p className="userOptions-choices userOptions-name">{this.props.session.username}</p>
+                            <p className="user-option__signed-in-title">Signed in as:</p>
+                            <p className="user-option__signed-in-as">{this.props.session.username}</p>
                         </div>
                     </div>
 
-                    <hr className="userOptionsSplit"/>
+                    <hr className="user-option__divider"/>
 
-                    <div className="userOptions-item userOptions-item-selectable">
+                    <div className="user-option user-option-selectable" onClick={() => { this.props.setDropdownState(false); this.props.minimizeNav() }}>
                         <i className="fa fa-globe"></i>
-                        <p className="userOptions-choices">About Twitchify</p>
+                        <p>About Twitchify</p>
                     </div>
 
-                    <div className="userOptions-item userOptions-item-selectable">
+                    <div className="user-option user-option-selectable" onClick={() => { this.props.setDropdownState(false); this.props.minimizeNav() }}>
                         <i className="fa fa-cog"></i>
-                        <p className="userOptions-choices">Settings</p>
+                        <p>Settings</p>
                     </div>
 
-                    <hr className="userOptionsSplit"/>
+                    <hr className="user-option__divider"/>
 
-                    <div className="userOptions-item userOptions-item-selectable" onClick={() => { this.props.logOut() }}>
+                    <div className="user-option user-option-selectable" onClick={() => { this.props.logOut(); this.props.setDropdownState(false); this.props.minimizeNav() }}>
                         <i className="fa fa-sign-out"></i>
-                        <p className="userOptions-choices">Logout</p>
+                        <p>Logout</p>
                     </div>
                 </div>
             )
