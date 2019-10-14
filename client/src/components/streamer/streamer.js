@@ -135,7 +135,9 @@ class Streamer extends Component {
     getFollowButton() {
 
         if(!this.props.session) {
-            return <button className="btn btn-primary" onClick={this.props.modalOpen}>Follow</button>
+            return (
+                <button className="btn btn-primary" onClick={this.props.modalOpen}>Follow</button>
+            )
         }
 
         if(this.state.data.isFollowed) {
@@ -162,11 +164,11 @@ class Streamer extends Component {
 
         return (
             <div>
-                <div className="row">
+                <div className="streamer-recent-games">
                     {recentGames.map(recentGame =>
-                        <div className="block"  key={recentGame['name']} onClick={() => this.followGame('follow', recentGame['name'])}>
-                            <p className="recentGameName">{recentGame['name']}</p>
-                            <img className="recentGameImg" src={recentGame['box_art_url']} alt="MISSING" />
+                        <div className="streamer-recent-game"  key={recentGame['name']} onClick={() => this.followGame('follow', recentGame['name'])}>
+                            <p className="streamer-recent-game__name">{recentGame['name']}</p>
+                            <img className="streamer-recent-game__logo" src={recentGame['box_art_url']} alt="MISSING" />
                         </div>
                     )}
                 </div>
@@ -183,9 +185,9 @@ class Streamer extends Component {
         return (
             <div>
                 {this.state.data.followedGames.map((gameName) => 
-                    <div className="tag" key={gameName}>
-                        <p className="tag-text" key={gameName}>{gameName}</p>
-                        <p className="tag-remove" onClick={() => this.followGame('unfollow', gameName)}>&#x2715;</p>
+                    <div className="streamer-game-tag" key={gameName}>
+                        <p className="streamer-game-tag__name" key={gameName}>{gameName}</p>
+                        <p className="streamer-game-tag__remove" onClick={() => this.followGame('unfollow', gameName)}>&#x2715;</p>
                     </div>
                 )}
             </div>
@@ -200,79 +202,67 @@ class Streamer extends Component {
         }
 
         return (
-            <div className="upperBody">
-                <div className="infoRow">
-                    <div className="boxLeft">
-                        <div className="flex-container">
-                            <div className="flex-container-div">
-                                
+            <div className="streamer-container">
+                <div className="streamer-info">
+                    <div className="streamer-left-container">
+                        <div className="streamer-left">
+                            <div className="streamer-left-box">
                                 {this.state.data['logo'] ? (
                                     <img src={this.state.data['logo']}  width="200" height="200" alt="MISSING" />
                                 ) : (
-                                    <img src={twitchLogo} width="200" height="200" className="roundedImg" alt="MISSING" />
+                                    <img src={twitchLogo} width="200" height="200" alt="MISSING" />
                                 )}
                             </div>
-                            
-                            <div className="flex-container-div">
-                                <h2 className="streamerName">{this.state.data['display_name']}</h2>
+            
+                            <div className="streamer-left-box">
+                                <h2 className="streamer-name">{this.state.data['display_name']}</h2>
                                 {this.getFollowButton()}
                             </div>
-                            
                         </div>
-
-
                         
-                        <div className="flex-container">
-                            <div className="flex-container-div previewDiv">
+                        <div className="streamer-left">
+                            <div className="streamer-left-box streamer-preview">
                                 {this.state.data['preview'] ? (
-                                    <img src={this.state.data['preview']} className="roundedImg previewImg" alt="MISSING" />
+                                    <img src={this.state.data['preview']} className="streamer-logo streamer-preview-img" alt="MISSING" />
                                 ) : (
-                                    <img src={twitchPreview} className="roundedImg previewImg" alt="MISSING" />
+                                    <img src={twitchPreview} className="streamer-logo streamer-preview-img" alt="MISSING" />
                                 )}
                             </div>
                             <div>
-                                <div className="card">
+                                <div className="streamer-personal-info">
                                     <p>{this.state.data['title']}</p>
                                     <p>{this.state.data['viewers']}</p>
                                     <p>{this.state.data['game']}</p>
                                 </div>
                             </div>
-
                         </div>
-
-
                     </div>
 
-                    <div className="boxRight">
-                        <div className="card">
+                    <div className="streamer-right">
+                        <div className="streamer-personal-info">
                             <p>{this.state.data['description']}</p>
                         </div>
                         
-                        <h3 className="followedGames">Followed Games</h3>
-                        <div className="tag-wrapper">
+                        <h3 className="streamer-followed-games__title">Followed Games</h3>
+                        <div className="streamer-followed-games__container">
                             {this.getFollowedGames()}
                         </div>
                     </div>
-
-
                 </div>
                 
-                <div className="recentGames">
-                    <div className="recentGamesSearch">
-                        <div className="recentGamesSearchBar">
-                            <div className="searchGamesTextDiv">
-                                <h3 className="searchGamesText">Games recently played by {this.state.data['display_name']}</h3>
+                <div className="streamer-recent-games__container">
+                    <div className="streamer-search-recent-games_container">
+                        <div className="streamer-search-recent-games">
+                            <div className="streamer-search-recent-games__title__container">
+                                <h3 className="streamer-search-recent-games__title">Games recently played by {this.state.data['display_name']}</h3>
                             </div>
-                            <div className="searchGamesButtonDiv">
-                                <button type="button" className="btn btn-primary btn-sm searchGamesButton" onClick={this.modalOpen}>Search for more games</button>
+                            <div className="streamer-search-recent-games__btn__container">
+                                <button type="button" className="btn btn-primary btn-sm streamer-search-recent-games__btn" onClick={this.modalOpen}>Search for more games</button>
                             </div>
                         </div>
-                        
                     </div>
-
                     {this.getRecentGames()}
                 </div>   
-
             </div>
         )
     }
@@ -284,7 +274,7 @@ class Streamer extends Component {
 
     render() {
         return (
-            <div className="streamerView">
+            <div className="streamer">
                 <SearchModal
                     show={this.state.showSearchModal}
                     onHide={this.modalClose}

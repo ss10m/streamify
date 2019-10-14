@@ -1,15 +1,138 @@
-.roundedImg {
+.streamer {
+    background-color: #696969;
+    min-height: 100%;
+}
+
+.streamer-container {
+    background-color: #c3c7cc;
+}
+
+.streamer-info {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    
+}
+
+@media screen and (max-width: 1400px) {
+    .streamer-info {
+        flex-wrap: wrap;
+    }
+
+}
+
+.streamer-left-container {
+    flex-grow: 2;
+    flex-basis: 0;
+}
+
+.streamer-right {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+
+.streamer-left {
+    display: flex;
+    flex-direction: row;
+}
+
+@media screen and (max-width: 800px) {
+    .streamer-left {
+        flex-wrap: wrap;
+    }
+}
+
+.streamer-left-box {
+    background-color: white;
+    padding: 10px;
+    margin: 10px;
+    box-shadow: 10px 10px 5px grey;
+}
+
+.streamer-logo {
     border-radius: 10px;
 }
 
-.row {
+.streamer-name {
+    font-size: 5vw;
+    color: #122941;
+    text-shadow: -1px 0 DimGrey, 0 1px DimGrey, 1px 0 DimGrey, 0 -1px DimGrey;
+}
+
+.streamer-preview {
+    max-width: 500px;
+    min-width: 400px;
+}
+
+.streamer-preview-img {
+    max-width: 100%;
+    height: auto;
+}
+
+.streamer-personal-info {
+    box-shadow: 10px 10px 5px grey;
+    background-color: white;
+    padding: 20px;
+    margin: 10px;
+}
+
+.streamer-followed-games__title {
+    padding: 20px 0px 0px 10px;
+    color: #1c4269;
+}
+
+.streamer-followed-games__container {
+    max-height: 300px;
+    min-width: 300px;
+    overflow: auto;
+}
+
+.streamer-recent-games__container {
+    background: linear-gradient(to bottom, #122941, DimGrey);
+    min-height: 350px;
+}
+
+.streamer-search-recent-games_container {
+    margin-top: 10px;
+    height: 60px;
+    background-color: #696969;
+}
+
+.streamer-search-recent-games {
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+
+.streamer-search-recent-games__title__container {
+    height: 100%;
+    width: 400px;
+    display: flex;
+}
+.streamer-search-recent-games__title {
+    margin: auto;
+    font: bold 15px Helvetica, Verdana, sans-serif;
+}
+
+.streamer-search-recent-games__btn__container {
+    height: 100%;
+    width: 250px;
+    display: flex;
+}
+
+.streamer-search-recent-games__btn {
+    margin: auto;
+}
+
+.streamer-recent-games {
     display: flex;  
     flex-direction: row;
     flex-wrap: wrap;
     margin: 0px 10px;
 }
 
-.block {
+.streamer-recent-game {
     flex: 0 0 150px;
     background-color: #122941;
     border: 1px solid black;
@@ -17,7 +140,12 @@
     border-radius: 5px;
 }
 
-.recentGameName {
+.streamer-recent-game:hover {
+    background-color: #1c4269;
+    cursor: pointer;
+}
+
+.streamer-recent-game__name {
     white-space: nowrap;
     margin: 5px 3px;
     text-align: center;
@@ -28,158 +156,16 @@
     overflow: hidden;
 }
 
-.recentGameImg {
+.streamer-recent-game__logo {
     width: 100%;
     height: auto;
 }
 
-.block:hover {
-    background-color: #1c4269;
-    cursor: pointer;
-}
-
-
-.innerbox {
-    height: 200px;
-    min-width: 200px;
-    border: 1px solid #122941; 
-    overflow: scroll;
-    background: linear-gradient(#e66465, #9198e5);
-}
-
-.infoRow {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    
-}
-
-.upperBody {
-    background-color: #c3c7cc;
-}
-
-.streamerView {
-    background-color: #696969;
-    min-height: 100%;
-}
-
-@media screen and (max-width: 1400px) {
-    .infoRow {
-        flex-wrap: wrap;
-    }
-
-}
-  
-@media screen and (max-width: 800px) {
-    .flex-container {
-        flex-wrap: wrap;
-    }
-}
-
-.boxLeft {
-    flex-grow: 2;
-    flex-basis: 0;
-    
-}
-
-.boxRight {
-    flex-grow: 1;
-    flex-basis: 0;
-}
-
-.card {
-    box-shadow: 10px 10px 5px grey;
-    background-color: white;
-    padding: 20px;
-    margin: 10px;
-}
-
-.flex-container {
-    display: flex;
-    flex-direction: row;
-}
-
-.flex-container-div {
-    background-color: white;
-    padding: 10px;
-    margin: 10px;
-    box-shadow: 10px 10px 5px grey;
-}
-
-.previewDiv {
-    max-width: 500px;
-    min-width: 400px;
-}
-
-.previewImg {
-    max-width: 100%;
-    height: auto;
-}
-
-.streamerName {
-    font-size: 5vw;
-    color: #122941;
-    text-shadow: -1px 0 DimGrey, 0 1px DimGrey, 1px 0 DimGrey, 0 -1px DimGrey;
-}
-
-
-.recentGames {
-    background: linear-gradient(to bottom, #122941, DimGrey);
-    min-height: 350px;
-}
-
-
-
-
-
-.recentGamesSearch {
-    margin-top: 10px;
-    height: 60px;
-    background-color: #696969;
-}
-
-.recentGamesSearchBar {
-    height: 100%;
-    width: 100%;
-    display: flex;
-}
-
-.searchGamesTextDiv {
-    height: 100%;
-    width: 400px;
-    display: flex;
-}
-.searchGamesText {
-    margin: auto;
-    font: bold 15px Helvetica, Verdana, sans-serif;
-}
-
-.searchGamesButtonDiv {
-    height: 100%;
-    width: 250px;
-    display: flex;
-}
-
-
-
-
-
-.searchGamesButton {
-    margin: auto;
-}
-
-
-.tag-wrapper {
-    max-height: 300px;
-    min-width: 300px;
-    overflow: auto;
-}
-
-.tag {
+.streamer-game-tag {
     padding: 10px;
 }
 
-.tag-text {
+.streamer-game-tag__name {
     display: inline;
     background-color: white;
     padding: 2px 10px;
@@ -187,7 +173,7 @@
     box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.15), 0 6px 20px 0 rgba(0, 0, 0, 0.15);
 }
 
-.tag-remove {
+.streamer-game-tag__remove {
     display: inline;
     padding: 2px 5px;
     border-radius: 0px 5px 5px 0px; 
@@ -196,12 +182,7 @@
     box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.15), 0 6px 20px 0 rgba(0, 0, 0, 0.15);
 }
 
-.tag-remove:hover {
+.streamer-game-tag__remove:hover {
     background-color: #1c4269;
     cursor: pointer; 
-}
-
-.followedGames {
-    padding: 20px 0px 0px 10px;
-    color: #1c4269;
 }

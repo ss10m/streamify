@@ -6,22 +6,12 @@ import Search from '../navbar/search.js'
 import './searchModal.css'
 
 class SearchModal extends React.Component {
-
-    getGames() {
-        return (
-            <p>test</p>
-        )
-    }
-
-
     render() {
         return (
             <Modal
                 {...this.props}
                 size="md"
                 aria-labelledby="contained-modal-title-vcenter"
-
-                
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
@@ -29,13 +19,12 @@ class SearchModal extends React.Component {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div className="mainWrapper">
+                    <div className="search-container">
                         <Search 
                             {...this.props}
                             category="games"
                         />
                     </div>
-
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.props.onHide}>Close</Button>
@@ -43,7 +32,6 @@ class SearchModal extends React.Component {
             </Modal>
         );
     }
-
 }
 
 export default withRouter (SearchModal);
