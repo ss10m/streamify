@@ -226,6 +226,7 @@ function insertStreamerData(username, nameToFollow, callback) {
         streamerData['id'] = body['id'];
         streamerData['name'] = body['login'];
         streamerData['logo'] = body['profile_image_url'];
+        streamerData['recent_notification'] = {game: "", lastActiveAt: null};
         streamerData['display_name'] = body['display_name'];
 
         User.findOne({username: username}, 
@@ -521,18 +522,22 @@ function search(category, query, callback) {
 
 function getAllUsers() {
 
+    var currentUsers = Object.keys(onlineUsers);
     var streamers = new Set();
-    User.find(
-        {}, 
-        function(err, users) {
-            users.forEach((user) => {
-                user.streamers.forEach((followed) => {
-                    streamers.add(followed.name)
-                })
+    User.find({
+        'username': { $in: currentUsers}
+    }, function(err, users){
+        users.forEach((user) => {
+            user.streamers.forEach((followed) => {
+                streamers.add(followed.name)
             })
-            if(streamers.size > 0) updateStreamers(users, streamers);
-        }
-    );
+        })
+        if(streamers.size > 0) updateStreamers(users, streamers);
+    });
+
+    
+    
+
 }
 
 function updateStreamers(users, streamers) {
@@ -600,6 +605,7 @@ function getGameNames(users, liveStreames, games) {
         }
 
         body = JSON.parse(body).data;
+        
         var gameIdtoGameName = {};
         for(let game of body) {
             gameIdtoGameName[game.id] = game.name;
@@ -617,15 +623,45 @@ function getGameNames(users, liveStreames, games) {
 }
 
 function notifyAll(users, useridToLivestream) {
-    var liveStreames = Object.keys(useridToLivestream);
+    
+
     for(let user of users) {
+
+        var followedStreamers = [];
         for(let streamer of user.streamers) {
-            if(liveStreames.includes(streamer.id) && streamer.followedGames.includes(useridToLivestream[streamer.id].game_id)) {
-                let livestream = useridToLivestream[streamer.id];
-                notify(user, livestream, streamer.logo)
-            }
+            followedStreamers.push(streamer.id)
         }
+
+        const currentLiveStreamers = new Set([...followedStreamers].filter(x => x in useridToLivestream));
+        console.log(currentLiveStreamers)
+
+        for(let streamer of user.streamers) {
+            if(currentLiveStreamers.has(streamer.id) && streamer.followedGames.includes(useridToLivestream[streamer.id].game_id)) {
+                var livestream = useridToLivestream[streamer.id];
+
+
+                var dateDiff = new Date();
+                if(streamer.recent_notification.lastActiveAt) {
+                    dateDiff = dateDiff - streamer.recent_notification.lastActiveAt;
+                }
+
+                if(livestream.game_id != streamer.recent_notification.game || Math.floor((dateDiff/1000)/60) > 3) {
+                    console.log('sending notification')
+                    var recent_notification = {game: livestream.game_id, lastActiveAt: new Date()}
+                    streamer.recent_notification = recent_notification;
+                    
+                    notify(user, livestream, streamer.logo)
+                } else {
+                    console.log('last notification sent ' + streamer.recent_notification.lastActiveAt.toLocaleString())
+                }
+            }
+            
+            
+        }
+        
+        user.save()
     }
+    
 }
 
 function notify(user, livestream, logo) {
@@ -658,7 +694,8 @@ function startTopStreamers() {
 startTopStreamers()
 
 
-setInterval(getAllUsers, 30000);
+getAllUsers()
+setInterval(getAllUsers, 15000);
 
 
 console.log('=========== twitchify started ============')

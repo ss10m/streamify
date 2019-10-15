@@ -12,6 +12,10 @@ const UserSchema = new mongoose.Schema({
         name: String,
         logo: String,
         display_name: String,
+        recent_notification: {
+            game: String,
+            lastActiveAt: Date
+        },
         followedGames: [String]
       }]
 });
