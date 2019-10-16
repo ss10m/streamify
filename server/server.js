@@ -60,13 +60,13 @@ io.use((socket, next) => {
 
     socket.on('disconnect', () => {
         console.log('('+ socket.id + ') client disconnected')
-        var token = JSON.parse(socket.handshake.query.token).user;
+        var token = JSON.parse(socket.handshake.query.token);
         removeFromOnlineUsers(socket.id, token);
     });
 })
 
 function addToOnlineUsers(socket) {
-    var token = JSON.parse(socket.handshake.query.token).user;
+    var token = JSON.parse(socket.handshake.query.token);
     socketIdToSocket[socket.id] = socket;
     if(token.username in onlineUsers) {
         var current = onlineUsers[token.username];

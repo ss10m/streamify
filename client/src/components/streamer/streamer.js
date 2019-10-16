@@ -17,21 +17,11 @@ class Streamer extends Component {
 
     }
 
-    static getDerivedStateFromProps(nextProps, prevState) {
-        var next = nextProps.match.params.id;
-        var previous = prevState.name;
-        if(next !== previous) {
-            return { name: next};
-        } 
-        else {
-            return null;
-        }
-    }
-
     componentDidUpdate(prevProps, prevState) {
-        if(prevProps.match.params.id !== this.state.name){
+        if(prevProps.match.params.id !== this.props.match.params.id){
+            console.log('ids dont match')
             const jwt = this.props.session;
-            fetch("/api/streamer/" + this.state.name, {
+            fetch("/api/streamer/" + this.props.match.params.id, {
                 headers: {
                     Authorization: JSON.stringify(jwt)
                 }
@@ -51,7 +41,9 @@ class Streamer extends Component {
       }
     
     componentDidMount() {
-        const jwt = this.props.session;
+        console.log('componentDidMount')
+        var jwt = this.props.session;
+
         fetch("/api/streamer/" + this.props.match.params.id, {
             headers: {
                 Authorization: JSON.stringify(jwt)

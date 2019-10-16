@@ -18,8 +18,9 @@ import socketIO from "socket.io-client";
 class App extends Component {
     constructor(props) {
         super(props);
+        var jwt = JSON.parse(localStorage.getItem("jwt"));
         this.state = {
-            session: '',
+            session: (jwt) ? jwt.user : "",
             notifications: [],
             newNotifications: false,
             modalShow: false,
@@ -27,7 +28,10 @@ class App extends Component {
             response: false,
             endpoint: "http://192.168.0.11:5000"
         };
+        
     }
+
+
 
     handleResize = event => {
         this.setState({winWidth: window.innerWidth});
@@ -36,17 +40,9 @@ class App extends Component {
     componentDidMount() {
         window.addEventListener("resize", this.handleResize);
 
-        var jwt = JSON.parse(localStorage.getItem("jwt"));
-
-        if(jwt) {
-            this.setState({session: jwt.user})
-        } else {
-            console.log('jwt not found')
-        }
-
         const { endpoint } = this.state;
         const socket = socketIO(endpoint, {
-            query: {token: JSON.stringify(jwt)}
+            query: {token: JSON.stringify(this.state.session)}
           });
           
         socket.on('notification', this.handleNotifications);
