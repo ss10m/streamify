@@ -41,9 +41,24 @@ class App extends Component {
         window.addEventListener("resize", this.handleResize);
 
         const { endpoint } = this.state;
+
+        /*
         const socket = socketIO(endpoint, {
             query: {token: JSON.stringify(this.state.session)}
           });
+          
+        
+
+        console.log(this.state.session.token)
+        const socket = socketIO(endpoint, {
+            query: 'token=' + JSON.stringify(this.state.session.token),
+            forceNew: true
+        });
+        */
+
+        var socket = socketIO.connect(endpoint, {
+        'query': 'token=' + this.state.session.token
+        });
           
         socket.on('notification', this.handleNotifications);
     }

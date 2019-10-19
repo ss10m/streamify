@@ -38,54 +38,52 @@ var socketIdToSocket = {};
 
 twitchify.setNotificationVariables(onlineUsers, socketIdToSocket);
 
-io.use((socket, next) => {
 
-    //AUTHENTICATE SOCKET
-    if(JSON.parse(socket.handshake.query.token)) {
-        next();
-    } 
+var socketioJwt   = require("socketio-jwt");
+io.use(socketioJwt.authorize({
+    secret: 'secret',
+    handshake: true
+  }));
 
-    /*
-    passport.authenticate('local', { session: false }, (err, verifiedUser) => {
-        console.log('passport')
-        next();
-    })(socket, next)
-    */
+
+io.on('connection', socket => {
+    console.log('hello! ', socket.decoded_token);
     
-}).on('connection', socket => {
     console.log('('+ socket.id + ') client connected');
     
-
     addToOnlineUsers(socket);
 
+    
     socket.on('disconnect', () => {
+        console.log('hello3! ', socket.decoded_token);
         console.log('('+ socket.id + ') client disconnected')
-        var token = JSON.parse(socket.handshake.query.token);
-        removeFromOnlineUsers(socket.id, token);
+        removeFromOnlineUsers(socket.id, socket.decoded_token.username);
     });
+    
+    
 })
 
-function addToOnlineUsers(socket) {
-    var token = JSON.parse(socket.handshake.query.token);
-    socketIdToSocket[socket.id] = socket;
-    if(token.username in onlineUsers) {
-        var current = onlineUsers[token.username];
-        current.push(socket.id)
-        onlineUsers[token.username] = current;
-    } else {
-        onlineUsers[token.username] = [socket.id]
-    }
 
+function addToOnlineUsers(socket) {
+    var username = socket.decoded_token.username;
+    socketIdToSocket[socket.id] = socket;
+    if(username in onlineUsers) {
+        var current = onlineUsers[username];
+        current.push(socket.id)
+        onlineUsers[username] = current;
+    } else {
+        onlineUsers[username] = [socket.id]
+    }
     console.log(onlineUsers)
 }
 
-function removeFromOnlineUsers(socketId, token) {
-    var current = onlineUsers[token.username]
-    onlineUsers[token.username] = current.splice(current.indexOf(socketId), 1);
+function removeFromOnlineUsers(socketId, username) {
+    var current = onlineUsers[username]
+    onlineUsers[username] = current.splice(current.indexOf(socketId), 1);
     if(current.length > 0) {
-        onlineUsers[token.username] = current;
+        onlineUsers[username] = current;
     } else {
-        delete onlineUsers[token.username];
+        delete onlineUsers[username];
     }
     delete socketIdToSocket[socketId];
 
