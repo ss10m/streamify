@@ -21,17 +21,15 @@ class App extends Component {
         var jwt = JSON.parse(localStorage.getItem("jwt"));
         this.state = {
             session: (jwt) ? jwt.user : "",
+            socket: null,
             notifications: [],
             newNotifications: false,
             modalShow: false,
             winWidth: window.innerWidth,
             response: false,
-            endpoint: "http://192.168.0.11:5000"
+            endpoint: "http://192.168.0.11:5000",
         };
-        
     }
-
-
 
     handleResize = event => {
         this.setState({winWidth: window.innerWidth});
@@ -40,27 +38,17 @@ class App extends Component {
     componentDidMount() {
         window.addEventListener("resize", this.handleResize);
 
-        const { endpoint } = this.state;
+        if(this.state.session) {
+            const { endpoint } = this.state;
+            var socket = socketIO.connect(endpoint, {
+                'query': 'token=' + this.state.session.token
+            });
+              
+            socket.on('notification', this.handleNotifications);
 
-        /*
-        const socket = socketIO(endpoint, {
-            query: {token: JSON.stringify(this.state.session)}
-          });
-          
-        
+            this.setState({socket: socket})
+        }
 
-        console.log(this.state.session.token)
-        const socket = socketIO(endpoint, {
-            query: 'token=' + JSON.stringify(this.state.session.token),
-            forceNew: true
-        });
-        */
-
-        var socket = socketIO.connect(endpoint, {
-        'query': 'token=' + this.state.session.token
-        });
-          
-        socket.on('notification', this.handleNotifications);
     }
 
     handleNotifications = (data) => {
@@ -91,7 +79,11 @@ class App extends Component {
 
     onLogout() {
         console.log('on logout')
-        this.setState({session: ''})
+        this.state.socket.disconnect();
+        this.setState({session: '',
+                       socket: null,
+                       notifications: [],
+                       newNotifications: false})
         localStorage.removeItem("jwt")
     }
 
@@ -99,6 +91,14 @@ class App extends Component {
         console.log(this.state.session)
         this.setState({session: jwt})
         console.log(this.state.session)
+        const { endpoint } = this.state;
+        var socket = socketIO.connect(endpoint, {
+            'query': 'token=' + this.state.session.token
+        });
+          
+        socket.on('notification', this.handleNotifications);
+
+        this.setState({socket: socket})
     }
 
     render() {

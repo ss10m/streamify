@@ -49,13 +49,12 @@ io.use(socketioJwt.authorize({
 io.on('connection', socket => {
     console.log('hello! ', socket.decoded_token);
     
-    console.log('('+ socket.id + ') client connected');
+    console.log('('+ socket.id + ') ' + socket.decoded_token.username + 'connected');
     
     addToOnlineUsers(socket);
 
     
     socket.on('disconnect', () => {
-        console.log('hello3! ', socket.decoded_token);
         console.log('('+ socket.id + ') client disconnected')
         removeFromOnlineUsers(socket.id, socket.decoded_token.username);
     });
