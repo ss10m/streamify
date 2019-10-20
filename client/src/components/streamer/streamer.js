@@ -159,8 +159,11 @@ class Streamer extends Component {
                 <div className="streamer-recent-games">
                     {recentGames.map(recentGame =>
                         <div className="streamer-recent-game"  key={recentGame['name']} onClick={() => this.followGame('follow', recentGame['name'])}>
-                            <p className="streamer-recent-game__name">{recentGame['name']}</p>
                             <img className="streamer-recent-game__logo" src={recentGame['box_art_url']} alt="MISSING" />
+                            <div class="streamer-recent-game__overlay">
+                                <div class="streamer-recent-game__title">Follow</div>
+                                <div class="streamer-recent-game__name">{recentGame['name']}</div>
+                            </div>
                         </div>
                     )}
                 </div>

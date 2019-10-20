@@ -96,20 +96,17 @@ class NavBar extends Component {
                         className="btn btn-outline-light btn-sm cus-navbar__user-options-login-btn"
                         onClick={() => { this.props.modalOpen(); this.minimizeNav() }}
                     >
-                        Log in
+                        Login
                     </button>
                 </div>
             )
         } else {
             return (
-                <div className="cus-navbar__user-options-btn-container">
-                    <img 
-                        className="cus-navbar__user-options-loggedin-btn"
-                        src='https://static-cdn.jtvnw.net/jtv_user_pictures/7ed5e0c6-0191-4eef-8328-4af6e4ea5318-profile_image-300x300.png' 
-                        onClick={() => { if(!this.state.showDropdown && this.state.dropbownBtn) this.setState({showDropdown: true, dropbownBtn: false})}}
-                        width="30" height="30" alt="MISSING" />
-                </div>  
-                
+                <div className="cus-navbar__icon-container" 
+                    onClick={() => { if(!this.state.showDropdown && this.state.dropbownBtn) this.setState({showDropdown: true, dropbownBtn: false})}}
+                    >
+                    <i className="fa fa-user cus-navbar__icon" />
+                </div>
             )
         }
     }
@@ -130,10 +127,16 @@ class NavBar extends Component {
                 <div className="cus-navbar__search">
                     <Search category="channels" minimizeNav={this.minimizeNav}/>
                 </div>
+                
+                <div className="cus-navbar__github">
+                    <div className="cus-navbar__icon-container" onClick={() => {window.open("https://github.com/fastf20")}} >
+                        <i className="fa fa-github cus-navbar__icon" />
+                    </div>
+                </div>
 
                 <div className="cus-navbar__notifications">
 
-                    <div className="cus-navbar__notifications-icon-container" 
+                    <div className="cus-navbar__icon-container" 
                         onClick={() => {
                             if(!this.state.showNotifications && this.state.notificationsBtn) {
                                 this.setState({showNotifications: true, notificationsBtn: false})
@@ -141,7 +144,7 @@ class NavBar extends Component {
                             this.props.resetNewNotifications()
                             }
                         }>
-                        <i className="fa fa-bell cus-navbar__notifications-icon" />
+                        <i className="fa fa-bell cus-navbar__icon" />
                         <span className="cus-navbar__notifications-badge" style={{display: (this.props.newNotifications) ? 'block' : 'none' }}></span>
                     </div>
 
@@ -159,7 +162,6 @@ class NavBar extends Component {
                 </div>
 
                 <div className="cus-navbar__user-options-container">
-                    <div className="cus-navbar__user-options">
                         {this.getButtons()}
                         <div className="cus-navbar__user-options-dropdown cus-navbar__user-options-dropdown--full">
                             <UserDropdownOptions 
@@ -171,7 +173,6 @@ class NavBar extends Component {
                                 logOut={this.logOut} 
                             />
                         </div>
-                    </div>
                 </div>            
             </div>
         )
@@ -206,8 +207,14 @@ class NavBar extends Component {
                         <Search category="channels" minimizeNav={this.minimizeNav}/>
                 </div>
 
+                <div className="cus-navbar__github-collapsed">
+                    <div className="cus-navbar__icon-container" onClick={() => {window.open("https://github.com/fastf20")}} >
+                        <i className="fa fa-github cus-navbar__icon" />
+                    </div>
+                </div>
+
                 <div className="cus-navbar__notifications-collapsed" onClick={this.minimizeNav}>
-                    <div className="cus-navbar__notifications-icon-container" 
+                    <div className="cus-navbar__icon-container" 
                         onClick={() => {
                             if(!this.state.showNotifications && this.state.notificationsBtn) {
                                 this.setState({showNotifications: true, notificationsBtn: false})
@@ -215,7 +222,7 @@ class NavBar extends Component {
                             this.props.resetNewNotifications()
                             }
                         }>
-                        <i className="fa fa-bell cus-navbar__notifications-icon" />
+                        <i className="fa fa-bell cus-navbar__icon" />
                         <span className="cus-navbar__notifications-badge" style={{display: (this.props.newNotifications) ? 'block' : 'none' }}></span>
                     </div>
                     <div className={notificationsClass}>

@@ -37,7 +37,7 @@ class UserDropdownOptions extends Component {
 
                     <hr className="user-option__divider"/>
 
-                    <div className="user-option user-option-selectable" onClick={() => { this.props.setDropdownState(false); this.props.minimizeNav() }}>
+                    <div className="user-option user-option-selectable" onClick={() => { this.props.setDropdownState(false); this.props.minimizeNav(); window.open("https://github.com/fastf20/Twitchify") }}>
                         <i className="fa fa-globe"></i>
                         <p>About Twitchify</p>
                     </div>

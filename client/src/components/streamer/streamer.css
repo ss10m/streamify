@@ -90,7 +90,7 @@
 
 .streamer-recent-games__container {
     background: linear-gradient(to bottom, #122941, DimGrey);
-    min-height: 350px;
+    min-height: 250px;
 }
 
 .streamer-search-recent-games_container {
@@ -134,31 +134,63 @@
 
 .streamer-recent-game {
     flex: 0 0 150px;
+    position: relative;
     background-color: #122941;
     border: 1px solid black;
     margin: 1em;
     border-radius: 5px;
 }
 
-.streamer-recent-game:hover {
+.streamer-recent-game:hover .streamer-recent-game__overlay {
     background-color: #1c4269;
     cursor: pointer;
+    opacity: 1;
+    border-radius: 5px;
+}
+
+
+.streamer-recent-game__title {
+    
+    width: 100%;
+    margin: 5px 3px;
+    text-align: center;
+    font: 35px Helvetica, Verdana, sans-serif; 
+    color: white;
 }
 
 .streamer-recent-game__name {
-    white-space: nowrap;
+    background-color: white;
+    padding: 10px 2px;
+    width: 100%;
     margin: 5px 3px;
     text-align: center;
-    font: 14px Helvetica, Verdana, sans-serif; 
-    color: white;
-    text-overflow: ellipsis;
-    width: 144px;
+    font: 20px Helvetica, Verdana, sans-serif; 
+    color: #1c4269;
     overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .streamer-recent-game__logo {
     width: 100%;
     height: auto;
+    border-radius: 5px;
+}
+
+.streamer-recent-game__overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: #008CBA;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center;
 }
 
 .streamer-game-tag {

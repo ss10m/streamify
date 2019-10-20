@@ -64,11 +64,50 @@
     flex: 1 1 auto; 
     max-width: 500px;
     margin: auto;
+    padding: 0px 10px 0px 10px;
+}
+
+.cus-navbar__github {
+    flex: 0 0 auto;
+    width: 40px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+
+.cus-navbar__github-collapsed {
+    position: fixed;
+    top: 0px;
+    right: 130px;
+    width: 40px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+
+.cus-navbar__icon-container {
+    position: relative;
+}
+
+.cus-navbar__icon-container:hover {
+    background-color: #122941;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cus-navbar__icon {
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 20px;
 }
 
 .cus-navbar__notifications {
     flex: 0 0 auto;
-    width: 30px;
+    width: 40px;
+    height: 50px;
     display: flex;
     justify-content: center;
     align-items: center; 
@@ -77,35 +116,18 @@
 .cus-navbar__notifications-collapsed {
     position: fixed;
     top: 0px;
-    right: 100px;
-    width: 30px;
+    right: 90px;
+    width: 40px;
     height: 50px;
     display: flex;
     justify-content: center;
     align-items: center; 
 }
 
-
-.cus-navbar__notifications-icon-container {
-    position: relative;
-}
-
-.cus-navbar__notifications-icon-container:hover {
-    background-color: #122941;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.cus-navbar__notifications-icon {
-    color: white;
-    padding: 8px;
-    border-radius: 5px;
-}
-
 .cus-navbar__notifications-badge {
     position: absolute;
-    top: 1px;
-    right: 1px;
+    top: 3px;
+    right: 3px;
     height: 10px;
     width: 10px;
     background-color: red;
@@ -137,22 +159,26 @@
 }
 
 .cus-navbar__user-options-container {
-    width: 50px;
     flex: 0 0 auto;
+    margin-right: 10px;
+    width: 40px;
+    height: 50px;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
 }
 
 .cus-navbar__user-options {
     position: fixed;
     height: 50px;
-    top: 0px;
-    width: 50px;
-    right: 0px;
-    
+    width: 40px;
 }
 
 .cus-navbar__user-options-collapsed {
     right: 50px;
-
+    display: flex;
+    align-items: center; 
+    justify-content: center;
 }
 
 .cus-navbar__user-options-dropdown {
@@ -170,25 +196,21 @@
 }
 
 .cus-navbar__user-options-btn-container {
-    width: 50px;
-    height: 50px;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center; 
     justify-content: center;
 }
 
 .cus-navbar__user-options-login-btn {
+    font-size: 12px;
     padding: 3px;
-}
-
-.cus-navbar__user-options-loggedin-btn {
-    cursor: pointer;
 }
 
 .cus-navbar__toggle-navbar-btn {
     color: #122941;
     text-shadow: 1px 1px 1px #1c4269;
-    
     position: fixed;
     top: 0;
     right: 0;
