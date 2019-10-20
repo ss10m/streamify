@@ -665,7 +665,6 @@ function notifyAll(users, useridToLivestream) {
 }
 
 function notify(user, livestream, logo) {
-    // keep track of what was already send to the client to remove duplicate notifications
     var msg = livestream.user_name + ' is currently playing ' + livestream.game_id;
     console.log(msg)
     var ret = {
@@ -674,7 +673,6 @@ function notify(user, livestream, logo) {
         game: livestream.game_id
     }
     if(user.username in onlineUsers) {
-        //console.log(user.username, onlineUsers[user.username])
         for(var socketid of onlineUsers[user.username]) {
             if(socketIdToSocket[socketid]) socketIdToSocket[socketid].emit('notification', ret);
         }
@@ -684,6 +682,21 @@ function notify(user, livestream, logo) {
 function setNotificationVariables(onlineUsersImport, socketIdToSocketImport) {
     onlineUsers = onlineUsersImport;
     socketIdToSocket = socketIdToSocketImport;
+}
+
+function verifyUserToken(token, callback) {
+    
+    
+    User.findOne(
+        {username: token.username}, 
+        function(err, user) {
+            if(user && token.id === user.id) {
+                console.log('token was successfully verified')
+                callback()
+            }
+        }
+    );
+
 }
 
 function startTopStreamers() {
@@ -708,3 +721,4 @@ module.exports.getUser = getUser;
 module.exports.topStreamers = topStreamers;
 module.exports.search = search;
 module.exports.setNotificationVariables = setNotificationVariables;
+module.exports.verifyUserToken = verifyUserToken;

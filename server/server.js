@@ -29,9 +29,7 @@ app.use(session({ secret: 'secret', cookie: { maxAge: 60000 }, resave: false, sa
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-//app.listen(port, () => console.log(`Listening on port ${port}`));
-server.listen(port);
+server.listen(port, () => console.log(`Listening on port ${port}`));
 
 var onlineUsers = {};
 var socketIdToSocket = {};
@@ -43,21 +41,24 @@ var socketioJwt   = require("socketio-jwt");
 io.use(socketioJwt.authorize({
     secret: 'secret',
     handshake: true
-  }));
-
+}));
 
 io.on('connection', socket => {
-    console.log('hello! ', socket.decoded_token);
-    
-    console.log('('+ socket.id + ') ' + socket.decoded_token.username + 'connected');
-    
-    addToOnlineUsers(socket);
+    console.log('connected! ', socket.decoded_token);
 
+    twitchify.verifyUserToken(socket.decoded_token, () => {
+        console.log('('+ socket.id + ') ' + socket.decoded_token.username + 'connected');
     
-    socket.on('disconnect', () => {
-        console.log('('+ socket.id + ') client disconnected')
-        removeFromOnlineUsers(socket.id, socket.decoded_token.username);
-    });
+        addToOnlineUsers(socket);
+    
+        
+        socket.on('disconnect', () => {
+            console.log('('+ socket.id + ') client disconnected')
+            removeFromOnlineUsers(socket.id, socket.decoded_token.username);
+        });
+    })
+    
+
     
     
 })
@@ -88,41 +89,6 @@ function removeFromOnlineUsers(socketId, username) {
 
     console.log(onlineUsers)
 }
-
-
-/*
-io.on('connection', isAuthenticated, function (socket, next) {
-    mySocket = socket;
-    console.log('connection')
-
-
-
-
-    socket.on('logout', (userTokenOrId) => {
-        // remove this from onlineUsers or redis
-        console.log('logout')
-    });
-
-    socket.on('disconnect', (userTokenOrId) => {
-        // remove this from onlineUsers or redis
-        console.log('disconnect',)
-    });
-
-    socket.emit('news', { hello: 'world' });
-
-    socket.on('my other event', function (data) {
-      console.log(data);
-    });
-
-});
-
-
-function isAuthenticated(req, res, next) {
-    console.log('isAuthenticated')
-
-  }
-*/
-
 
 app.use((req, res, next) => {
     console.log('============== new request ===============')
