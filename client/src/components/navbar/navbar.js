@@ -81,7 +81,6 @@ class NavBar extends Component {
                 user: 'user'
             }),
         }).then(response => {
-            this.props.history.push('/');
             this.props.onLogout();
         }).catch(function(err) {
             console.info(err);

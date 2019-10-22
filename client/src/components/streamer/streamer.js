@@ -13,8 +13,6 @@ class Streamer extends Component {
             followedGames: [],
             showSearchModal: false
         };
-
-
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -77,7 +75,8 @@ class Streamer extends Component {
                 Authorization: JSON.stringify(jwt)
             },
             body: JSON.stringify({ name: this.state.data['name'] }),
-        }).then(res => res.json())
+        })
+        .then(res => res.json())
         .then(function(res) {
             console.log(res)
             if(res.error) { throw res }
@@ -96,8 +95,13 @@ class Streamer extends Component {
     }
 
     followGame = (type, gameName) => {
-        if(!this.props.session || !this.state.data.isFollowed) {
+        if(!this.props.session) {
             this.props.modalOpen();
+            return;
+        }
+
+        if(!this.state.data.isFollowed) {
+            alert("You are not following " + this.state.data['name']);
             return;
         }
 
@@ -160,9 +164,9 @@ class Streamer extends Component {
                     {recentGames.map(recentGame =>
                         <div className="streamer-recent-game"  key={recentGame['name']} onClick={() => this.followGame('follow', recentGame['name'])}>
                             <img className="streamer-recent-game__logo" src={recentGame['box_art_url']} alt="MISSING" />
-                            <div class="streamer-recent-game__overlay">
-                                <div class="streamer-recent-game__title">Follow</div>
-                                <div class="streamer-recent-game__name">{recentGame['name']}</div>
+                            <div className="streamer-recent-game__overlay">
+                                <div className="streamer-recent-game__title">Follow</div>
+                                <div className="streamer-recent-game__name">{recentGame['name']}</div>
                             </div>
                         </div>
                     )}

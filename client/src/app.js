@@ -48,7 +48,13 @@ class App extends Component {
 
             this.setState({socket: socket})
         }
+    }
 
+    componentDidUpdate() {
+        var jwt = localStorage.getItem("jwt");
+        if(this.state.session && !jwt) {
+            this.onLogout()
+        }
     }
 
     handleNotifications = (data) => {
@@ -77,14 +83,15 @@ class App extends Component {
         this.setState({newNotifications: false})
     }
 
-    onLogout() {
+    onLogout = () => {
         console.log('on logout')
         this.state.socket.disconnect();
         this.setState({session: '',
                        socket: null,
                        notifications: [],
-                       newNotifications: false})
-        localStorage.removeItem("jwt")
+                       newNotifications: false});
+        localStorage.removeItem("jwt");
+        this.props.history.push('/');
     }
 
     updateSession(jwt) {
@@ -113,7 +120,7 @@ class App extends Component {
                                              newNotifications={this.state.newNotifications}
                                              resetNewNotifications={this.resetNewNotifications}
                                              removeNotification={this.removeNotification}
-                                             onLogout={this.onLogout.bind(this)} 
+                                             onLogout={this.onLogout} 
                                              modalOpen={modalOpen}/>} />
                 <LoginModal
                     show={this.state.modalShow}
@@ -136,7 +143,7 @@ class App extends Component {
                                         <h1>home page!</h1>
                                     )}/>
                             <Route path='/streamers' render={() => <Streamers session={this.state.session} modalOpen={modalOpen} />} />
-                            <Route exact path='/streamer/:id' render={(props) => <Streamer session={this.state.session} modalOpen={modalOpen} {...props}/>}  />      
+                            <Route exact path='/streamer/:id' render={(props) => <Streamer session={this.state.session} onLogout={this.onLogout} modalOpen={modalOpen} {...props}/>}  />      
                             <Route render={() => (
                                         <h1>404</h1>
                                     )}/>

@@ -114,7 +114,7 @@ class Search extends Component {
             <div className="form-inline my-2 my-lg-0">
                 <div className="form-group has-search cus-search" >
                     <span className="fa fa-search form-control-feedback"></span>
-                    <input autoComplete="off" spellcheck="false" type="text" className="form-control cus-search__search-bar" ref={this.myRef} onChange={this.handleChange} placeholder="Search" value={this.state.inputField}/>
+                    <input autoComplete="off" spellCheck="false" type="text" className="form-control cus-search__search-bar" ref={this.myRef} onChange={this.handleChange} placeholder="Search" value={this.state.inputField}/>
                     {this.getAutocompleteList()}
                 </div>
             </div>
