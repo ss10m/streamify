@@ -16,7 +16,7 @@ class Streamer extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if(prevProps.match.params.id !== this.props.match.params.id){
+        if(prevProps.match.params.id !== this.props.match.params.id) {
             console.log('ids dont match')
             const jwt = this.props.session;
             fetch("/api/streamer/" + this.props.match.params.id, {
@@ -36,10 +36,22 @@ class Streamer extends Component {
                 console.log(err)
             });
         }
+
+
+    
+        if(prevProps.session !== this.props.session) {
+            console.log('session has changed')
+            this.getStreamersData();
+        }
+        
       }
     
     componentDidMount() {
         console.log('componentDidMount')
+        this.getStreamersData();
+    }
+
+    getStreamersData = () => {
         var jwt = this.props.session;
 
         fetch("/api/streamer/" + this.props.match.params.id, {
@@ -60,8 +72,18 @@ class Streamer extends Component {
         });
     }
 
+    checkIfSessionExists = () => {
+        if(localStorage.getItem("jwt")) {
+            return true;
+        }
+        return false;
+    }
+
     followStreamer = event => {
         event.preventDefault();
+
+        if(!this.checkIfSessionExists()) return;
+
         const jwt = this.props.session;
         var apiCall = '/api/follow';
         if(this.state.data.isFollowed) {
@@ -99,6 +121,8 @@ class Streamer extends Component {
             this.props.modalOpen();
             return;
         }
+
+        if(!this.checkIfSessionExists()) return;
 
         if(!this.state.data.isFollowed) {
             alert("You are not following " + this.state.data['name']);
