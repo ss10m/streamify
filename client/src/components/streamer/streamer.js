@@ -229,13 +229,15 @@ class Streamer extends Component {
                 <div className="streamer-info">
                     <div className="streamer-left-container">
                         <div className="streamer-left">
-                            <div className="streamer-left-box">
-                                {this.state.data['logo'] ? (
-                                    <img src={this.state.data['logo']}  width="200" height="200" alt="MISSING" />
-                                ) : (
-                                    <img src={twitchLogo} width="200" height="200" alt="MISSING" />
-                                )}
-                            </div>
+                            
+                                <div class="parent">
+                                    <div class="circle">
+                                        <div class="white-grad"></div>
+                                        <div class="timg" style={{backgroundImage: "url(" + this.state.data['logo'] + ")"}}></div>
+                                    </div>
+                                </div>
+                                
+                            
             
                             <div className="streamer-left-box">
                                 <h2 className="streamer-name">{this.state.data['display_name']}</h2>

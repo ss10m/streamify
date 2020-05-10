@@ -13,13 +13,13 @@ const twitchify = require('./twitchify.js');
 const auth = require('./config/auth.js')
 const User = mongoose.model('User');
 
-mongoose.connect('mongodb://localhost:27017/twitchify',  { useNewUrlParser: true });
+mongoose.connect('mongodb://db:27017/twitchify',  { useNewUrlParser: true });
 
 
 const app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-const port = 5000;
+const port = 8080;
 
 
 app.use(bodyParser.json());

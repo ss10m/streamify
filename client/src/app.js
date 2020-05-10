@@ -27,7 +27,7 @@ class App extends Component {
             modalShow: false,
             winWidth: window.innerWidth,
             response: false,
-            endpoint: "http://192.168.0.11:5000",
+            endpoint: "",
         };
     }
 

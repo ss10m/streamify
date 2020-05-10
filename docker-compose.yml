@@ -1,0 +1,34 @@
+version: "3"
+services:
+  server:
+    build:
+      context: ./server/
+    command: npm start
+    volumes:
+      - ./server/:/server
+      - /server/node_modules
+    depends_on:
+      - db
+    ports:
+      - "${NODE_PORT_HOST}:${NODE_PORT_CONTAINER}"
+      - "9229:9229"
+    environment:
+      - NODE_ENV=development
+  client:
+    build:
+      context: ./client/
+    command: npm start
+    volumes:
+      - ./client/:/client
+      - /client/node_modules
+    depends_on:
+      - server
+    ports:
+      - "${REACT_PORT_HOST}:${REACT_PORT_CONTAINER}"
+    environment:
+      - NODE_ENV=development
+    stdin_open: true
+  db:
+    image: mongo
+    ports:
+      - "27017:27017"
