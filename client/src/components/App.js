@@ -1,0 +1,95 @@
+import React, { Component } from "react";
+import { withRouter, Route, Switch } from "react-router-dom";
+import { connect } from "react-redux";
+
+import { getSession, login, logout, showLogin, toggleNavBar } from "../store/actions.js";
+
+import Page1 from "./Page1";
+import Page2 from "./Page2";
+import LoginPage from "./LoginPage/LoginPage";
+import NavBar from "./Navbar/NavBar";
+
+import "./App.scss";
+
+class App extends Component {
+    componentDidMount() {
+        console.log("componentDidMount");
+        this.props.getSession();
+    }
+
+    register = () => {
+        // to be implemented
+    };
+
+    login = () => {
+        let userInfo = { email: "czelo22@email.com", password: "Password1!" };
+        this.props.login(userInfo);
+    };
+
+    logout = () => {
+        this.props.logout();
+    };
+
+    hideNavbar = (event) => {
+        event.preventDefault();
+        if (this.props.expandedNavbar) this.props.toggleNavBar();
+    };
+
+    render() {
+        let {
+            session: { isLoaded, user },
+            loginDisplayed,
+        } = this.props;
+
+        if (!isLoaded) {
+            return <div>Loading...</div>;
+        }
+
+        return (
+            <div className="app">
+                <NavBar />
+                {loginDisplayed && <LoginPage />}
+
+                <div className="mainbody" onClick={this.hideNavbar}>
+                    <Switch>
+                        <Route exact path="/">
+                            <Page1 />
+                        </Route>
+                        <Route exact path="/page2">
+                            <Page2 />
+                        </Route>
+                        <Route render={() => <h1>404</h1>} />
+                    </Switch>
+                </div>
+            </div>
+        );
+    }
+}
+
+const mapStateToProps = (state) => {
+    return {
+        session: state.session,
+        loginDisplayed: state.loginDisplayed,
+        expandedNavbar: state.toggleNavbar,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+    getSession: () => {
+        dispatch(getSession());
+    },
+    logout: () => {
+        dispatch(logout());
+    },
+    login: (userInfo) => {
+        dispatch(login(userInfo));
+    },
+    showLogin: () => {
+        dispatch(showLogin());
+    },
+    toggleNavBar: () => {
+        dispatch(toggleNavBar());
+    },
+});
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

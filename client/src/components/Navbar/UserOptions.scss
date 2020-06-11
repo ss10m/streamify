@@ -1,0 +1,89 @@
+$primary-color: #222831;
+$top-color: #d0d0d0;
+$hightlight-color: #30475e;
+
+#userDropdown {
+    position: relative;
+
+    .dropdown-options {
+        width: 200px;
+        height: auto;
+        position: absolute;
+        top: 50px;
+        left: -150px;
+        border-radius: 7px;
+        background-color: $primary-color;
+        box-shadow: 0 0 5px rgba(33, 33, 33, 0.5);
+        display: flex;
+        flex-direction: column;
+
+        .top {
+            display: flex;
+            flex-direction: column;
+            border-radius: 7px 7px 0 0;
+            padding: 8px 20px 1px 20px;
+
+            background-color: $primary-color;
+
+            color: $top-color;
+
+            .info {
+                color: white;
+                margin-top: 10px;
+                .user-icon {
+                    font-size: 28px;
+                }
+                .username {
+                    font-weight: 600;
+                    font-size: 18px;
+                    margin: 0;
+                    margin-left: 10px;
+                }
+            }
+
+            .last-login {
+                margin: 0;
+                margin-top: 8px;
+                font-size: 12px;
+                font-weight: 300;
+            }
+        }
+
+        .option {
+            height: 35px;
+            margin: 0 15px;
+            font-weight: 300;
+            font-size: 16px;
+            color: $top-color;
+
+            .button {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                background-color: $primary-color;
+
+                .option-icon {
+                    font-size: 18px;
+                    margin-right: 8px;
+                }
+            }
+
+            .selectable:hover {
+                background-color: $hightlight-color;
+            }
+
+            &:last-child {
+                margin-bottom: 8px;
+            }
+        }
+
+        .divider {
+            height: 1px;
+            margin: 8px 20px;
+            border: none;
+            opacity: 0.2;
+            background-color: white;
+            color: white;
+        }
+    }
+}

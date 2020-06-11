@@ -1,0 +1,62 @@
+$primary-color: #121a21;
+$secondary-color: #273747;
+
+.input {
+    display: flex;
+    height: 45px;
+
+    .icon {
+        height: 100%;
+        width: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid $primary-color;
+        border-right: 0;
+        border-radius: 5px 0 0 5px;
+        font-size: 25px;
+        color: $secondary-color;
+        background-color: $primary-color;
+    }
+
+    .field {
+        label {
+            position: relative;
+
+            input {
+                height: 100%;
+                width: 90%;
+                padding: 0 10px;
+                outline: none;
+                border: 1px solid $primary-color;
+                border-radius: 0 5px 5px 0;
+                border-left: none;
+                font-size: 16px;
+                color: white;
+                background: transparent;
+            }
+
+            .title {
+                position: absolute;
+                left: 10px;
+                top: 0;
+                transition: 0.25s cubic-bezier(0.68, -0.35, 0.465, 1.55);
+                border: 1px solid transparent;
+                pointer-events: none;
+                font-weight: 300;
+            }
+        }
+
+        &.active {
+            .title {
+                transform: translate(0, -22px);
+                font-size: 12px;
+                padding: 0 7px;
+                color: white;
+                border: 1px solid $primary-color;
+                border-radius: 5px;
+                background-color: $secondary-color;
+            }
+        }
+    }
+}
