@@ -3,7 +3,7 @@ import session from "express-session";
 import pgSimpleSession from "connect-pg-simple";
 
 import { SESS_NAME, SESS_SECRET, SESS_LIFETIME } from "../config.js";
-import { userRoutes, sessionRoutes } from "./routes/index.js";
+import { userRoutes, sessionRoutes, twitchifyRoutes } from "./routes/index.js";
 import { pgPool } from "./config/db.js";
 
 const PORT = process.env.PORT || 8080;
@@ -36,5 +36,6 @@ const apiRouter = express.Router();
 app.use("/api", apiRouter);
 apiRouter.use("/users", userRoutes);
 apiRouter.use("/session", sessionRoutes);
+apiRouter.use("/twitchify", twitchifyRoutes);
 
 app.listen(PORT, HOST, () => console.log(`Running on http://${HOST}:${PORT}`));

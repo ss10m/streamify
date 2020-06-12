@@ -14,7 +14,7 @@ import UserOptions from "./UserOptions";
 class NavBar extends Component {
     constructor(props) {
         super(props);
-        this.state = { width: window.innerWidth, showSidebar: false, userOptions: false };
+        this.state = { width: window.innerWidth, userOptions: false };
     }
 
     componentDidMount() {
@@ -88,7 +88,7 @@ class NavBar extends Component {
                                 />
                             </div>
                         )}
-                        <div className="title flex">Twitchify</div>
+                        <div className="title flex">TWITCHIFY</div>
                     </div>
 
                     {this.state.width >= 650 && (

@@ -34,13 +34,9 @@ body {
 .mainbody {
     flex: 1;
     min-height: 0px;
-    overflow: auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
 
-    &::-webkit-scrollbar {
-        display: none;
-    }
+    display: flex;
+    flex-direction: row;
 }
 
 .flex {
@@ -59,4 +55,13 @@ body {
 .page2 {
     background-color: whitesmoke;
     padding-top: 160px;
+    overflow: auto;
+    flex: 1;
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    overflow: auto;
 }

@@ -8,6 +8,7 @@ import Page1 from "./Page1";
 import Page2 from "./Page2";
 import LoginPage from "./LoginPage/LoginPage";
 import NavBar from "./Navbar/NavBar";
+import TopStreamers from "./TopStreamers/TopStreamers";
 
 import "./App.scss";
 
@@ -51,6 +52,7 @@ class App extends Component {
                 {loginDisplayed && <LoginPage />}
 
                 <div className="mainbody" onClick={this.hideNavbar}>
+                    <TopStreamers />
                     <Switch>
                         <Route exact path="/">
                             <Page1 />
