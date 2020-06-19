@@ -1,40 +1,34 @@
-version: "3"
+version: "3.7"
+
 services:
-    server:
-        build:
-            context: ./server/
-        command: npm start
-        volumes:
-            - ./server/:/server
-            - /server/node_modules
+    app:
+        build: ./
+        restart: always
+        environment:
+            VIRTUAL_PORT: 8080
+            VIRTUAL_HOST: streamify.ssprojects.ca
+            LETSENCRYPT_HOST: streamify.ssprojects.ca
+            LETSENCRYPT_EMAIL: "fastf20@gmail.com"
+        networks:
+            - service-network
+            - twitchify-network
         depends_on:
             - db
-        ports:
-            - "${NODE_PORT_HOST}:${NODE_PORT_CONTAINER}"
-        environment:
-            - NODE_ENV=development
-    client:
-        build:
-            context: ./client/
-        command: npm start
-        volumes:
-            - ./client/:/client
-            - /client/node_modules
-        depends_on:
-            - server
-        ports:
-            - "${REACT_PORT_HOST}:${REACT_PORT_CONTAINER}"
-        environment:
-            - NODE_ENV=development
-        stdin_open: true
+
     db:
         image: postgres:11.2-alpine
-        ports:
-            - "5432:5432"
         environment:
             POSTGRES_DB: twitchify
             POSTGRES_USER: twitchify
             POSTGRES_PASSWORD: pw
+        networks:
+            - twitchify-network
         volumes:
             - ~/dbTwitchify:/var/lib/postgresql/data
             - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+networks:
+    service-network:
+        external: true
+    twitchify-network:
+        driver: bridge

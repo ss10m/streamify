@@ -88,7 +88,7 @@ class NavBar extends Component {
                                 />
                             </div>
                         )}
-                        <div className="title flex">TWITCHIFY</div>
+                        <div className="title flex">STREAMIFY</div>
                     </div>
 
                     {this.state.width >= 650 && (
