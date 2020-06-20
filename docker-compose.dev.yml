@@ -1,0 +1,39 @@
+version: "3.7"
+services:
+    server_dev:
+        build:
+            context: ./server/
+        command: npm run dev
+        volumes:
+            - ./server/:/server
+            - /server/node_modules
+        depends_on:
+            - db
+        ports:
+            - "8080:8080"
+        environment:
+            - NODE_ENV=development
+    client_dev:
+        build:
+            context: ./client/
+        command: npm start
+        volumes:
+            - ./client/:/client
+            - /client/node_modules
+        depends_on:
+            - server_dev
+        ports:
+            - "3000:3000"
+        environment:
+            - NODE_ENV=development
+        stdin_open: true
+
+    db:
+        image: postgres:11.2-alpine
+        environment:
+            POSTGRES_DB: twitchify
+            POSTGRES_USER: twitchify
+            POSTGRES_PASSWORD: pw
+        volumes:
+            - ~/dbTwitchify:/var/lib/postgresql/data
+            - ./init.sql:/docker-entrypoint-initdb.d/init.sql

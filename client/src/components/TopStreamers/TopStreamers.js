@@ -15,7 +15,7 @@ class TopStreamers extends Component {
     }
 
     fetchTopStreamers = () => {
-        fetch("api/twitchify/top")
+        fetch("/api/twitchify/top")
             .then((res) => res.json())
             .then((res) => this.setState({ streamers: res["data"] }));
     };
