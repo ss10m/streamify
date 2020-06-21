@@ -19,6 +19,7 @@ export const getTopStreamers = (cb) => {
             console.log(response.status);
             return;
         }
+
         let streamers = response.data.data;
         let user_ids = [];
         let game_ids = [];
@@ -42,13 +43,29 @@ export const getTopStreamers = (cb) => {
             data.display_name = channel.display_name;
             data.logo = channel.profile_image_url;
 
-            let gameName = game.name;
-            if (gameName.length > 20) {
-                gameName = gameName.substring(0, 20) + "...";
-            } else if (gameName == "") {
+            if (data.display_name.length > 14) data.display_name = data.display_name.substring(0, 14) + "..";
+
+            let gameName = "";
+            if (game) {
+                gameName = game.name;
+                if (gameName.length > 28) {
+                    gameName = gameName.substring(0, 28) + "..";
+                } else if (gameName == "") {
+                    gameName = "Nothing";
+                }
+            } else {
                 gameName = "Nothing";
             }
             data.game = gameName;
+
+            let viewers = streamer.viewer_count;
+
+            if (streamer.viewer_count >= 1000) {
+                viewers = roundedToFixed(viewers / 1000, 1);
+                if (viewers % 1 == 0) viewers = parseInt(viewers);
+                viewers = viewers.toString() + "K";
+            }
+            data.viewer_count = viewers;
 
             ret.push(data);
         }
@@ -56,6 +73,11 @@ export const getTopStreamers = (cb) => {
         cb(ret);
     });
 };
+
+function roundedToFixed(_float, _digits) {
+    var rounded = Math.pow(10, _digits);
+    return (Math.round(_float * rounded) / rounded).toFixed(_digits);
+}
 
 export const getChannels = async (ids) => {
     let idParam = "?id=" + ids.join("&id=");
@@ -74,7 +96,6 @@ export const getChannels = async (ids) => {
         console.log(response.status);
         return;
     }
-    console.log(response.data.data);
 
     let dict = {};
     response.data.data.forEach((obj) => (dict[obj.id] = obj));
@@ -104,6 +125,7 @@ export const getGames = async (ids) => {
     return dict;
 };
 
+// NEW
 export const getVideos = async () => {
     let options = {
         method: "get",
@@ -145,10 +167,10 @@ export const getRecent = async () => {
 };
 */
 
-export const getChannel = async (name) => {
+export const getChannel = async (username, cb) => {
     var options = {
         method: "GET",
-        url: "https://api.twitch.tv/helix/users?login=" + name,
+        url: "https://api.twitch.tv/helix/users?login=" + username,
         headers: {
             "Client-ID": cred.clientId,
             Authorization: cred.auth,
@@ -161,10 +183,10 @@ export const getChannel = async (name) => {
         return;
     }
 
-    getRecent(response.data.data[0].id);
+    getRecent(response.data.data[0].id, cb);
 };
 
-export const getRecent = async (user_id) => {
+export const getRecent = async (user_id, cb) => {
     var options = {
         method: "GET",
         url: "https://api.twitch.tv/kraken/channels/" + user_id + "/videos?broadcast_type=archive&limit=50",
@@ -195,7 +217,7 @@ export const getRecent = async (user_id) => {
         callback(streamerData);
         */
     } else {
-        getRecentGamesBoxArt(recentGamesArray, channel);
+        getRecentGamesBoxArt(recentGamesArray, channel, cb);
     }
 };
 
@@ -204,7 +226,7 @@ export const getRecent = async (user_id) => {
 //121059319, 163836275, 60056333, 51496027, 71092938
 //summit - 26490481
 
-const getRecentGamesBoxArt = async (recentGames, channel) => {
+const getRecentGamesBoxArt = async (recentGames, channel, cb) => {
     var requestParameters = "";
     var currentGameIncluded = false;
 
@@ -242,7 +264,13 @@ const getRecentGamesBoxArt = async (recentGames, channel) => {
 
     channel.recent_games = response.data.data;
 
-    console.log(channel);
+    //console.log(channel);
+    cb(channel);
 };
 
-getChannel("summit1g");
+//getChannel("summit1g");
+
+export const getStreamer = (username, cb) => {
+    console.log(username);
+    getChannel(username, cb);
+};

@@ -8,7 +8,7 @@ export const loginHelper = (email, password) => {
     console.log(requestOptions);
 
     //return fetch(`/users/authenticate`, requestOptions)
-    return fetch("api/session", requestOptions)
+    return fetch("/api/session", requestOptions)
         .then(handleResponse)
         .then((user) => {
             // store user details and jwt token in local storage to keep user logged in between page refreshes

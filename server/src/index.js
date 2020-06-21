@@ -42,7 +42,7 @@ apiRouter.use("/users", userRoutes);
 apiRouter.use("/session", sessionRoutes);
 apiRouter.use("/twitchify", twitchifyRoutes);
 
-app.get("*", function (request, response) {
+app.get("*", (request, response) => {
     response.sendFile(path.join(CLIENT_BUILD_PATH, "index.html"));
 });
 

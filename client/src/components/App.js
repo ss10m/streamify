@@ -9,6 +9,7 @@ import Page2 from "./Page2";
 import LoginPage from "./LoginPage/LoginPage";
 import NavBar from "./Navbar/NavBar";
 import TopStreamers from "./TopStreamers/TopStreamers";
+import Streamer from "./Streamer/Streamer";
 
 import "./App.scss";
 
@@ -53,15 +54,18 @@ class App extends Component {
 
                 <div className="mainbody" onClick={this.hideNavbar}>
                     <TopStreamers />
-                    <Switch>
-                        <Route exact path="/">
-                            <Page1 />
-                        </Route>
-                        <Route exact path="/page2">
-                            <Page2 />
-                        </Route>
-                        <Route render={() => <h1>404</h1>} />
-                    </Switch>
+                    <div className="streamers">
+                        <Switch>
+                            <Route exact path="/">
+                                <Page1 />
+                            </Route>
+                            <Route exact path="/page2">
+                                <Page2 />
+                            </Route>
+                            <Route exact path="/streamer/:id" render={(props) => <Streamer />} />
+                            <Route render={() => <h1>404</h1>} />
+                        </Switch>
+                    </div>
                 </div>
             </div>
         );

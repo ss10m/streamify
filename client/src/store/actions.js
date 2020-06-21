@@ -8,7 +8,7 @@ const clearSession = () => ({
 });
 
 export const getSession = () => async (dispatch) => {
-    const response = await fetch("api/session", { method: "GET" });
+    const response = await fetch("/api/session", { method: "GET" });
     let data = await extractData(response, dispatch);
     let defaultState = { isLoaded: true, user: null };
     if (data && data["user"]) defaultState["user"] = data["user"];
@@ -16,7 +16,7 @@ export const getSession = () => async (dispatch) => {
 };
 
 export const login = (userInfo) => async (dispatch) => {
-    const response = await fetch("api/session", {
+    const response = await fetch("/api/session", {
         method: "POST",
         body: JSON.stringify(userInfo),
         headers: {
@@ -32,7 +32,7 @@ export const login = (userInfo) => async (dispatch) => {
 };
 
 export const register = (userInfo) => async (dispatch) => {
-    const response = await fetch("api/users/", {
+    const response = await fetch("/api/users/", {
         method: "POST",
         body: JSON.stringify(userInfo),
         headers: {
@@ -60,7 +60,7 @@ const extractData = async (response, dispatch) => {
 };
 
 export const logout = () => async (dispatch) => {
-    const response = await fetch("api/session", { method: "DELETE" });
+    const response = await fetch("/api/session", { method: "DELETE" });
     if (!response.ok) console.log("ERROR");
     return dispatch(clearSession());
 };
