@@ -39,13 +39,11 @@
             flex: 1;
 
             .stream {
-                height: 53%;
-
+                height: 65%;
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
                 align-items: center;
-
                 font-weight: 500;
 
                 .viewer-count {
@@ -69,6 +67,8 @@
                 height: 35%;
                 font-size: 14px;
                 color: grey;
+                position: relative;
+                bottom: 10px;
             }
         }
 
@@ -84,17 +84,17 @@
 
     .toggle {
         height: 40px;
-        color: whitesmoke;
-
         display: flex;
         align-items: center;
         justify-content: center;
-        font-weight: 700;
+        font-weight: 800;
         font-size: 15px;
+        color: whitesmoke;
 
         .icon {
-            padding: 0 10px 0 10px;
+            padding: 3px 10px 3px 12px;
             border-radius: 5px;
+            font-size: 24px;
 
             &:hover {
                 background-color: #1c4269;
@@ -104,11 +104,10 @@
 
         &.expanded {
             justify-content: space-between;
-
-            margin: 0 5px 0 8px;
+            margin: 0 5px 0 10px;
 
             .icon {
-                padding: 0 13px 0 8px;
+                padding: 3px 12px 3px 8px;
             }
         }
     }
