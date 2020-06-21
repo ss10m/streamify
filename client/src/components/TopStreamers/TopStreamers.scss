@@ -44,7 +44,7 @@
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
-                align-items: flex-end;
+                align-items: center;
 
                 font-weight: 500;
 
@@ -53,6 +53,7 @@
                     display: flex;
                     flex-direction: row;
                     align-items: center;
+                    font-size: 14px;
 
                     .indicator {
                         width: 10px;
@@ -78,6 +79,37 @@
 
         &:focus {
             background-color: #1c4269;
+        }
+    }
+
+    .toggle {
+        height: 40px;
+        color: whitesmoke;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 15px;
+
+        .icon {
+            padding: 0 10px 0 10px;
+            border-radius: 5px;
+
+            &:hover {
+                background-color: #1c4269;
+                cursor: pointer;
+            }
+        }
+
+        &.expanded {
+            justify-content: space-between;
+
+            margin: 0 5px 0 8px;
+
+            .icon {
+                padding: 0 13px 0 8px;
+            }
         }
     }
 

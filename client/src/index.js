@@ -21,9 +21,24 @@ import {
     faCog,
     faSignOutAlt,
     faGlobeAmericas,
+    faCaretRight,
+    faCaretLeft,
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faUserCircle, faBars, faEnvelope, faBell, faUser, faKey, faAt, faCog, faSignOutAlt, faGlobeAmericas);
+library.add(
+    faUserCircle,
+    faBars,
+    faEnvelope,
+    faBell,
+    faUser,
+    faKey,
+    faAt,
+    faCog,
+    faSignOutAlt,
+    faGlobeAmericas,
+    faCaretRight,
+    faCaretLeft
+);
 
 const store = createStore(reducers, applyMiddleware(thunk));
 
