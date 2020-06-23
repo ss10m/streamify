@@ -22,7 +22,7 @@ class Streamer extends Component {
         }
     }
 
-    getStreamersData = (username) => {
+    getStreamersData = () => {
         fetch("/api/twitchify/streamer/" + this.props.match.params.id, {})
             .then((res) => res.json())
             .then((res) => {
@@ -32,9 +32,18 @@ class Streamer extends Component {
                 return res;
             })
             .then((data) => {
-                this.setState({ streamer: data.data });
+                let recent_games = [];
+                recent_games = [...data.data.recent_games];
 
-                let recent_games = data.data.recent_games;
+                if (recent_games.length < 8) {
+                    for (let i = recent_games.length; i < 8; i++) {
+                        recent_games.push({
+                            box_art_url: "https://static-cdn.jtvnw.net/ttv-static/404_boxart-200x300.jpg",
+                            id: "0",
+                            name: "Suggested " + i,
+                        });
+                    }
+                }
 
                 for (let i = 0; i < recent_games.length - 1; i++) {
                     recent_games[i].order = i + 2;
@@ -43,42 +52,11 @@ class Streamer extends Component {
                 recent_games[recent_games.length - 1].order = 1;
                 recent_games[recent_games.length - 1].next = recent_games[0];
 
-                console.log(recent_games);
-                this.setState({ streamer: data.data, recent_games, seat: recent_games.length - 1 });
+                this.setState({ streamer: data.data, direction: null, recent_games, seat: recent_games.length - 1 });
             })
             .catch((err) => {
                 console.log(err);
             });
-    };
-
-    getRecentGames = () => {
-        if (!this.state.streamer.recent_games) return;
-
-        return <div></div>;
-    };
-
-    handleCarousel2 = (moveRight) => {
-        let { recent_games, seat } = this.state;
-
-        let newSeat = 0;
-        let newDirection = null;
-        if (moveRight) {
-            newSeat = seat + 1 >= recent_games.length ? 0 : seat + 1;
-            newDirection = "right";
-        } else {
-            newSeat = seat - 1 < 0 ? recent_games.length - 1 : seat - 1;
-            newDirection = "left";
-        }
-
-        let current = recent_games[newSeat];
-        current.order = 1;
-
-        for (let i = 1; i < recent_games.length; i++) {
-            current = current.next;
-            current.order = i + 1;
-        }
-
-        this.setState({ recent_games, seat: newSeat, direction: newDirection });
     };
 
     handleCarousel = (moveRight) => {
@@ -102,9 +80,7 @@ class Streamer extends Component {
             current.order = i + 1;
         }
 
-        console.log(recent_games);
-
-        this.setState({ recent_games, seat: newSeat, direction: newDirection });
+        this.setState({ seat: newSeat, direction: newDirection });
     };
 
     getData = () => {
@@ -126,19 +102,23 @@ class Streamer extends Component {
         return (
             <>
                 <div className="recent-games">
-                    <ul className={carouselClass}>
-                        {recent_games.map((streamer) => (
-                            <li key={streamer.name} className="item" style={{ order: streamer.order }}>
-                                <p>{streamer.name}</p>
-                                <p>{streamer.order}</p>
-                                <img src={streamer["box_art_url"]} width="200" height="300" alt="MISSING" />
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <div className="btns">
-                    <button onClick={() => this.handleCarousel(false)}>&larr;</button>
-                    <button onClick={() => this.handleCarousel(true)}>&rarr;</button>
+                    <a role="button" onClick={() => this.handleCarousel(false)}>
+                        ‹
+                    </a>
+                    <div className="list">
+                        <ul className={carouselClass}>
+                            {recent_games.map((streamer) => (
+                                <li key={streamer.name} className="item" style={{ order: streamer.order }}>
+                                    <p>{streamer.name}</p>
+                                    <img src={streamer["box_art_url"]} width="200" height="300" alt="MISSING" />
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <a role="button" onClick={() => this.handleCarousel(true)}>
+                        ›
+                    </a>
                 </div>
             </>
         );
@@ -170,8 +150,5 @@ const mapStateToProps = (state) => {
         session: state.session,
     };
 };
-//<div>{this.props.match.params.id}</div>
-//<div>{(user && user.username) || "not logged in"}</div>
-//<div>{JSON.stringify(this.state.data)}</div>
 
 export default withRouter(connect(mapStateToProps)(Streamer));

@@ -4,6 +4,7 @@ $hightlight-color: #30475e;
 
 #userDropdown {
     position: relative;
+    z-index: 2;
 
     .dropdown-options {
         width: 200px;
