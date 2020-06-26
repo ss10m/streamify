@@ -277,7 +277,61 @@ export const getStreamer = (username, cb) => {
     getChannel(username, cb);
 };
 
-export const followStreamer = async (username, streamer_name) => {
+const getUserData = (username) => {
+    let query = "SELECT * FROM users WHERE username = $1";
+    let values = [username];
+    return db
+        .query(query, values)
+        .then((res) => {
+            if (!res.rows.length) throw new Error("User not found");
+            return { user: res.rows, errorUser: null };
+        })
+        .catch((err) => {
+            return { user: null, errorUser: err.message };
+        });
+};
+
+const getStreamerData = (username) => {
+    let query = "SELECT * FROM streamers WHERE name = $1";
+    let values = [username];
+    return db
+        .query(query, values)
+        .then((res) => {
+            if (!res.rows.length) throw new Error("Streamer not found");
+            return { streamer: res.rows, errorStreamer: null };
+        })
+        .catch((err) => {
+            return { streamer: null, errorStreamer: err.message };
+        });
+};
+
+export const followStreamer = async (username, streamer_name, sendData, sendError) => {
+    let { user, errorUser } = await getUserData(username, sendError);
+    if (!user) return sendError({ err: errorUser });
+
+    let { streamer, errorStreamer } = await getStreamerData(streamer_name, sendError);
+    if (!streamer) return sendError({ err: errorStreamer });
+
+    console.log(streamer);
+
+    sendData({ status: "ok" });
+
+    /*
+    let query = "SELECT * FROM users WHERE username = $1";
+    let values = [username];
+    db.query(query, values)
+        .then((res) => {
+            if (!res.rows.length) throw new Error("User not found");
+            return res.rows;
+        })
+        .then((res) => {
+            console.log(res);
+            console.log("1111");
+            //throw new Error("User not found");
+        })
+        .catch((err) => cb(err.message));
+
+    
     console.log(username, streamer_name);
     const query1 = "SELECT * FROM users WHERE username = $1";
     const values1 = [username];
@@ -286,6 +340,7 @@ export const followStreamer = async (username, streamer_name) => {
     let user = result1.rows[0];
     console.log(user);
 
+    
     let query2 = "SELECT * FROM streamers WHERE name = $1";
     let values2 = [streamer_name];
     let result2 = await db.query(query2, values2);
@@ -303,8 +358,21 @@ export const followStreamer = async (username, streamer_name) => {
 
     let followInsert = "INSERT INTO follows(user_id, streamer_id) VALUES($1, $2) RETURNING *";
     let valuesInsert = [user.id, streamer.id];
-    let follow = await db.query(followInsert, valuesInsert);
-    console.log(follow.rows);
+    
+    let follow = await db.query(followInsert, valuesInsert, (err, result) => {
+        if (err) {
+            return console.error("Error executing query", err.stack);
+        }
+        console.log(result.rows[0].name); // brianc
+    });
+    
+    //console.log(follow.rows);
+    db.query(followInsert, valuesInsert)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err.message));
+
+    //cb(follow.rows);
+    */
 };
 
 const getFollows = async (username, streamer_name) => {
@@ -320,4 +388,4 @@ const getFollows = async (username, streamer_name) => {
     }
 };
 
-getFollows();
+//getFollows();

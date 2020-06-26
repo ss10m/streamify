@@ -29,8 +29,25 @@ router.get("/streamer/:username", (req, res) => {
 
 router.post("/follow", (req, res) => {
     let { session, body } = req;
-    followStreamer(session.user.username, body.username);
-    res.status(200);
+    followStreamer(
+        session.user.username,
+        body.username,
+        (data) => {
+            res.status(200).send(data);
+        },
+        (err) => {
+            res.status(401).send(err);
+        }
+    );
+    /*
+    try {
+        followStreamer(session.user.username, body.username, (data) => {
+            res.send({ data });
+        });
+    } catch (err) {
+        res.status(401).send(parseError(err));
+    }
+    */
 });
 
 export default router;
