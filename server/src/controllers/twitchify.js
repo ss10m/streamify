@@ -1,6 +1,8 @@
 import * as cred from "../config/credentials.js";
 import axios from "axios";
 
+import db from "../config/db.js";
+
 export const getTopStreamers = (cb) => {
     let options = {
         method: "get",
@@ -274,3 +276,48 @@ export const getStreamer = (username, cb) => {
     console.log(username);
     getChannel(username, cb);
 };
+
+export const followStreamer = async (username, streamer_name) => {
+    console.log(username, streamer_name);
+    const query1 = "SELECT * FROM users WHERE username = $1";
+    const values1 = [username];
+    const result1 = await db.query(query1, values1);
+    if (!result1.rows.length) throw new Error("User not found");
+    let user = result1.rows[0];
+    console.log(user);
+
+    let query2 = "SELECT * FROM streamers WHERE name = $1";
+    let values2 = [streamer_name];
+    let result2 = await db.query(query2, values2);
+    let streamer = null;
+    if (!result2.rows.length) {
+        let queryInsertStreamer = "INSERT INTO streamers(name, display_name, logo) VALUES($1, $2, $3) RETURNING *";
+        let valuesInsert = [streamer_name, streamer_name, "no logo"];
+        let result = await db.query(queryInsertStreamer, valuesInsert);
+        streamer = result.rows[0];
+    } else {
+        streamer = result2.rows[0];
+    }
+
+    console.log(streamer);
+
+    let followInsert = "INSERT INTO follows(user_id, streamer_id) VALUES($1, $2) RETURNING *";
+    let valuesInsert = [user.id, streamer.id];
+    let follow = await db.query(followInsert, valuesInsert);
+    console.log(follow.rows);
+};
+
+const getFollows = async (username, streamer_name) => {
+    let query = `SELECT follows.id, users.username, streamers.name 
+                 FROM follows 
+                 INNER JOIN users ON users.id = follows.user_id 
+                 INNER JOIN streamers ON streamers.id = follows.streamer_id`;
+    let values = [];
+    let result = await db.query(query, values);
+
+    for (let res of result.rows) {
+        console.log(`${res.id} => ${res.username} follows ${res.name}`);
+    }
+};
+
+getFollows();

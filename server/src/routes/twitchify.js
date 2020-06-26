@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 import { parseError } from "../util/helpers.js";
 
-import { getTopStreamers, getStreamer } from "../controllers/twitchify.js";
+import { getTopStreamers, getStreamer, followStreamer } from "../controllers/twitchify.js";
 
 router.get("/top", (req, res) => {
     try {
@@ -25,6 +25,12 @@ router.get("/streamer/:username", (req, res) => {
     } catch (err) {
         res.status(401).send(parseError(err));
     }
+});
+
+router.post("/follow", (req, res) => {
+    let { session, body } = req;
+    followStreamer(session.user.username, body.username);
+    res.status(200);
 });
 
 export default router;

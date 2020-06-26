@@ -124,6 +124,29 @@ class Streamer extends Component {
         );
     };
 
+    follow = () => {
+        fetch("/api/twitchify/follow", {
+            method: "POST",
+            body: JSON.stringify({ username: this.props.match.params.id }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.error) {
+                    throw res;
+                }
+                return res;
+            })
+            .then((data) => {
+                console.log(data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
     render() {
         let {
             session: { user },
@@ -138,6 +161,10 @@ class Streamer extends Component {
                         <img src={streamer["logo"]} width="200" height="200" alt="MISSING" />
                         <p>{streamer["display_name"]}</p>
                     </div>
+                    <div>
+                        <button onClick={this.follow}>FOLLOW</button>
+                    </div>
+
                     {this.getData()}
                 </div>
             </>
