@@ -96,7 +96,7 @@ class NavBar extends Component {
                             <div className="search flex">
                                 <input className="inputfield" type="number" placeholder="Order #"></input>
                                 <div className="user-btn wide flex">
-                                    <a href="#" class="button button-reg" onClick={this.props.showLogin}>
+                                    <a href="#" className="button button-reg" onClick={this.props.showLogin}>
                                         Search
                                     </a>
                                 </div>

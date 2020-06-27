@@ -70,9 +70,7 @@ class TopStreamers extends Component {
     };
 
     render() {
-        console.log(this.state.streamers);
         let { width, isHidden } = this.state;
-        console.log(isHidden);
         return (
             <div className={"topStreamers" + (width <= 992 || isHidden ? " hidden" : "")}>
                 {this.getHeader()}

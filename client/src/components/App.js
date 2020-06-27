@@ -9,6 +9,7 @@ import Page2 from "./Page2";
 import LoginPage from "./LoginPage/LoginPage";
 import NavBar from "./Navbar/NavBar";
 import TopStreamers from "./TopStreamers/TopStreamers";
+import Streamers from "./Streamers/Streamers";
 import Streamer from "./Streamer/Streamer";
 
 import "./App.scss";
@@ -63,6 +64,9 @@ class App extends Component {
                                 <Page2 />
                             </Route>
                             <Route exact path="/streamer/:id" render={(props) => <Streamer />} />
+                            <Route exact path="/streamers">
+                                <Streamers />
+                            </Route>
                             <Route render={() => <h1>404</h1>} />
                         </Switch>
                     </div>

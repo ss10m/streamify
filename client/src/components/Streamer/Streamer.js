@@ -3,12 +3,12 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 import "./Streamer.scss";
+import Spinner from "../Spinner/Spinner";
 
 class Streamer extends Component {
     constructor(props) {
         super(props);
-
-        this.state = { streamer: {}, direction: null, seat: 0, recent_games: [] };
+        this.state = { streamer: null, direction: null, seat: 0, recent_games: [] };
     }
 
     componentDidMount() {
@@ -18,6 +18,7 @@ class Streamer extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.match.params.id !== this.props.match.params.id) {
             console.log("ids dont match");
+            this.setState({ streamer: null, direction: null, seat: 0, recent_games: [] });
             this.getStreamersData();
         }
     }
@@ -153,6 +154,11 @@ class Streamer extends Component {
         } = this.props;
 
         let { streamer } = this.state;
+
+        if (!streamer) {
+            return <Spinner />;
+        } else {
+        }
 
         return (
             <>
