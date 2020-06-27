@@ -19,10 +19,11 @@ CREATE TABLE "users" (
 );
 
 CREATE TABLE "streamers" (
-    "id" serial PRIMARY KEY,
-    "name" VARCHAR(50) UNIQUE NOT NULL,
+    "name" VARCHAR(50) PRIMARY KEY,
+    "id" INTEGER UNIQUE NOT NULL,
     "display_name" VARCHAR(50) NOT NULL,
-    "logo" VARCHAR NOT NULL
+    "logo" VARCHAR NOT NULL,
+    "offline_img" VARCHAR NOT NULL
 );
 
 CREATE TABLE "follows" (

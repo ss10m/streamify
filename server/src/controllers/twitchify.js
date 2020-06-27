@@ -284,25 +284,62 @@ const getUserData = (username) => {
         .query(query, values)
         .then((res) => {
             if (!res.rows.length) throw new Error("User not found");
-            return { user: res.rows, errorUser: null };
+            return { user: res.rows[0], errorUser: null };
         })
         .catch((err) => {
             return { user: null, errorUser: err.message };
         });
 };
 
-const getStreamerData = (username) => {
+const getStreamerData = async (username) => {
     let query = "SELECT * FROM streamers WHERE name = $1";
     let values = [username];
+
     return db
         .query(query, values)
         .then((res) => {
-            if (!res.rows.length) throw new Error("Streamer not found");
-            return { streamer: res.rows, errorStreamer: null };
+            if (res.rows.length) {
+                return res.rows[0];
+            }
+            return getUser(username);
+        })
+        .then((res) => {
+            return { streamer: res, errorStreamer: null };
         })
         .catch((err) => {
-            return { streamer: null, errorStreamer: err.message };
+            console.log(err.message);
+            return { streamer: null, errorStreamer: "Already following" };
         });
+};
+
+const getUser = async (username) => {
+    let options = {
+        method: "get",
+        url: "https://api.twitch.tv/helix/users?login=" + username,
+        headers: {
+            "Client-ID": cred.clientId,
+            Authorization: cred.auth,
+        },
+    };
+
+    let response = await axios(options);
+    if (response && response.status != "200") {
+        console.log(response.status);
+        return;
+    }
+
+    let { login, id, display_name, profile_image_url, offline_image_url } = response.data.data[0];
+    let streamer = { name: login, id, display_name, logo: profile_image_url, offline_img: offline_image_url };
+    await addStreamer(streamer);
+    return streamer;
+};
+
+const addStreamer = async (streamer) => {
+    let query =
+        "INSERT INTO streamers(name, id, display_name, logo, offline_img) VALUES($1, $2, $3, $4, $5) RETURNING *";
+    let values = [streamer.name, streamer.id, streamer.display_name, streamer.logo, streamer.offline_img];
+    await db.query(query, values);
+    return;
 };
 
 export const followStreamer = async (username, streamer_name, sendData, sendError) => {
@@ -310,11 +347,29 @@ export const followStreamer = async (username, streamer_name, sendData, sendErro
     if (!user) return sendError({ err: errorUser });
 
     let { streamer, errorStreamer } = await getStreamerData(streamer_name, sendError);
+    console.log(streamer, errorStreamer);
     if (!streamer) return sendError({ err: errorStreamer });
 
+    console.log("-------===--------");
+    console.log(user);
     console.log(streamer);
+    console.log("-------===--------");
 
-    sendData({ status: "ok" });
+    let query = "INSERT INTO follows(user_id, streamer_id) VALUES($1, $2) RETURNING *";
+    let values = [user.id, streamer.id];
+    db.query(query, values)
+        .then((res) => {
+            console.log(res.rows);
+            if (!res.rows.length) {
+                return sendError({ err: "Something went wrong" });
+            }
+            sendData({ status: "ok" });
+        })
+        .catch((err) => {
+            console.log(err.code);
+            if (err && err.code == 23505) return sendError({ err: "Already following" });
+            return sendError({ err: "Something went wrong" });
+        });
 
     /*
     let query = "SELECT * FROM users WHERE username = $1";
@@ -389,3 +444,78 @@ const getFollows = async (username, streamer_name) => {
 };
 
 //getFollows();
+
+/*
+export const getChannelTest = (id) => {
+    let options = {
+        method: "get",
+        url: "https://api.twitch.tv/helix/channels?broadcaster_id=" + id,
+        headers: {
+            "Client-ID": cred.clientId,
+            Authorization: cred.auth,
+        },
+    };
+
+    axios(options).then((response) => {
+        if (response && response.status != "200") {
+            console.log(response.status);
+            return;
+        }
+        console.log("================================");
+        console.log("getChannelTest");
+        console.log(response.data);
+    });
+};
+
+export const getUsersTest = async (id) => {
+    let options = {
+        method: "get",
+        url: "https://api.twitch.tv/helix/users?login=" + id,
+        headers: {
+            "Client-ID": cred.clientId,
+            Authorization: cred.auth,
+        },
+    };
+
+    let response = await axios(options);
+    if (response && response.status != "200") {
+        console.log(response.status);
+        return;
+    }
+    //console.log("================================");
+    //console.log("getUsersTest");
+    //console.log(response.data.data[0]);
+    return response.data.data[0];
+};
+
+export const getStreamsTest = async (id) => {
+    let options = {
+        method: "get",
+        url: "https://api.twitch.tv/helix/streams?user_login=" + id,
+        headers: {
+            "Client-ID": cred.clientId,
+            Authorization: cred.auth,
+        },
+    };
+
+    let response = await axios(options);
+    if (response && response.status != "200") {
+        console.log(response.status);
+        return;
+    }
+    console.log("================================");
+    console.log("getStreamsTest");
+    console.log(response.data);
+};
+
+//getChannelTest(23161357);
+//getUsersTest("lirik");
+//getUsersTest("czelo22");
+//getUsersTest("summit1g");
+//getStreamsTest("lirik");
+//getStreamsTest("summit1g");
+
+//121059319, 163836275, 60056333, 51496027, 71092938
+//summit - 26490481
+
+*/
