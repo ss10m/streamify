@@ -205,9 +205,11 @@ export const getRecent = async (user_id, cb) => {
     }
 
     let channel = response.data.videos[0].channel;
+
     let videos = response.data.videos;
 
     var recentGames = new Set();
+    recentGames.add(channel.game.toLowerCase());
     for (let video of videos) {
         recentGames.add(video.game.toLowerCase());
     }

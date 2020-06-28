@@ -23,6 +23,7 @@ import {
     faGlobeAmericas,
     faCaretRight,
     faCaretLeft,
+    faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -37,7 +38,8 @@ library.add(
     faSignOutAlt,
     faGlobeAmericas,
     faCaretRight,
-    faCaretLeft
+    faCaretLeft,
+    faSearch
 );
 
 const store = createStore(reducers, applyMiddleware(thunk));

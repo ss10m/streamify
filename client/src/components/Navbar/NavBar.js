@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,6 +10,7 @@ import "./NavBar.scss";
 
 import ExtendedBar from "./ExtendedBar";
 import UserOptions from "./UserOptions";
+import Search from "./Search";
 
 class NavBar extends Component {
     constructor(props) {
@@ -42,12 +43,7 @@ class NavBar extends Component {
                 <div>
                     <div className="user-btn wide flex">
                         <a class="button" onClick={this.props.showLogin}>
-                            Login
-                        </a>
-                    </div>
-                    <div className="user-btn wide flex">
-                        <a class="button button-reg" onClick={this.props.showLogin}>
-                            Register
+                            Sign In
                         </a>
                     </div>
                 </div>
@@ -89,20 +85,17 @@ class NavBar extends Component {
                             </div>
                         )}
                         <div className="title flex">STREAMIFY</div>
+                        {this.state.width >= 650 && (
+                            <>
+                                <hr />
+                                <Link to="/streamers" className="streamers">
+                                    FOLLOWED
+                                </Link>
+                            </>
+                        )}
                     </div>
 
-                    {this.state.width >= 650 && (
-                        <div>
-                            <div className="search flex">
-                                <input className="inputfield" type="number" placeholder="Order #"></input>
-                                <div className="user-btn wide flex">
-                                    <a href="#" className="button button-reg" onClick={this.props.showLogin}>
-                                        Search
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                    {this.state.width >= 650 && <Search />}
                     {this.getUserBtns(user)}
                 </div>
                 {extended && (

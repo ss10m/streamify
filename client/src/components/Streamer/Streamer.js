@@ -157,7 +157,6 @@ class Streamer extends Component {
 
         if (!streamer) {
             return <Spinner />;
-        } else {
         }
 
         return (

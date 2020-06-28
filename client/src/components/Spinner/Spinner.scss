@@ -23,7 +23,8 @@ $duration: 1.8s;
             stroke-dasharray: $offset;
             stroke-dashoffset: 0;
             transform-origin: center;
-            animation: dash $duration ease-in-out infinite, colors ($duration * 4) ease-in-out infinite;
+            stroke: #1c4269;
+            animation: dash $duration ease-in-out infinite;
 
             @keyframes dash {
                 0% {
@@ -36,24 +37,6 @@ $duration: 1.8s;
                 100% {
                     stroke-dashoffset: $offset;
                     transform: rotate(450deg);
-                }
-            }
-
-            @keyframes colors {
-                0% {
-                    stroke: #4285f4;
-                }
-                25% {
-                    stroke: #de3e35;
-                }
-                50% {
-                    stroke: #f7c223;
-                }
-                75% {
-                    stroke: #1b9a59;
-                }
-                100% {
-                    stroke: #4285f4;
                 }
             }
         }

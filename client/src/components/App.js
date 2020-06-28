@@ -20,19 +20,6 @@ class App extends Component {
         this.props.getSession();
     }
 
-    register = () => {
-        // to be implemented
-    };
-
-    login = () => {
-        let userInfo = { email: "czelo22@email.com", password: "Password1!" };
-        this.props.login(userInfo);
-    };
-
-    logout = () => {
-        this.props.logout();
-    };
-
     hideNavbar = (event) => {
         event.preventDefault();
         if (this.props.expandedNavbar) this.props.toggleNavBar();
@@ -87,12 +74,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
     getSession: () => {
         dispatch(getSession());
-    },
-    logout: () => {
-        dispatch(logout());
-    },
-    login: (userInfo) => {
-        dispatch(login(userInfo));
     },
     showLogin: () => {
         dispatch(showLogin());

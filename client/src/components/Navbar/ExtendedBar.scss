@@ -18,7 +18,13 @@
         }
     }
 
-    .link:hover {
-        cursor: pointer;
+    .streamers {
+        text-decoration: none;
+        color: whitesmoke;
+        font-weight: 500;
+
+        &:hover {
+            color: red;
+        }
     }
 }

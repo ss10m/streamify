@@ -1,0 +1,41 @@
+$primary-color: #121a21;
+$secondary-color: #273747;
+
+.input-wrap {
+    flex: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 auto;
+    max-width: 500px;
+    margin-right: 10px;
+
+    .input {
+        max-height: 40px;
+        width: 100%;
+        box-sizing: border-box;
+
+        .icon {
+            height: 100%;
+            box-sizing: border-box;
+            border-radius: 7px 0 0 7px;
+            font-size: 20px;
+            color: whitesmoke;
+            background-color: #242424;
+        }
+
+        input {
+            height: 100%;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0 10px;
+            outline: none;
+            border: 1px solid #242424;
+            border-radius: 0 7px 7px 0;
+            border-left: none;
+            font-size: 16px;
+            color: whitesmoke;
+            background: transparent;
+            background-color: #3a3a3d;
+        }
+    }
+}

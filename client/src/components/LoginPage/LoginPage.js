@@ -9,7 +9,7 @@ import { loginHelper } from "../../services/user";
 
 import "./LoginPage.scss";
 
-import Input from "../Input/Input";
+import Input from "./Input";
 
 class LoginPageView extends Component {
     constructor(props) {
