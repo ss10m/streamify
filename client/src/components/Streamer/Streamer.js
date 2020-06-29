@@ -101,7 +101,11 @@ class Streamer extends Component {
         let carouselClass = "items" + directionClass;
 
         return (
-            <>
+            <div>
+                <div className="recent-games-header">
+                    <div className="recent-games-title">Recent Games</div>
+                    <button>Search Games</button>
+                </div>
                 <div className="recent-games">
                     <a role="button" onClick={() => this.handleCarousel(false)}>
                         ‹
@@ -121,7 +125,7 @@ class Streamer extends Component {
                         ›
                     </a>
                 </div>
-            </>
+            </div>
         );
     };
 

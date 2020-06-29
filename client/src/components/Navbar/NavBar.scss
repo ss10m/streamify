@@ -7,6 +7,9 @@
 .navbar {
     //background-color: #1c4269;
     background-color: #202e3a;
+    //box-shadow: 0 0 10px black;
+    box-shadow: 0px 0px 5px 3px black;
+    z-index: 1;
 
     height: 56px;
     transition: height 0.5s ease-in;
@@ -34,10 +37,16 @@
             flex-direction: row;
 
             .title {
-                height: 100%;
                 padding: 0 20px;
                 font-size: 28px;
                 font-weight: 700;
+                line-height: 56px;
+                text-decoration: none;
+                color: whitesmoke;
+
+                &:hover {
+                    color: white;
+                }
             }
 
             hr {
@@ -46,6 +55,7 @@
 
             .followed-link {
                 width: 120px;
+                margin: 0 10px;
                 line-height: 56px;
                 text-align: center;
                 text-decoration: none;
@@ -53,7 +63,7 @@
                 font-weight: 500;
 
                 &:hover {
-                    color: yellow;
+                    border-bottom: 5px solid whitesmoke;
                 }
             }
 
