@@ -149,9 +149,11 @@ class Streamer extends Component {
     };
 
     render() {
+        /*
         let {
             session: { user },
         } = this.props;
+        */
 
         let { streamer } = this.state;
 

@@ -29,7 +29,8 @@ class Streamers extends Component {
             if (response.ok) {
                 return this.setState({ streamers: data });
             }
-            console.log(data.message || "Something went wrong.");
+            console.log(data);
+            console.log(data.err || "Something went wrong.");
         } catch (err) {
             console.log("Something went wrong.");
         }

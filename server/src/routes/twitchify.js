@@ -18,7 +18,7 @@ router.get("/top", (req, res) => {
 router.get("/streamer/:username", (req, res) => {
     let session = req.session;
 
-    console.log(session.user.username);
+    console.log(session);
     let username = req.params.username;
 
     try {
