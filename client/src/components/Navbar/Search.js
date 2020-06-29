@@ -10,7 +10,7 @@ export default () => {
                 <div className="icon">
                     <FontAwesomeIcon icon="search" size="1x" />
                 </div>
-                <input type="text" spellCheck={false} />
+                <input type="text" spellCheck={false} placeholder="Search" />
             </div>
         </div>
     );

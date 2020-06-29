@@ -9,7 +9,7 @@ export default (props) => {
     return (
         <div className={"extended-bar"}>
             <div>
-                <Link to="/streamers" className="streamers" onClick={() => props.toggleNavBar()}>
+                <Link to="/streamers" className="streamers-link" onClick={() => props.toggleNavBar()}>
                     STREAMERS
                 </Link>
             </div>

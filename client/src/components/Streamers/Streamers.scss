@@ -1,20 +1,37 @@
-.streamers2 {
+.followed {
     display: flex;
     flex-direction: column;
     min-width: 400px;
 
-    .streamer2 {
+    .followed-streamer {
         height: 60px;
-
         display: flex;
+
         margin: 20px 60px;
         padding: 5px;
         justify-content: space-between;
         align-items: center;
         text-decoration: none;
-        background-color: orange;
+        background-color: #121a21;
+        color: whitesmoke;
+    }
+}
+
+.unauth {
+    margin: 20px;
+    button {
+        padding: 10px 80px;
+
+        outline: none;
+        border: none;
+
+        background-color: #121a21;
+        color: whitesmoke;
+        border-radius: 5px;
 
         &:hover {
+            cursor: pointer;
+            background-color: #30475e;
         }
     }
 }

@@ -5,8 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { login, closeLoginWindow, register, hideLoginError } from "../../store/actions.js";
 
-import { loginHelper } from "../../services/user";
-
 import "./LoginPage.scss";
 
 import Input from "./Input";

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
 
+import { showLogin } from "../../store/actions.js";
+
 import "./Streamers.scss";
 
 class Streamers extends Component {
@@ -16,8 +18,10 @@ class Streamers extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log(prevProps);
-        console.log(this.props);
+        if (this.props.session !== prevProps.session) {
+            this.getStreamersData();
+            this.setState({ streamers: [] });
+        }
     }
 
     getStreamersData = async () => {
@@ -25,12 +29,10 @@ class Streamers extends Component {
 
         try {
             let data = await response.json();
-
             if (response.ok) {
                 return this.setState({ streamers: data });
             }
-            console.log(data);
-            console.log(data.err || "Something went wrong.");
+            console.log(data.message || "Something went wrong.");
         } catch (err) {
             console.log("Something went wrong.");
         }
@@ -38,7 +40,7 @@ class Streamers extends Component {
 
     getStreamers = () => {
         return this.state.streamers.map((streamer) => (
-            <Link to={"/streamer/" + streamer["name"]} key={streamer["name"]} className="streamer2">
+            <Link to={"/streamer/" + streamer["name"]} key={streamer["name"]} className="followed-streamer ">
                 <img src={streamer["logo"]} width="60" height="60" alt="MISSING" />
                 <div>{streamer["display_name"]}</div>
                 <div>{dateDifference(new Date(streamer["followed_at"]), new Date())}</div>
@@ -51,7 +53,15 @@ class Streamers extends Component {
             session: { user },
         } = this.props;
 
-        return <div className="streamers2">{this.getStreamers()}</div>;
+        if (!user) {
+            return (
+                <div className="unauth">
+                    <p>Log In to see followed streamers.</p>
+                    <button onClick={this.props.showLogin}>Sign In</button>
+                </div>
+            );
+        }
+        return <div className="followed">{this.getStreamers()}</div>;
     }
 }
 
@@ -60,6 +70,12 @@ const mapStateToProps = (state) => {
         session: state.session,
     };
 };
+
+const mapDispatchToProps = (dispatch) => ({
+    showLogin: () => {
+        dispatch(showLogin());
+    },
+});
 
 const dateDifference = (then, now) => {
     let offset = (now - then) / 1000;
@@ -100,4 +116,4 @@ const dateDifference = (then, now) => {
     }
 };
 
-export default withRouter(connect(mapStateToProps)(Streamers));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Streamers));

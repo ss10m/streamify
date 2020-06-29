@@ -1,8 +1,15 @@
 import crypto from "crypto";
 
 export const parseError = (err) => {
-    if (err.isJoi) return err.details[0];
-    return JSON.stringify(err, Object.getOwnPropertyNames(err));
+    let message = "";
+    if (err.isJoi) {
+        message = err.details[0].message;
+    } else {
+        message = err.message;
+    }
+    if (!message) message = "Something went wrong";
+    console.log(message);
+    return JSON.stringify({ message });
 };
 
 export const sessionizeUser = (user) => {

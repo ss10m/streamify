@@ -18,13 +18,14 @@
         }
     }
 
-    .streamers {
+    .streamers-link {
         text-decoration: none;
         color: whitesmoke;
         font-weight: 500;
+        margin-left: 5px;
 
         &:hover {
-            color: red;
+            color: yellow;
         }
     }
 }

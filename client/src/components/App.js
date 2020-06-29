@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withRouter, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { getSession, login, logout, showLogin, toggleNavBar } from "../store/actions.js";
+import { getSession, showLogin, toggleNavBar } from "../store/actions.js";
 
 import Page1 from "./Page1";
 import Page2 from "./Page2";
@@ -27,7 +27,7 @@ class App extends Component {
 
     render() {
         let {
-            session: { isLoaded, user },
+            session: { isLoaded },
             loginDisplayed,
         } = this.props;
 

@@ -42,9 +42,7 @@ class NavBar extends Component {
             return (
                 <div>
                     <div className="user-btn wide flex">
-                        <a class="button" onClick={this.props.showLogin}>
-                            Sign In
-                        </a>
+                        <a onClick={this.props.showLogin}>Sign In</a>
                     </div>
                 </div>
             );
@@ -88,7 +86,7 @@ class NavBar extends Component {
                         {this.state.width >= 650 && (
                             <>
                                 <hr />
-                                <Link to="/streamers" className="streamers">
+                                <Link to="/streamers" className="followed-link">
                                     FOLLOWED
                                 </Link>
                             </>

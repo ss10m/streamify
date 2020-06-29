@@ -16,9 +16,6 @@ class Page1 extends Component {
     };
 
     render() {
-        let {
-            session: { user },
-        } = this.props;
         return (
             <div className="page1">
                 <button onClick={() => this.props.history.push("/page2")}>Page 2</button>
