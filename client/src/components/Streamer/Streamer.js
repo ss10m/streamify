@@ -172,7 +172,7 @@ class Streamer extends Component {
                         <img src={streamer["logo"]} width="200" height="200" alt="MISSING" />
                         <p>{streamer["display_name"]}</p>
                     </div>
-                    <div>
+                    <div className="follow">
                         <button onClick={this.follow}>FOLLOW</button>
                     </div>
 

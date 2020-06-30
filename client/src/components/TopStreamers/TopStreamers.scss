@@ -8,10 +8,11 @@
 
     -ms-overflow-style: none;
     scrollbar-width: none;
+    z-index: 2;
+    overflow: auto;
     &::-webkit-scrollbar {
         display: none;
     }
-    overflow: auto;
 
     .link {
         text-decoration: none;
