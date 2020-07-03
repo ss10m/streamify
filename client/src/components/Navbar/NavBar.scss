@@ -14,7 +14,6 @@
     transition: height 0.5s ease-in;
     z-index: 3;
 
-    padding: 0 10px;
     display: flex;
     flex-direction: column;
     color: whitesmoke;
@@ -29,6 +28,7 @@
         height: 56px;
         display: flex;
         flex-direction: row;
+        padding: 0 10px;
         justify-content: space-between;
 
         div {
