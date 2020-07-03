@@ -11,6 +11,17 @@ export default (props) => {
                     STREAMERS
                 </Link>
             </div>
+            <div>
+                <div
+                    className="streamers-link"
+                    onClick={() => {
+                        props.toggleNavBar();
+                        props.showSearch();
+                    }}
+                >
+                    SEARCH
+                </div>
+            </div>
         </div>
     );
 };

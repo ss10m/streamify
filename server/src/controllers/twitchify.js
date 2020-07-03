@@ -456,3 +456,30 @@ export const getStreamsTest = async (id) => {
 //summit - 26490481
 
 */
+
+export const search = async (query, sendData, sendError) => {
+    let options = {
+        method: "get",
+        url: "https://api.twitch.tv/helix/search/channels?query=" + query,
+        headers: {
+            "Client-ID": cred.clientId,
+            Authorization: cred.auth,
+        },
+        params: {
+            first: 5,
+        },
+    };
+
+    let response;
+    try {
+        response = await axios(options);
+    } catch (err) {
+        return sendError({ message: "Something went wrong" });
+    }
+
+    if (response.status != "200") {
+        return sendError({ message: "Something went wrong" });
+    }
+
+    sendData({ data: response.data.data });
+};
