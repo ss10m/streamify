@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 
 import "./ExtendedBar.scss";
 
-import Search from "./Search";
-
 export default (props) => {
     return (
         <div className={"extended-bar"}>
@@ -13,7 +11,6 @@ export default (props) => {
                     STREAMERS
                 </Link>
             </div>
-            <Search />
         </div>
     );
 };

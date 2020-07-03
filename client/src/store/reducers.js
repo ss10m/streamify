@@ -55,9 +55,24 @@ const toggleNavbarReducer = (state = false, action) => {
     }
 };
 
+const SHOW_SEARCH = "SHOW_SEARCH";
+const HIDE_SEARCH = "HIDE_SEARCH";
+
+const showSearchReducer = (state = false, action) => {
+    switch (action.type) {
+        case SHOW_SEARCH:
+            return true;
+        case HIDE_SEARCH:
+            return false;
+        default:
+            return state;
+    }
+};
+
 export default combineReducers({
     session: sessionReducer,
     loginError: loginErrorReducer,
     loginDisplayed: showLoginReducer,
     toggleNavbar: toggleNavbarReducer,
+    searchDisplayed: showSearchReducer,
 });

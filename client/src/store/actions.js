@@ -90,3 +90,11 @@ export const hideLogin = () => ({
 export const toggleNavBar = () => ({
     type: "TOGGLE_NAVBAR",
 });
+
+export const showSearch = () => ({
+    type: "SHOW_SEARCH",
+});
+
+export const hideSearch = () => ({
+    type: "HIDE_SEARCH",
+});

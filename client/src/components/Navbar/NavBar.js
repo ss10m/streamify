@@ -4,13 +4,12 @@ import { connect } from "react-redux";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { getSession, logout, showLogin, toggleNavBar } from "../../store/actions.js";
+import { getSession, logout, showLogin, toggleNavBar, showSearch } from "../../store/actions.js";
 
 import "./NavBar.scss";
 
 import ExtendedBar from "./ExtendedBar";
 import UserOptions from "./UserOptions";
-import Search from "./Search";
 
 class NavBar extends Component {
     constructor(props) {
@@ -37,6 +36,11 @@ class NavBar extends Component {
         this.setState({ userOptions });
     };
 
+    showSearch = () => {
+        console.log("show search");
+        this.props.showSearch();
+    };
+
     getUserBtns = (user) => {
         if (!user) {
             return (
@@ -58,6 +62,19 @@ class NavBar extends Component {
                     {this.state.userOptions && (
                         <UserOptions user={user} logout={this.props.logout} toggleDropDown={this.toggleDropDown} />
                     )}
+                </div>
+            </div>
+        );
+    };
+
+    getSearchField = () => {
+        return (
+            <div className="input-wrap">
+                <div className="input" onClick={this.showSearch}>
+                    <div className="icon">
+                        <FontAwesomeIcon icon="search" size="1x" />
+                    </div>
+                    <div className="input">Search</div>
                 </div>
             </div>
         );
@@ -95,7 +112,7 @@ class NavBar extends Component {
                         )}
                     </div>
 
-                    {this.state.width >= 650 && <Search />}
+                    {this.state.width >= 650 && this.getSearchField()}
                     {this.getUserBtns(user)}
                 </div>
                 {extended && (
@@ -129,6 +146,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     toggleNavBar: () => {
         dispatch(toggleNavBar());
+    },
+    showSearch: () => {
+        dispatch(showSearch());
     },
 });
 

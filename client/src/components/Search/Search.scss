@@ -1,0 +1,100 @@
+$primary-color: #121a21;
+$secondary-color: #273747;
+
+.search-wrapper {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(1, 1, 1, 0.98);
+    z-index: 4;
+
+    color: white;
+    display: flex;
+    justify-content: center;
+
+    .search {
+        width: 820px;
+        margin: 20px;
+        overflow: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+
+        display: flex;
+        flex-direction: column;
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        .header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            height: 90px;
+
+            p {
+                font-size: 40px;
+                font-weight: 800;
+
+                margin: 10px 0;
+            }
+
+            div {
+                height: 60px;
+                width: 60px;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 50%;
+
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.2);
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .input {
+            height: 80px;
+            width: 100%;
+            box-sizing: border-box;
+
+            z-index: 1;
+
+            .icon {
+                height: 100%;
+                box-sizing: border-box;
+                border-radius: 7px 0 0 7px;
+                font-size: 40px;
+                color: whitesmoke;
+                width: 100px;
+                background-color: #121a21;
+            }
+
+            input {
+                height: 100%;
+                width: 100%;
+                box-sizing: border-box;
+
+                outline: none;
+                border: 1px solid #121a21;
+                border-radius: 0 7px 7px 0;
+                border-left: none;
+                font-size: 30px;
+                color: whitesmoke;
+                background: transparent;
+                background-color: #121a21;
+            }
+        }
+
+        .results {
+            margin-top: 40px;
+            border-radius: 7px;
+            flex-grow: 1;
+            min-height: 400px;
+        }
+    }
+}

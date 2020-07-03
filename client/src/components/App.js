@@ -11,6 +11,7 @@ import NavBar from "./Navbar/NavBar";
 import TopStreamers from "./TopStreamers/TopStreamers";
 import Streamers from "./Streamers/Streamers";
 import Streamer from "./Streamer/Streamer";
+import Search from "./Search/Search";
 
 import "./App.scss";
 
@@ -29,6 +30,7 @@ class App extends Component {
         let {
             session: { isLoaded },
             loginDisplayed,
+            searchDisplayed,
         } = this.props;
 
         if (!isLoaded) {
@@ -39,6 +41,7 @@ class App extends Component {
             <div className="app">
                 <NavBar />
                 {loginDisplayed && <LoginPage />}
+                {searchDisplayed && <Search />}
 
                 <div className="mainbody" onClick={this.hideNavbar}>
                     <TopStreamers />
@@ -68,6 +71,7 @@ const mapStateToProps = (state) => {
         session: state.session,
         loginDisplayed: state.loginDisplayed,
         expandedNavbar: state.toggleNavbar,
+        searchDisplayed: state.searchDisplayed,
     };
 };
 

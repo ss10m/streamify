@@ -24,6 +24,7 @@ import {
     faCaretRight,
     faCaretLeft,
     faSearch,
+    faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -39,7 +40,8 @@ library.add(
     faGlobeAmericas,
     faCaretRight,
     faCaretLeft,
-    faSearch
+    faSearch,
+    faTimes
 );
 
 const store = createStore(reducers, applyMiddleware(thunk));
