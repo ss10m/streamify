@@ -109,11 +109,20 @@ const followStreamer = async (username, body, sendData, sendError) => {
         });
 };
 
-const followGame = async (username, { data }, sendData, sendError) => {
-    console.log(data);
-    let { user, errorUser } = await getUserData(username, sendError);
-    console.log(user);
+const followGame = async (user, { data }, sendData, sendError) => {
+    //console.log(user, data);
+    //let { user, errorUser } = await getUserData(username, sendError);
+    //console.log(user);
 
+    let follows = await isFollowingStreamer(user, data.username);
+    //console.log(follows);
+    if (!follows) return sendError({ message: "Not following " + data.username });
+
+    let followId = follows.id;
+    //console.log(followId);
+
+    let game = await getGame(data);
+    console.log(game);
     /*
     let query = "INSERT INTO games(id, name, box_art_url) VALUES($1, $2, $3) RETURNING *";
     let values = [data.id, data.name, data.box_art_url];
@@ -133,6 +142,7 @@ const followGame = async (username, { data }, sendData, sendError) => {
         });
     */
 
+    /*
     let query = "INSERT INTO followed_games(follow_id, game_id) VALUES($1, $2) RETURNING *";
     let values = [4, 509663];
     db.query(query, values)
@@ -146,4 +156,48 @@ const followGame = async (username, { data }, sendData, sendError) => {
         .catch((err) => {
             console.log(err);
         });
+    */
+};
+
+export const isFollowingStreamer = async (username, streamer) => {
+    let query = `SELECT follows.id, streamers.name as streamer, users.username
+                 FROM follows 
+                 INNER JOIN users ON users.id = follows.user_id 
+                 INNER JOIN streamers ON streamers.id = follows.streamer_id
+                 WHERE users.username = $1 AND streamers.name = $2`;
+    let values = [username, streamer];
+    let result = await db.query(query, values);
+
+    return result.rows[0];
+};
+
+const getGame = (game) => {
+    let query = `SELECT *
+                 FROM games 
+                 WHERE id = $1`;
+    let values = [game.id];
+
+    return db
+        .query(query, values)
+        .then((res) => {
+            if (res.rows.length) return res.rows[0];
+            return insertGame(game);
+        })
+        .then((res) => {
+            if (!res) throw new Error();
+            return { game: res, error: null };
+        })
+        .catch((err) => {
+            return { game: null, error: "Internal Server Error" };
+        });
+};
+
+const insertGame = async (game) => {
+    let query = `INSERT INTO games(id, name, box_art_url) 
+                 VALUES($1, $2, $3)
+                 RETURNING *`;
+    let values = [game.id, game.name, game.box_art_url];
+    let res = await db.query(query, values);
+    if (res.rows.length) return res.rows[0];
+    return null;
 };
