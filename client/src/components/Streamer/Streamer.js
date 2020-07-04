@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
+import { showSearchGames } from "../../store/actions.js";
+
 import "./Streamer.scss";
 import Spinner from "../Spinner/Spinner";
 
@@ -33,6 +35,7 @@ class Streamer extends Component {
                 return res;
             })
             .then((data) => {
+                console.log(data.data);
                 let recent_games = [];
                 recent_games = [...data.data.recent_games];
 
@@ -85,7 +88,7 @@ class Streamer extends Component {
     };
 
     getData = () => {
-        let { recent_games, direction } = this.state;
+        let { streamer, recent_games, direction } = this.state;
 
         let directionClass = "";
         if (direction === "right") {
@@ -104,7 +107,7 @@ class Streamer extends Component {
             <div>
                 <div className="recent-games-header">
                     <div className="recent-games-title">Recent Games</div>
-                    <button>Search Games</button>
+                    <button onClick={() => this.props.showSearchGames(streamer)}>Search Games</button>
                 </div>
                 <div className="recent-games">
                     <a role="button" onClick={() => this.handleCarousel(false)}>
@@ -112,10 +115,15 @@ class Streamer extends Component {
                     </a>
                     <div className="list">
                         <ul className={carouselClass}>
-                            {recent_games.map((streamer) => (
-                                <li key={streamer.name} className="item" style={{ order: streamer.order }}>
-                                    <p>{streamer.name}</p>
-                                    <img src={streamer["box_art_url"]} width="200" height="300" alt="MISSING" />
+                            {recent_games.map((game) => (
+                                <li
+                                    key={game.id}
+                                    className="item"
+                                    style={{ order: game.order }}
+                                    onClick={() => this.follow("game", this.parseGame(game))}
+                                >
+                                    <p>{game.name}</p>
+                                    <img src={game["box_art_url"]} width="200" height="300" alt="MISSING" />
                                 </li>
                             ))}
                         </ul>
@@ -129,10 +137,17 @@ class Streamer extends Component {
         );
     };
 
-    follow = () => {
+    parseGame = (game) => {
+        return { id: game.id, name: game.name, box_art_url: game.box_art_url };
+    };
+
+    follow = (type, data) => {
+        console.log(data);
+        console.log(JSON.stringify({ type, data }));
+        data.username = this.props.match.params.id;
         fetch("/api/twitchify/follow", {
             method: "POST",
-            body: JSON.stringify({ username: this.props.match.params.id }),
+            body: JSON.stringify({ type, data }),
             headers: {
                 "Content-Type": "application/json",
             },
@@ -173,7 +188,7 @@ class Streamer extends Component {
                         <p>{streamer["display_name"]}</p>
                     </div>
                     <div className="follow">
-                        <button onClick={this.follow}>FOLLOW</button>
+                        <button onClick={() => this.follow("user", {})}>FOLLOW</button>
                     </div>
 
                     {this.getData()}
@@ -189,4 +204,10 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default withRouter(connect(mapStateToProps)(Streamer));
+const mapDispatchToProps = (dispatch) => ({
+    showSearchGames: (user) => {
+        dispatch(showSearchGames(user));
+    },
+});
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Streamer));

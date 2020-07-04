@@ -95,6 +95,11 @@ export const showSearch = () => ({
     type: "SHOW_SEARCH",
 });
 
+export const showSearchGames = (user) => ({
+    type: "SHOW_SEARCH_GAMES",
+    user,
+});
+
 export const hideSearch = () => ({
     type: "HIDE_SEARCH",
 });

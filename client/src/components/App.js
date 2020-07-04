@@ -41,7 +41,7 @@ class App extends Component {
             <div className="app">
                 <NavBar />
                 {loginDisplayed && <LoginPage />}
-                {searchDisplayed && <Search />}
+                {searchDisplayed && <Search mode={searchDisplayed} />}
 
                 <div className="mainbody" onClick={this.hideNavbar}>
                     <TopStreamers />

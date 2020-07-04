@@ -2,12 +2,11 @@ import express from "express";
 const router = express.Router();
 import { parseError } from "../util/helpers.js";
 
-import { getTopStreamers, getStreamer, followStreamer, getFollows, search } from "../controllers/twitchify.js";
-import e from "express";
+import * as Twitchify from "../controllers/index.js";
 
 router.get("/top", (req, res) => {
     try {
-        getTopStreamers((data) => {
+        Twitchify.getTopStreamers((data) => {
             res.send({ data });
         });
     } catch (err) {
@@ -18,11 +17,11 @@ router.get("/top", (req, res) => {
 router.get("/streamer/:username", (req, res) => {
     let session = req.session;
 
-    console.log(session);
+    //console.log(session);
     let username = req.params.username;
 
     try {
-        getStreamer(username, (data) => {
+        Twitchify.getStreamer(username, (data) => {
             res.send({ data });
         });
     } catch (err) {
@@ -34,7 +33,7 @@ router.get("/streamers", (req, res) => {
     let session = req.session;
     if (!session.user) return res.status(401).send(parseError(new Error("You must login first.")));
 
-    getFollows(
+    Twitchify.getFollows(
         session.user.username,
         (data) => {
             res.status(200).send(data);
@@ -49,9 +48,9 @@ router.post("/follow", (req, res) => {
     let { session, body } = req;
     if (!session.user) return res.status(401).send(parseError("You must login first."));
 
-    followStreamer(
+    Twitchify.follow(
         session.user.username,
-        body.username,
+        body,
         (data) => {
             res.status(200).send(data);
         },
@@ -61,10 +60,11 @@ router.post("/follow", (req, res) => {
     );
 });
 
-router.get("/search/:query", (req, res) => {
-    let query = req.params.query;
-    search(
-        query,
+router.post("/search/", (req, res) => {
+    let { body } = req;
+
+    Twitchify.search(
+        body,
         (data) => {
             res.status(200).send(data);
         },

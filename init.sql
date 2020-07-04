@@ -37,7 +37,7 @@ CREATE TABLE "follows" (
 CREATE TABLE "games" (
 	"id" INTEGER PRIMARY KEY,
 	"name" VARCHAR(80) UNIQUE NOT NULL, 
-	"art_box_url" VARCHAR NOT NULL
+	"box_art_url" VARCHAR NOT NULL
 );
 
 CREATE TABLE "followed_games" (

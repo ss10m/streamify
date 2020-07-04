@@ -39,12 +39,27 @@ class Search extends Component {
         }, 500);
     };
 
-    getNewSuggestions = async (searchInput) => {
-        if (searchInput !== this.state.searchInput || searchInput.length === 0) {
+    getNewSuggestions = async (query) => {
+        let { type, user } = this.props.mode;
+
+        if (query !== this.state.searchInput || query.length === 0) {
             return;
         }
 
-        const response = await fetch("/api/twitchify/search/" + searchInput, {});
+        let body;
+        if (type === "user") {
+            body = JSON.stringify({ query, type });
+        } else {
+            body = JSON.stringify({ query, type, username: user.name, id: user._id });
+        }
+
+        const response = await fetch("/api/twitchify/search", {
+            method: "POST",
+            body,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
 
         try {
             let data = await response.json();
@@ -64,25 +79,51 @@ class Search extends Component {
         this.props.hideSearch();
     };
 
+    getHeader = () => {
+        let { type, user } = this.props.mode;
+
+        if (type === "user") {
+            return (
+                <div className="title">
+                    <p>SEARCH </p>
+                </div>
+            );
+        }
+        return (
+            <div className="title games">
+                <p>SEARCH GAMES FOR</p>
+                <div>
+                    <img src={user["logo"]} width="30" height="30" alt="MISSING" />
+                    <p>{user.display_name}</p>
+                </div>
+            </div>
+        );
+    };
+
     getResults = () => {
         let { searchInput, results, time, noResults } = this.state;
+        let { type, user } = this.props.mode;
 
         if (noResults) return <p style={{ marginLeft: "10px" }}>No matches found</p>;
         if (searchInput && results.length === 0) {
             return <Spinner />;
         }
 
-        return results.map((result) => (
-            <Link
-                to={"/streamer/" + result.display_name}
-                key={result.id}
-                className="result"
-                onClick={this.props.hideSearch}
-            >
-                <img src={result["thumbnail_url"]} width="80" height="80" alt="MISSING" />
-                {this.getStatus(result, time)}
-            </Link>
-        ));
+        if (type === "user") {
+            return results.map((result) => (
+                <Link
+                    to={"/streamer/" + result.display_name}
+                    key={result.id}
+                    className="result"
+                    onClick={this.props.hideSearch}
+                >
+                    <img src={result["thumbnail_url"]} width="80" height="80" alt="MISSING" />
+                    {this.getStatus(result, time)}
+                </Link>
+            ));
+        } else {
+            return <p style={{ marginLeft: "10px" }}>NO GAMES</p>;
+        }
     };
 
     getStatus = (result, time) => {
@@ -127,8 +168,8 @@ class Search extends Component {
             <div className="search-wrapper">
                 <div className="search">
                     <div className="header">
-                        <p>SEARCH </p>
-                        <div onClick={this.closeSearch}>
+                        {this.getHeader()}
+                        <div className="close-btn" onClick={this.closeSearch}>
                             <FontAwesomeIcon icon="times" size="2x" />
                         </div>
                     </div>
