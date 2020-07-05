@@ -52,6 +52,7 @@ const getRecentGames = async (user, cb) => {
         };
     }
     user.recent_games = [];
+    user.followed_games = [];
 
     if (response.data._total === 0) return cb(user);
     let channel = response.data.videos[0].channel;

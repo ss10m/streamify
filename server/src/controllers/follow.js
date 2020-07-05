@@ -1,5 +1,6 @@
 import * as cred from "../config/credentials.js";
 import axios from "axios";
+import { CustomError, handleError } from "../util/helpers.js";
 import db from "../config/db.js";
 
 export const getFollows = async (username, sendData, sendError) => {
@@ -82,9 +83,11 @@ const addStreamer = async (streamer) => {
     await db.query(query, values);
 };
 
-export const follow = (username, body, sendData, sendError) => {
-    if (body.type === "user") return followStreamer(username, body, sendData, sendError);
-    if (body.type === "game") return followGame(username, body, sendData, sendError);
+export const follow = (session, body, cb) => {
+    if (!session.user) return cb({ message: "You must be logged in", code: 2 }, 401);
+    let username = session.user.username;
+    if (body.type === "user") return followStreamer(username, body, cb);
+    if (body.type === "game") return followGame(username, body, cb);
 };
 
 const followStreamer = async (username, body, sendData, sendError) => {
@@ -109,57 +112,29 @@ const followStreamer = async (username, body, sendData, sendError) => {
         });
 };
 
-const followGame = async (user, { data }, sendData, sendError) => {
-    //console.log(user, data);
-    //let { user, errorUser } = await getUserData(username, sendError);
-    //console.log(user);
+const followGame = async (user, { data }, cb) => {
+    try {
+        let followsStreamer = await isFollowingStreamer(user, data.username);
+        if (!followsStreamer) throw new CustomError(`Not following ${data.username}`, 401, 3);
 
-    let follows = await isFollowingStreamer(user, data.username);
-    //console.log(follows);
-    if (!follows) return sendError({ message: "Not following " + data.username });
+        let game = await getGame(data);
+        if (!game) throw new Error();
 
-    let followId = follows.id;
-    //console.log(followId);
+        let followsGame = await isFollowingGame(followsStreamer.id, game.id);
+        if (followsGame) throw new CustomError(`Already following ${game.name}`, 401, 4);
 
-    let game = await getGame(data);
-    console.log(game);
-    /*
-    let query = "INSERT INTO games(id, name, box_art_url) VALUES($1, $2, $3) RETURNING *";
-    let values = [data.id, data.name, data.box_art_url];
+        let followedGame = await startFollowingGame(followsStreamer.id, game.id);
+        if (!followedGame) throw new Error();
+        let followedGames = await getFollowedGames(followsStreamer.id);
 
-    
-    db.query(query, values)
-        .then((res) => {
-            if (!res.rows.length) {
-                return sendError({ err: "Something went wrong" });
-            }
-            console.log("SUCCESS");
-            console.log(res.rows[0]);
-        })
-        .catch((err) => {
-            if (err && err.code == 23505) return sendError({ err: "Already following" });
-            return sendError({ err: "Something went wrong" });
-        });
-    */
-
-    /*
-    let query = "INSERT INTO followed_games(follow_id, game_id) VALUES($1, $2) RETURNING *";
-    let values = [4, 509663];
-    db.query(query, values)
-        .then((res) => {
-            if (!res.rows.length) {
-                return sendError({ err: "Something went wrong" });
-            }
-            console.log("SUCCESS");
-            console.log(res.rows[0]);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-    */
+        cb(followedGames);
+    } catch (err) {
+        console.log(err);
+        handleError(err, cb);
+    }
 };
 
-export const isFollowingStreamer = async (username, streamer) => {
+const isFollowingStreamer = async (username, streamer) => {
     let query = `SELECT follows.id, streamers.name as streamer, users.username
                  FROM follows 
                  INNER JOIN users ON users.id = follows.user_id 
@@ -167,29 +142,19 @@ export const isFollowingStreamer = async (username, streamer) => {
                  WHERE users.username = $1 AND streamers.name = $2`;
     let values = [username, streamer];
     let result = await db.query(query, values);
-
+    if (!result.rows.length) return null;
     return result.rows[0];
 };
 
-const getGame = (game) => {
+const getGame = async (game) => {
     let query = `SELECT *
                  FROM games 
                  WHERE id = $1`;
     let values = [game.id];
 
-    return db
-        .query(query, values)
-        .then((res) => {
-            if (res.rows.length) return res.rows[0];
-            return insertGame(game);
-        })
-        .then((res) => {
-            if (!res) throw new Error();
-            return { game: res, error: null };
-        })
-        .catch((err) => {
-            return { game: null, error: "Internal Server Error" };
-        });
+    let result = await db.query(query, values);
+    if (!result.rows.length) return insertGame(game);
+    return result.rows[0];
 };
 
 const insertGame = async (game) => {
@@ -198,6 +163,35 @@ const insertGame = async (game) => {
                  RETURNING *`;
     let values = [game.id, game.name, game.box_art_url];
     let res = await db.query(query, values);
-    if (res.rows.length) return res.rows[0];
-    return null;
+    if (!res.rows.length) return null;
+    return res.rows[0];
+};
+
+const isFollowingGame = async (followId, gameId) => {
+    let query = `SELECT *
+                 FROM followed_games 
+                 WHERE followed_games.follow_id = $1 AND followed_games.game_id = $2`;
+    let values = [followId, gameId];
+    let result = await db.query(query, values);
+    if (!result.rows.length) return null;
+    return result.rows[0];
+};
+
+const startFollowingGame = async (followId, gameId) => {
+    let query = "INSERT INTO followed_games(follow_id, game_id) VALUES($1, $2) RETURNING *";
+    let values = [followId, gameId];
+    let result = await db.query(query, values);
+    if (!result.rows.length) return null;
+    return result.rows[0];
+};
+
+const getFollowedGames = async (followId) => {
+    let query = `SELECT id, name, box_art_url
+                 FROM followed_games 
+                 INNER JOIN games ON games.id = followed_games.game_id
+                 WHERE followed_games.follow_id = $1`;
+    let values = [followId];
+    let result = await db.query(query, values);
+    if (!result.rows.length) return [];
+    return result.rows;
 };

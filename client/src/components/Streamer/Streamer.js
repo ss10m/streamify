@@ -141,30 +141,34 @@ class Streamer extends Component {
         return { id: game.id, name: game.name, box_art_url: game.box_art_url };
     };
 
-    follow = (type, data) => {
-        console.log(data);
-        console.log(JSON.stringify({ type, data }));
+    follow = async (type, data) => {
         data.username = this.props.match.params.id;
-        fetch("/api/twitchify/follow", {
+
+        const response = await fetch("/api/twitchify/follow", {
             method: "POST",
             body: JSON.stringify({ type, data }),
             headers: {
                 "Content-Type": "application/json",
             },
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                if (res.error) {
-                    throw res;
-                }
-                return res;
-            })
-            .then((data) => {
-                console.log(data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        });
+        try {
+            let data = await response.json();
+            if (!response.ok) throw data;
+
+            console.log(data);
+            //return this.setState({ streamers: data });
+        } catch (err) {
+            switch (err.code) {
+                case 2:
+                    console.log("open login");
+                    break;
+                case 3:
+                    console.log("open follow streamer");
+                    break;
+                default:
+                    console.log(err.message);
+            }
+        }
     };
 
     render() {

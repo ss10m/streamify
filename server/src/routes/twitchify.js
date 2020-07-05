@@ -44,20 +44,10 @@ router.get("/streamers", (req, res) => {
     );
 });
 
-router.post("/follow", (req, res) => {
-    let { session, body } = req;
-    if (!session.user) return res.status(401).send(parseError("You must login first."));
-
-    Twitchify.follow(
-        session.user.username,
-        body,
-        (data) => {
-            res.status(200).send(data);
-        },
-        (err) => {
-            res.status(401).send(err);
-        }
-    );
+router.post("/follow", ({ session, body }, res) => {
+    Twitchify.follow(session, body, (data, status = 200) => {
+        res.status(status).send(data);
+    });
 });
 
 router.post("/search/", (req, res) => {
