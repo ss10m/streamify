@@ -94,11 +94,23 @@ class Streamer extends Component {
 
         let games = [];
         for (let game of followed_games) {
-            games.push(<p>{game.name}</p>);
+            games.push(
+                <div className="tag" key={game.id}>
+                    <p className="name">{game.name}</p>
+                    <p className="remove" onClick={() => console.log("unfollow " + game.name)}>
+                        &#x2715;
+                    </p>
+                </div>
+            );
         }
 
-        if (!games.length) return <p>No followed games</p>;
-        return games;
+        if (!games.length) return <p>Not following any games</p>;
+        return (
+            <div className="followed-games">
+                <p className="header">FOLLOWED GAMES</p>
+                {games}
+            </div>
+        );
     };
 
     getData = () => {
@@ -213,7 +225,7 @@ class Streamer extends Component {
                     </div>
                     <div className="follow">{button}</div>
 
-                    <div style={{ marginLeft: "20px" }}>{this.getFollowedGames()}</div>
+                    <div>{this.getFollowedGames()}</div>
 
                     {this.getData()}
                 </div>

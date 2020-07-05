@@ -223,3 +223,39 @@
         }
     }
 }
+
+.followed-games {
+    margin-bottom: 20px;
+    margin-left: 20px;
+
+    .header {
+        font-weight: 600;
+        color: #122941;
+    }
+
+    .tag {
+        padding: 10px;
+
+        .name {
+            display: inline;
+            background-color: white;
+            padding: 2px 10px;
+            border-radius: 5px 0px 0px 5px;
+            box-shadow: 0px 0px 5px 0px black;
+        }
+
+        .remove {
+            display: inline;
+            padding: 2px 5px;
+            border-radius: 0px 5px 5px 0px;
+            background-color: #122941;
+            color: white;
+            box-shadow: 0px 0px 5px 0px black;
+
+            &:hover {
+                background-color: #1c4269;
+                cursor: pointer;
+            }
+        }
+    }
+}
