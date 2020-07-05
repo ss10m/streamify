@@ -35,15 +35,15 @@ class Streamer extends Component {
                 return res;
             })
             .then((data) => {
-                console.log(data.data);
+                console.log(data);
                 let recent_games = [];
-                recent_games = [...data.data.recent_games];
+                recent_games = [...data.recent_games];
 
                 if (recent_games.length < 8) {
                     for (let i = recent_games.length; i < 8; i++) {
                         recent_games.push({
                             box_art_url: "https://static-cdn.jtvnw.net/ttv-static/404_boxart-200x300.jpg",
-                            id: "0",
+                            id: i,
                             name: "Suggested " + i,
                         });
                     }
@@ -56,7 +56,7 @@ class Streamer extends Component {
                 recent_games[recent_games.length - 1].order = 1;
                 recent_games[recent_games.length - 1].next = recent_games[0];
 
-                this.setState({ streamer: data.data, direction: null, recent_games, seat: recent_games.length - 1 });
+                this.setState({ streamer: data, direction: null, recent_games, seat: recent_games.length - 1 });
             })
             .catch((err) => {
                 console.log(err);
@@ -85,6 +85,20 @@ class Streamer extends Component {
         }
 
         this.setState({ seat: newSeat, direction: newDirection });
+    };
+
+    getFollowedGames = () => {
+        let {
+            streamer: { followed_games },
+        } = this.state;
+
+        let games = [];
+        for (let game of followed_games) {
+            games.push(<p>{game.name}</p>);
+        }
+
+        if (!games.length) return <p>No followed games</p>;
+        return games;
     };
 
     getData = () => {
@@ -155,8 +169,11 @@ class Streamer extends Component {
             let data = await response.json();
             if (!response.ok) throw data;
 
-            console.log(data);
-            //return this.setState({ streamers: data });
+            this.setState((prevState) => {
+                let streamer = prevState.streamer;
+                streamer.followed_games = [...data];
+                return { streamer };
+            });
         } catch (err) {
             switch (err.code) {
                 case 2:
@@ -184,6 +201,9 @@ class Streamer extends Component {
             return <Spinner />;
         }
 
+        let button = <button onClick={() => this.follow("user", {})}>FOLLOW</button>;
+        if (streamer.following) button = <button onClick={() => console.log("UNFOLLOW")}>UNFOLLOW</button>;
+
         return (
             <>
                 <div className="streamer">
@@ -191,9 +211,9 @@ class Streamer extends Component {
                         <img src={streamer["logo"]} width="200" height="200" alt="MISSING" />
                         <p>{streamer["display_name"]}</p>
                     </div>
-                    <div className="follow">
-                        <button onClick={() => this.follow("user", {})}>FOLLOW</button>
-                    </div>
+                    <div className="follow">{button}</div>
+
+                    <div style={{ marginLeft: "20px" }}>{this.getFollowedGames()}</div>
 
                     {this.getData()}
                 </div>

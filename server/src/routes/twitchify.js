@@ -14,19 +14,10 @@ router.get("/top", (req, res) => {
     }
 });
 
-router.get("/streamer/:username", (req, res) => {
-    let session = req.session;
-
-    //console.log(session);
-    let username = req.params.username;
-
-    try {
-        Twitchify.getStreamer(username, (data) => {
-            res.send({ data });
-        });
-    } catch (err) {
-        res.status(401).send(parseError(err));
-    }
+router.get("/streamer/:username", ({ session, params }, res) => {
+    Twitchify.getStreamer(session, params.username, (data, status = 200) => {
+        res.status(status).send(data);
+    });
 });
 
 router.get("/streamers", (req, res) => {
