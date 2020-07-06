@@ -42,24 +42,9 @@ export const getTopStreamers = (cb) => {
             data.name = channel.login;
             data.display_name = channel.display_name;
             data.logo = channel.profile_image_url;
-
-            if (data.display_name.length > 14) data.display_name = data.display_name.substring(0, 14) + "..";
-
-            let gameName = "";
-            if (game) {
-                gameName = game.name;
-                if (gameName.length > 28) {
-                    gameName = gameName.substring(0, 28) + "..";
-                } else if (gameName == "") {
-                    gameName = "Nothing";
-                }
-            } else {
-                gameName = "Nothing";
-            }
-            data.game = gameName;
+            data.game = game ? game.name : "Nothing";
 
             let viewers = streamer.viewer_count;
-
             if (streamer.viewer_count >= 1000) {
                 viewers = roundedToFixed(viewers / 1000, 1);
                 if (viewers % 1 == 0) viewers = parseInt(viewers);

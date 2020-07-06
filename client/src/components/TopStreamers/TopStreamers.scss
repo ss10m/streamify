@@ -41,12 +41,19 @@
             flex: 1;
 
             .stream {
-                height: 65%;
+                height: 68%;
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
                 align-items: center;
                 font-weight: 500;
+
+                .name {
+                    width: 140px;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
 
                 .viewer-count {
                     font-weight: 400;
@@ -66,11 +73,16 @@
             }
 
             .game {
-                height: 35%;
-                font-size: 14px;
-                color: grey;
+                height: 20px;
+                width: 185px;
                 position: relative;
                 bottom: 10px;
+
+                font-size: 14px;
+                color: grey;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
             }
         }
 

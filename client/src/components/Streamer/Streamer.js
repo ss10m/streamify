@@ -97,7 +97,7 @@ class Streamer extends Component {
             games.push(
                 <div className="tag" key={game.id}>
                     <p className="name">{game.name}</p>
-                    <p className="remove" onClick={() => console.log("unfollow " + game.name)}>
+                    <p className="remove" onClick={() => this.changeFollow("unfollow", "game", this.parseGame(game))}>
                         &#x2715;
                     </p>
                 </div>
@@ -146,9 +146,9 @@ class Streamer extends Component {
                                     key={game.id}
                                     className="item"
                                     style={{ order: game.order }}
-                                    onClick={() => this.follow("game", this.parseGame(game))}
+                                    onClick={() => this.changeFollow("follow", "game", this.parseGame(game))}
                                 >
-                                    <p>{game.name}</p>
+                                    <div>{game.name}</div>
                                     <img src={game["box_art_url"]} width="200" height="300" alt="MISSING" />
                                 </li>
                             ))}
@@ -167,7 +167,10 @@ class Streamer extends Component {
         return { id: game.id, name: game.name, box_art_url: game.box_art_url };
     };
 
-    follow = async (type, data) => {
+    changeFollow = async (type, mode, data) => {
+        console.log(type, mode, data);
+
+        return;
         data.username = this.props.match.params.id;
 
         const response = await fetch("/api/twitchify/follow", {
@@ -181,11 +184,20 @@ class Streamer extends Component {
             let data = await response.json();
             if (!response.ok) throw data;
 
-            this.setState((prevState) => {
-                let streamer = prevState.streamer;
-                streamer.followed_games = [...data];
-                return { streamer };
-            });
+            switch (type) {
+                case "game":
+                    return this.setState((prevState) => {
+                        let streamer = prevState.streamer;
+                        streamer.followed_games = [...data];
+                        return { streamer };
+                    });
+                case "user":
+                    return this.setState((prevState) => {
+                        let streamer = prevState.streamer;
+                        streamer.following = true;
+                        return { streamer };
+                    });
+            }
         } catch (err) {
             switch (err.code) {
                 case 2:
@@ -213,8 +225,9 @@ class Streamer extends Component {
             return <Spinner />;
         }
 
-        let button = <button onClick={() => this.follow("user", {})}>FOLLOW</button>;
-        if (streamer.following) button = <button onClick={() => console.log("UNFOLLOW")}>UNFOLLOW</button>;
+        let button = <button onClick={() => this.changeFollow("follow", "user", {})}>FOLLOW</button>;
+        if (streamer.following)
+            button = <button onClick={() => this.changeFollow("unfollow", "user", {})}>UNFOLLOW</button>;
 
         return (
             <>

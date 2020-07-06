@@ -89,7 +89,7 @@ const topStreamers = (streamers) => {
                 </div>
                 <div className="info">
                     <div className="stream">
-                        <div>{streamer["display_name"]}</div>
+                        <div className="name">{streamer["display_name"]}</div>
                         <div className="viewer-count">
                             <div className="indicator"></div>
                             <div>{streamer["viewer_count"]}</div>

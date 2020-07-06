@@ -14,7 +14,6 @@ export const getStreamer = async (session, streamerName, cb) => {
         let streamer = parseData(user, stream, recentGames);
 
         let { isFollowing, followedGames } = await isFollowingStreamer(username, user.login);
-        console.log(isFollowing, followedGames);
 
         streamer.following = isFollowing;
         streamer.followed_games = followedGames;
@@ -82,10 +81,12 @@ const getRecentGames = async (streamerId) => {
 
     let videos = response.data.videos;
 
-    var recentGames = new Set();
-    recentGames.add(channel.game.toLowerCase());
+    let recentGames = new Set();
+    let currentGame = channel.game.toLowerCase();
+    if (currentGame && !currentGame.includes("&")) recentGames.add(currentGame);
     for (let video of videos) {
-        recentGames.add(video.game.toLowerCase());
+        let game = video.game.toLowerCase();
+        if (!game.includes("&")) recentGames.add(game);
     }
 
     let recentGamesArray = Array.from(recentGames);
@@ -126,7 +127,8 @@ const getRecentGamesBoxArt = async (recentGames) => {
     for (let game of response.data.data) {
         game.box_art_url = game.box_art_url.replace(/{width}/g, "200");
         game.box_art_url = game.box_art_url.replace(/{height}/g, "300");
-        if (game.name.length > 25) game.name = game.name.substring(0, 23) + "..";
+        //if (game.name.length > 25) game.name = game.name.substring(0, 23) + "..";
+        //game.name = "asdgoijsadog asopdigjsapdogijsad sapdogijasdpogij";
     }
 
     return response.data.data;
