@@ -20,19 +20,10 @@ router.get("/streamer/:username", ({ session, params }, res) => {
     });
 });
 
-router.get("/streamers", (req, res) => {
-    let session = req.session;
-    if (!session.user) return res.status(401).send(parseError(new Error("You must login first.")));
-
-    Twitchify.getFollows(
-        session.user.username,
-        (data) => {
-            res.status(200).send(data);
-        },
-        (err) => {
-            res.status(401).send(err);
-        }
-    );
+router.get("/streamers", ({ session }, res) => {
+    Twitchify.getFollows(session, (data, status = 200) => {
+        res.status(status).send(data);
+    });
 });
 
 router.post("/follow", ({ session, body }, res) => {

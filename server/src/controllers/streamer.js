@@ -169,7 +169,8 @@ const isFollowingStreamer = async (username, streamer) => {
                  INNER JOIN streamers ON streamers.id = follows.streamer_id
                  LEFT JOIN followed_games ON followed_games.follow_id = follows.id 
                  LEFT JOIN games on games.id = followed_games.game_id
-                 WHERE users.username = $1 AND streamers.name = $2`;
+                 WHERE users.username = $1 AND streamers.name = $2
+                 ORDER BY followed_games.followed_at`;
     let values = [username, streamer];
     let result = await db.query(query, values);
 

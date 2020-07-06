@@ -1,17 +1,17 @@
 import crypto from "crypto";
 
 export class CustomError extends Error {
-    constructor(message, responseCode = 200, errorCode = 0) {
+    constructor(message, responseCode = 200, action = "") {
         super(message);
         this.name = "CustomError";
         this.responseCode = responseCode;
-        this.errorCode = errorCode;
+        this.action = action;
     }
 }
 
 export const handleError = (err, cb) => {
     if (err instanceof CustomError) {
-        return cb({ message: err.message, code: err.errorCode }, err.responseCode);
+        return cb({ message: err.message, code: err.action }, err.responseCode);
     }
     cb({ message: "Internal Server Error" }, 500);
 };
