@@ -26,9 +26,21 @@ class Streamer extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.match.params.id !== this.props.match.params.id) {
-            console.log("ids dont match");
             this.setState({ streamer: null, direction: null, seat: 0, recent_games: [] });
             this.getStreamersData();
+        }
+        if (this.props.session !== prevProps.session) {
+            let {
+                session: { user },
+            } = this.props;
+            if (user) {
+                this.getStreamersData();
+            } else {
+                let streamer = this.state.streamer;
+                streamer.following = false;
+                streamer.followed_games = [];
+                this.setState(streamer);
+            }
         }
     }
 

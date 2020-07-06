@@ -32,18 +32,10 @@ router.post("/follow", ({ session, body }, res) => {
     });
 });
 
-router.post("/search/", (req, res) => {
-    let { body } = req;
-
-    Twitchify.search(
-        body,
-        (data) => {
-            res.status(200).send(data);
-        },
-        (err) => {
-            res.status(401).send(err);
-        }
-    );
+router.post("/search/", ({ session, body }, res) => {
+    Twitchify.search(session, body, (data, status = 200) => {
+        res.status(status).send(data);
+    });
 });
 
 export default router;

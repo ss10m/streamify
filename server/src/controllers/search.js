@@ -1,9 +1,9 @@
 import * as cred from "../config/credentials.js";
 import axios from "axios";
 
-export const search = (data, sendData, sendError) => {
-    if (data.type === "game") return searchGames(data, sendData, sendError);
+export const search = (session, data, sendData, sendError) => {
     if (data.type === "user") return searchUsers(data, sendData, sendError);
+    if (data.type === "game") return searchGames(data, sendData, sendError);
 };
 
 const searchUsers = async (data, sendData, sendError) => {
