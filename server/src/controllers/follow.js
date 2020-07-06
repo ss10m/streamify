@@ -9,6 +9,7 @@ const UNFOLLOW_STREAMER = "UNFOLLOW_STREAMER";
 const FOLLOW_GAME = "FOLLOW_GAME";
 const UNFOLLOW_GAME = "UNFOLLOW_GAME";
 const LOGIN = "LOGIN";
+const NONE = "NONE";
 
 export const getFollows = async (session, cb) => {
     if (!session.user) return cb({ message: "You must be logged in" }, 401);
@@ -54,7 +55,7 @@ const followStreamer = async (username, { data }, cb) => {
         let streamerName = data.username;
 
         let isFollowing = await isFollowingStreamer(username, streamerName);
-        if (isFollowing) throw new CustomError(`Already following ${streamerName}`, 401);
+        if (isFollowing) return cb({ status: "ok" });
 
         let streamer = await getStreamerData(streamerName);
         if (!streamer) throw new Error();
@@ -100,7 +101,7 @@ const followGame = async (user, { data }, cb) => {
         if (!game) throw new Error();
 
         let followsGame = await isFollowingGame(followsStreamer.id, game.id);
-        if (followsGame) throw new CustomError(`Already following ${game.name}`, 401);
+        if (followsGame) throw new CustomError(`Already following ${game.name}`, 401, NONE);
 
         let followedGame = await startFollowingGame(followsStreamer.id, game.id);
         if (!followedGame) throw new Error();

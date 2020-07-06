@@ -1,0 +1,60 @@
+.prompt {
+    width: 350px;
+
+    background-color: #202e3a;
+    color: whitesmoke;
+    flex-direction: column;
+    border-radius: 7px;
+    box-shadow: 0px 0px 5px 1px black;
+
+    p {
+        text-align: center;
+    }
+
+    .box {
+        height: 50px;
+        display: flex;
+        justify-content: center;
+
+        img {
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        p {
+            margin-left: 10px;
+            font-size: 25px;
+            margin: 0;
+            line-height: 50px;
+            font-weight: 600;
+        }
+    }
+
+    .btns {
+        margin-top: 20px;
+        button {
+            width: 50%;
+            height: 50px;
+
+            color: whitesmoke;
+            font-weight: 600;
+            outline: none;
+            border: 1px solid black;
+            background-color: #121a21;
+
+            &:hover {
+                cursor: pointer;
+                background-color: #30475e;
+            }
+
+            &:first-of-type {
+                border-bottom-left-radius: 7px;
+                border-right: none;
+            }
+
+            &:nth-of-type(2) {
+                border-bottom-right-radius: 7px;
+            }
+        }
+    }
+}

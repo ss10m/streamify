@@ -6,6 +6,7 @@ import { showSearchGames, showLogin } from "../../store/actions.js";
 
 import "./Streamer.scss";
 import Spinner from "../Spinner/Spinner";
+import FollowModal from "./FollowModal";
 
 const FOLLOW_STREAMER = "FOLLOW_STREAMER";
 const UNFOLLOW_STREAMER = "UNFOLLOW_STREAMER";
@@ -16,7 +17,7 @@ const LOGIN = "LOGIN";
 class Streamer extends Component {
     constructor(props) {
         super(props);
-        this.state = { streamer: null, direction: null, seat: 0, recent_games: [] };
+        this.state = { streamer: null, direction: null, seat: 0, recent_games: [], showFollowPrompt: false };
     }
 
     componentDidMount() {
@@ -185,7 +186,6 @@ class Streamer extends Component {
         try {
             let data = await response.json();
             if (!response.ok) throw data;
-            console.log(data);
 
             let streamer = this.state.streamer;
             switch (action) {
@@ -212,10 +212,20 @@ class Streamer extends Component {
                 case LOGIN:
                     return this.props.showLogin();
                 case FOLLOW_STREAMER:
-                    console.log("open follow streamer");
-                    break;
+                    return this.toggleFollowPrompt();
             }
         }
+    };
+
+    toggleFollowPrompt = () => {
+        this.setState((prevState) => ({
+            showFollowPrompt: !prevState.showFollowPrompt,
+        }));
+    };
+
+    handleFollow = () => {
+        this.handleFollowChange(FOLLOW_STREAMER);
+        this.setState({ showFollowPrompt: false });
     };
 
     render() {
@@ -225,7 +235,7 @@ class Streamer extends Component {
         } = this.props;
         */
 
-        let { streamer } = this.state;
+        let { streamer, showFollowPrompt } = this.state;
 
         if (!streamer) {
             return <Spinner />;
@@ -237,6 +247,11 @@ class Streamer extends Component {
 
         return (
             <>
+                {showFollowPrompt && (
+                    <div className="follow-prompt">
+                        <FollowModal streamer={streamer} follow={this.handleFollow} close={this.toggleFollowPrompt} />
+                    </div>
+                )}
                 <div className="streamer">
                     <div className="tops">
                         <img src={streamer["logo"]} width="200" height="200" alt="MISSING" />

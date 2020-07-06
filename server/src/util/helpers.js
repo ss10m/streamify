@@ -11,7 +11,7 @@ export class CustomError extends Error {
 
 export const handleError = (err, cb) => {
     if (err instanceof CustomError) {
-        return cb({ message: err.message, code: err.action }, err.responseCode);
+        return cb({ message: err.message, action: err.action }, err.responseCode);
     }
     cb({ message: "Internal Server Error" }, 500);
 };
