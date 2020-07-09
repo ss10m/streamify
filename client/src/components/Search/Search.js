@@ -54,7 +54,7 @@ class Search extends Component {
         let body;
         if (type === SEARCH_USERS) {
             body = JSON.stringify({ query, type });
-        } else if ((type = SEARCH_GAMES)) {
+        } else if (type === SEARCH_GAMES) {
             body = JSON.stringify({ query, type, username: user.name, id: user._id });
         }
 
@@ -68,8 +68,11 @@ class Search extends Component {
 
         try {
             let data = await response.json();
+
             if (response.ok) {
+                if (!Array.isArray(data)) data = [];
                 console.log(data);
+                console.log(data.length);
                 if (data.length === 0) {
                     return this.setState({ noResults: true });
                 }
@@ -111,6 +114,8 @@ class Search extends Component {
 
     getResults = () => {
         let { searchInput, results, time, noResults } = this.state;
+        //console.log(results);
+        //console.log(noResults);
         let { type } = this.props.mode;
 
         if (noResults) return <p style={{ marginLeft: "10px" }}>No matches found</p>;
