@@ -152,7 +152,9 @@ class Streamer extends Component {
             <div>
                 <div className="recent-games-header">
                     <div className="recent-games-title">Recent Games</div>
-                    <button onClick={() => this.props.showSearchGames(streamer)}>Search Games</button>
+                    <button onClick={() => this.props.showSearchGames(streamer, this.handleFollowChange)}>
+                        Search Games
+                    </button>
                 </div>
                 <div className="recent-games">
                     <a role="button" onClick={() => this.handleCarousel(false)}>
@@ -187,6 +189,7 @@ class Streamer extends Component {
     };
 
     handleFollowChange = async (action, data = {}) => {
+        console.log(action, data);
         data.username = this.props.match.params.id;
         const response = await fetch("/api/twitchify/follow", {
             method: "POST",
@@ -287,8 +290,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    showSearchGames: (user) => {
-        dispatch(showSearchGames(user));
+    showSearchGames: (user, handleFollowChange) => {
+        dispatch(showSearchGames(user, handleFollowChange));
     },
     showLogin: () => {
         dispatch(showLogin());

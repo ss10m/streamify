@@ -95,9 +95,10 @@ export const showSearch = () => ({
     type: "SHOW_SEARCH",
 });
 
-export const showSearchGames = (user) => ({
+export const showSearchGames = (user, handleFollowChange) => ({
     type: "SHOW_SEARCH_GAMES",
     user,
+    handleFollowChange,
 });
 
 export const hideSearch = () => ({

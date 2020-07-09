@@ -9,6 +9,11 @@ import Spinner from "../Spinner/Spinner";
 
 import "./Search.scss";
 
+const SEARCH_USERS = "USERS";
+const SEARCH_GAMES = "GAMES";
+const FOLLOW_GAME = "FOLLOW_GAME";
+const UNFOLLOW_GAME = "UNFOLLOW_GAME";
+
 class Search extends Component {
     constructor(props) {
         super(props);
@@ -47,9 +52,9 @@ class Search extends Component {
         }
 
         let body;
-        if (type === "user") {
+        if (type === SEARCH_USERS) {
             body = JSON.stringify({ query, type });
-        } else {
+        } else if ((type = SEARCH_GAMES)) {
             body = JSON.stringify({ query, type, username: user.name, id: user._id });
         }
 
@@ -64,13 +69,16 @@ class Search extends Component {
         try {
             let data = await response.json();
             if (response.ok) {
-                if (data.data.length === 0) {
+                console.log(data);
+                if (data.length === 0) {
                     return this.setState({ noResults: true });
                 }
-                return this.setState({ results: data.data, noResults: false });
+                return this.setState({ results: data, noResults: false });
             }
             console.log(data.message || "Something went wrong.");
+            this.setState({ noResults: true });
         } catch (err) {
+            console.log(err);
             console.log("Something went wrong.");
         }
     };
@@ -82,34 +90,35 @@ class Search extends Component {
     getHeader = () => {
         let { type, user } = this.props.mode;
 
-        if (type === "user") {
+        if (type === SEARCH_USERS) {
             return (
                 <div className="title">
                     <p>SEARCH </p>
                 </div>
             );
-        }
-        return (
-            <div className="title games">
-                <p>SEARCH GAMES FOR</p>
-                <div>
-                    <img src={user["logo"]} width="30" height="30" alt="MISSING" />
-                    <p>{user.display_name}</p>
+        } else if (type === SEARCH_GAMES) {
+            return (
+                <div className="title games">
+                    <p>SEARCH GAMES FOR</p>
+                    <div>
+                        <img src={user["logo"]} width="30" height="30" alt="MISSING" />
+                        <p>{user.display_name}</p>
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        }
     };
 
     getResults = () => {
         let { searchInput, results, time, noResults } = this.state;
-        let { type, user } = this.props.mode;
+        let { type } = this.props.mode;
 
         if (noResults) return <p style={{ marginLeft: "10px" }}>No matches found</p>;
         if (searchInput && results.length === 0) {
             return <Spinner />;
         }
 
-        if (type === "user") {
+        if (type === SEARCH_USERS) {
             return results.map((result) => (
                 <Link
                     to={"/streamer/" + result.display_name}
@@ -117,37 +126,52 @@ class Search extends Component {
                     className="result"
                     onClick={this.props.hideSearch}
                 >
-                    <img src={result["thumbnail_url"]} width="80" height="80" alt="MISSING" />
-                    {this.getStatus(result, time)}
+                    <img src={result["thumbnail_url"]} width="100" height="100" alt="MISSING" />
+
+                    {this.userInfo(result, time)}
                 </Link>
             ));
-        } else {
-            return <p style={{ marginLeft: "10px" }}>NO GAMES</p>;
+        } else if (type === SEARCH_GAMES) {
+            return results.map((result) => (
+                <div className="result">
+                    <img src={result["box_art_url"]} width="67" height="100" alt="MISSING" />
+
+                    {this.gameInfo(result)}
+                </div>
+            ));
         }
     };
 
-    getStatus = (result, time) => {
-        if (window.innerWidth > 500) {
-            return (
-                <>
-                    <p>{result.display_name.toUpperCase()}</p>
+    gameInfo = (result) => {
+        let { handleFollowChange } = this.props.mode;
+        let btnClass = result.following ? "unfollow" : "";
+        let button = (
+            <button
+                className={btnClass}
+                onClick={() => handleFollowChange(result.following ? UNFOLLOW_GAME : FOLLOW_GAME, result)}
+            >
+                {result.following ? "UNFOLLOW" : "FOLLOW"}
+            </button>
+        );
 
-                    <div className="status">
-                        {result.is_live ? (
-                            <>
-                                <p className="indicator">LIVE</p>
-                                <p className="time">{dateDifference(new Date(result.started_at), time)}</p>
-                            </>
-                        ) : (
-                            <p>OFFLINE</p>
-                        )}
-                    </div>
-                </>
-            );
-        } else {
-            return (
-                <div className="mini">
-                    <p>{result.display_name.toUpperCase()}</p>
+        return (
+            <div className={"info" + (window.innerWidth <= 500 ? " mini" : "")}>
+                <div className="name center">{result.name}</div>
+                <div
+                    className="options center"
+                    style={{ justifyContent: window.innerWidth <= 500 ? "center" : "start" }}
+                >
+                    {button}
+                </div>
+            </div>
+        );
+    };
+
+    userInfo = (result, time) => {
+        return (
+            <div className={"info" + (window.innerWidth <= 500 ? " mini" : "")}>
+                <div className="name center">{result.display_name.toUpperCase()}</div>
+                <div className="options center">
                     <div className="status">
                         {result.is_live ? (
                             <>
@@ -159,8 +183,8 @@ class Search extends Component {
                         )}
                     </div>
                 </div>
-            );
-        }
+            </div>
+        );
     };
 
     render() {

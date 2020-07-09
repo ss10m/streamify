@@ -58,13 +58,15 @@ const toggleNavbarReducer = (state = false, action) => {
 const SHOW_SEARCH = "SHOW_SEARCH";
 const SHOW_SEARCH_GAMES = "SHOW_SEARCH_GAMES";
 const HIDE_SEARCH = "HIDE_SEARCH";
+const SEARCH_USERS = "USERS";
+const SEARCH_GAMES = "GAMES";
 
 const showSearchReducer = (state = false, action) => {
     switch (action.type) {
         case SHOW_SEARCH:
-            return { type: "user" };
+            return { type: SEARCH_USERS };
         case SHOW_SEARCH_GAMES:
-            return { type: "game", user: action.user };
+            return { type: SEARCH_GAMES, user: action.user, handleFollowChange: action.handleFollowChange };
         case HIDE_SEARCH:
             return false;
         default:
