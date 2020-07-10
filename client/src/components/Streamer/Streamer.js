@@ -123,10 +123,11 @@ class Streamer extends Component {
             );
         }
 
-        if (!games.length) return <p>Not following any games</p>;
+        let header = <p>Not following any games</p>;
+        if (games.length) header = "FOLLOWED GAMES";
         return (
             <div className="followed-games">
-                <p className="header">FOLLOWED GAMES</p>
+                {header}
                 {games}
             </div>
         );
@@ -134,6 +135,7 @@ class Streamer extends Component {
 
     getData = () => {
         let { streamer, recent_games, direction } = this.state;
+        let { session } = this.props;
 
         let directionClass = "";
         if (direction === "right") {
@@ -148,13 +150,20 @@ class Streamer extends Component {
 
         let carouselClass = "items" + directionClass;
 
+        let searchBtn;
+        if (!session.user) {
+            searchBtn = () => this.props.showLogin();
+        } else if (!streamer.following) {
+            searchBtn = () => this.setState({ showFollowPrompt: true });
+        } else {
+            searchBtn = () => this.props.showSearchGames(streamer, this.handleFollowChange);
+        }
+
         return (
             <div>
                 <div className="recent-games-header">
                     <div className="recent-games-title">Recent Games</div>
-                    <button onClick={() => this.props.showSearchGames(streamer, this.handleFollowChange)}>
-                        Search Games
-                    </button>
+                    <button onClick={searchBtn}>Search Games</button>
                 </div>
                 <div className="recent-games">
                     <a role="button" onClick={() => this.handleCarousel(false)}>
@@ -163,14 +172,15 @@ class Streamer extends Component {
                     <div className="list">
                         <ul className={carouselClass}>
                             {recent_games.map((game) => (
-                                <li
-                                    key={game.id}
-                                    className="item"
-                                    style={{ order: game.order }}
-                                    onClick={() => this.handleFollowChange(FOLLOW_GAME, this.parseGame(game))}
-                                >
+                                <li key={game.id} className="item" style={{ order: game.order }}>
                                     <div>{game.name}</div>
-                                    <img src={game["box_art_url"]} width="200" height="300" alt="MISSING" />
+                                    <img
+                                        src={game["box_art_url"]}
+                                        width="200"
+                                        height="300"
+                                        alt="MISSING"
+                                        onClick={() => this.handleFollowChange(FOLLOW_GAME, this.parseGame(game))}
+                                    />
                                 </li>
                             ))}
                         </ul>

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withRouter, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
+import socketIO from "socket.io-client";
 
 import { getSession, showLogin, toggleNavBar } from "../store/actions.js";
 
@@ -19,7 +20,23 @@ class App extends Component {
     componentDidMount() {
         console.log("componentDidMount");
         this.props.getSession();
+        setTimeout(() => {
+            console.log("CONNECTING");
+            this.connectSocketIo();
+        }, 5000);
     }
+
+    connectSocketIo = () => {
+        let socket = socketIO.connect("");
+
+        socket.on("notification", this.handleNotifications);
+
+        this.setState({ socket: socket });
+    };
+
+    handleNotifications = () => {
+        console.log("handleNotifications");
+    };
 
     hideNavbar = (event) => {
         event.preventDefault();
