@@ -62,6 +62,7 @@ io.on("connection", (socket) => {
     });
 });
 
+/*
 setInterval(() => {
     console.log("=======================-------CONNECTIONS-------====================");
     console.log(connections.size);
@@ -75,6 +76,7 @@ setInterval(() => {
         connection.emit("notification", user.username + " " + new Date() + ids);
     }
 }, 10000);
+*/
 
 const apiRouter = express.Router();
 app.use("/api", apiRouter);
