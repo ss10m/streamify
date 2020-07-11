@@ -17,25 +17,45 @@ import Search from "./Search/Search";
 import "./App.scss";
 
 class App extends Component {
-    componentDidMount() {
-        console.log("componentDidMount");
-        this.props.getSession();
-        setTimeout(() => {
-            console.log("CONNECTING");
-            this.connectSocketIo();
-        }, 5000);
+    constructor(props) {
+        super(props);
+        this.state = { socket: null };
     }
 
-    connectSocketIo = () => {
-        let socket = socketIO.connect("");
+    componentDidMount() {
+        this.props.getSession();
+    }
 
+    componentDidUpdate(prevProps, prevState) {
+        let { session } = this.props;
+        let { socket } = this.state;
+
+        if (session !== prevProps.session) {
+            console.log("SESSION GOT UPDATED");
+            if (session.user) {
+                console.log("LOGGED IN");
+                console.log("CONNECTING SESSION");
+                this.connectSocket();
+            }
+
+            if (!session.user && socket) {
+                console.log("LOGGED OUT");
+                console.log("DISCONNECTING SESSION");
+                socket.disconnect();
+                this.setState({ socket: null });
+            }
+        }
+    }
+
+    connectSocket = () => {
+        let socket = socketIO.connect();
         socket.on("notification", this.handleNotifications);
-
-        this.setState({ socket: socket });
+        this.setState({ socket });
     };
 
-    handleNotifications = () => {
+    handleNotifications = (data) => {
         console.log("handleNotifications");
+        console.log(data);
     };
 
     hideNavbar = (event) => {

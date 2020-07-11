@@ -4,6 +4,8 @@ import pgSimpleSession from "connect-pg-simple";
 import path from "path";
 import http from "http";
 import ioClient from "socket.io";
+//var sharedsession = require("express-socket.io-session");
+import sharedsession from "express-socket.io-session";
 
 import { SESS_NAME, SESS_SECRET, SESS_LIFETIME } from "../config.js";
 import { userRoutes, sessionRoutes, twitchifyRoutes, notificationRoutes } from "./routes/index.js";
@@ -23,38 +25,56 @@ app.use(express.static(CLIENT_BUILD_PATH));
 const server = http.Server(app);
 const io = ioClient(server);
 
-app.use(
-    session({
-        name: SESS_NAME,
-        secret: SESS_SECRET,
-        saveUninitialized: false,
-        resave: false,
-        store: new pgSession({
-            pool: pgPool,
-            tableName: "session",
-        }),
-        cookie: {
-            sameSite: true,
-            secure: false,
-            maxAge: parseInt(SESS_LIFETIME),
-        },
-    })
-);
+let expressSession = session({
+    name: SESS_NAME,
+    secret: SESS_SECRET,
+    saveUninitialized: false,
+    resave: false,
+    store: new pgSession({
+        pool: pgPool,
+        tableName: "session",
+    }),
+    cookie: {
+        sameSite: true,
+        secure: false,
+        maxAge: parseInt(SESS_LIFETIME),
+    },
+});
+
+app.use(expressSession);
+io.use(sharedsession(expressSession));
+
+const connections = new Set();
 
 io.on("connection", (socket) => {
-    console.log("io's ready");
+    console.log("new connection");
+    connections.add(socket);
+    //console.log(socket.handshake.session.user);
     let srvSockets = io.sockets.sockets;
     console.log(Object.keys(srvSockets).length);
 
-    setInterval(() => {
-        socket.emit("notification", "Hello!");
-    }, 10000);
-
     socket.on("disconnect", () => {
+        connections.delete(socket);
         console.log("disconnect");
-        console.log(Object.keys(srvSockets).length);
+        //console.log(Object.keys(srvSockets).length);
+        //console.log(Object.keys(srvSockets));
+        //console.log(srvSockets);
     });
 });
+
+setInterval(() => {
+    console.log("=======================-------CONNECTIONS-------====================");
+    console.log(connections.size);
+    let srvSockets = io.sockets.sockets;
+
+    let ids = "[" + Object.keys(srvSockets).join(" - ") + "]";
+    console.log(ids);
+
+    for (let connection of connections) {
+        let user = connection.handshake.session.user;
+        connection.emit("notification", user.username + " " + new Date() + ids);
+    }
+}, 10000);
 
 const apiRouter = express.Router();
 app.use("/api", apiRouter);

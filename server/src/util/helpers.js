@@ -29,7 +29,7 @@ export const parseError = (err) => {
 };
 
 export const sessionizeUser = (user) => {
-    return { username: user.username, last_login: new Date() };
+    return { id: user.id, username: user.username, last_login: new Date() };
 };
 
 export const encryptPassword = (password) => {
