@@ -16,55 +16,41 @@ const setupNotifications = (io) => {
             connections.delete(socket);
         });
     });
-    //automateNotifications(io);
+    automateNotifications(io);
 };
 
 const automateNotifications = (io) => {
-    setInterval(() => sendNotifications(io), 10000);
+    setInterval(() => sendNotifications(io), 60000);
 };
 
 const sendNotifications = async (io) => {
     try {
-        console.log("=======================-------CONNECTIONS-------====================");
-        console.log(connections.size);
+        console.log("=======================-------NOTIFICATIONS-------====================");
+        console.log("# of connections: " + connections.size);
         if (!connections.size) return;
         let srvSockets = io.sockets.sockets;
 
-        let ids = "[" + Object.keys(srvSockets).join(" - ") + "]";
-        console.log(ids);
+        let connectedClientsIds = Object.keys(srvSockets).map((socket) => srvSockets[socket].handshake.session.user.id);
 
-        for (let socket of Object.keys(srvSockets)) {
-            console.log(srvSockets[socket].handshake.session.user.id);
-        }
-        console.log("=-=-=-=-=-=-=-=-=-=-=");
-
-        let a = Object.keys(srvSockets).map((socket) => srvSockets[socket].handshake.session.user.id);
-        console.log(a);
-
-        let followedStreamers = await getFollowedStreamers(a);
-        console.log(followedStreamers);
+        let followedStreamers = await getFollowedStreamers(connectedClientsIds);
         if (!followedStreamers.length) return;
 
         let followedIds = new Set(followedStreamers.map((streamer) => streamer.streamer_id));
-        console.log(followedIds);
 
         let streamers = await getStreams(followedIds);
         if (!streamers) return;
-        //console.log(streamers);
 
         let idToStreamer = {};
         for (let steamer of streamers) {
             idToStreamer[steamer.user_id] = steamer;
         }
 
-        console.log(idToStreamer);
-
+        let ids = "[" + Object.keys(srvSockets).join(" - ") + "]";
         for (let connection of connections) {
-            let user = connection.handshake.session.user;
-            connection.emit("notification", user.username + " " + new Date() + ids);
+            notifyUser(connection, idToStreamer, ids);
         }
     } catch (err) {
-        console.log(err);
+        console.log(err.message);
     }
 };
 
@@ -100,6 +86,60 @@ const getStreams = async (ids) => {
         return;
     }
     return response.data.data;
+};
+
+const notifyUser = async (connection, idToStreamer, ids) => {
+    let user = connection.handshake.session.user;
+    console.log(user);
+    let followedGames = await getFollowedGames(user.id);
+    for (let followedGame of followedGames) {
+        if (followedGame.streamer_id in idToStreamer) {
+            let streamer = idToStreamer[followedGame.streamer_id];
+            if (streamer.game_id == followedGame.id) {
+                // send new notficiation if time since last one is > 60 sec
+                let recentNotification = await getNotifications(followedGame.follow_id, followedGame.id);
+                if (!recentNotification || (new Date() - recentNotification.sent_at) / 1000 > 60) {
+                    let msg = `${followedGame.display_name} IS PLAYING ${followedGame.name}`;
+                    console.log(msg);
+                    storeNotification(followedGame.follow_id, followedGame.id);
+                    connection.emit("notification", msg);
+                }
+            }
+        }
+    }
+    connection.emit("notification", user.username + " " + new Date() + ids);
+};
+
+const getFollowedGames = async (userId) => {
+    let query = `SELECT follows.streamer_id, streamers.display_name, followed_games.follow_id, games.name, games.id
+                 FROM follows 
+                 INNER JOIN streamers on streamers.id = follows.streamer_id
+                 INNER JOIN followed_games on follow_id = follows.id
+                 INNER JOIN games on games.id = followed_games.game_id
+                 WHERE user_id = $1`;
+    let values = [userId];
+    let result = await db.query(query, values);
+    return result.rows;
+};
+
+const getNotifications = async (followId, gameId) => {
+    let query = `SELECT *
+                 FROM notifications
+                 WHERE follow_id = $1 AND game_id = $2
+                 ORDER BY sent_at DESC
+                 LIMIT 1`;
+    let values = [followId, gameId];
+    let res = await db.query(query, values);
+    if (!res.rows.length) return null;
+    return res.rows[0];
+};
+
+const storeNotification = (followId, gameId) => {
+    let query = `INSERT INTO notifications(follow_id, game_id) 
+                 VALUES($1, $2)
+                 RETURNING *`;
+    let values = [followId, gameId];
+    db.query(query, values);
 };
 
 export default setupNotifications;
