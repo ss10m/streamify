@@ -12,7 +12,8 @@ export const getSession = () => async (dispatch) => {
     let data = await extractData(response, dispatch);
     let defaultState = { isLoaded: true, user: null };
     if (data && data["user"]) defaultState["user"] = data["user"];
-    return dispatch(setSession(defaultState));
+    dispatch(setSession(defaultState));
+    dispatch(addNotifications(data.notifications));
 };
 
 export const login = (userInfo) => async (dispatch) => {
@@ -26,9 +27,10 @@ export const login = (userInfo) => async (dispatch) => {
 
     let data = await extractData(response, dispatch);
     if (!data) return;
-    let sessionState = { isLoaded: true, user: data };
+    let sessionState = { isLoaded: true, user: data.user };
     dispatch(closeLoginWindow());
-    return dispatch(setSession(sessionState));
+    dispatch(setSession(sessionState));
+    dispatch(addNotifications(data.notifications));
 };
 
 export const register = (userInfo) => async (dispatch) => {
@@ -44,7 +46,15 @@ export const register = (userInfo) => async (dispatch) => {
     if (!data) return;
     let sessionState = { isLoaded: true, user: data };
     dispatch(closeLoginWindow());
-    return dispatch(setSession(sessionState));
+    dispatch(setSession(sessionState));
+    dispatch(clearNotifications());
+};
+
+export const logout = () => async (dispatch) => {
+    const response = await fetch("/api/session", { method: "DELETE" });
+    if (!response.ok) console.log("ERROR");
+    dispatch(clearSession());
+    dispatch(clearNotifications());
 };
 
 const extractData = async (response, dispatch) => {
@@ -57,12 +67,6 @@ const extractData = async (response, dispatch) => {
     } catch (err) {
         dispatch(showLoginError("Something went wrong."));
     }
-};
-
-export const logout = () => async (dispatch) => {
-    const response = await fetch("/api/session", { method: "DELETE" });
-    if (!response.ok) console.log("ERROR");
-    return dispatch(clearSession());
 };
 
 export const showLoginError = (msg) => ({
@@ -103,4 +107,13 @@ export const showSearchGames = (user, handleFollowChange) => ({
 
 export const hideSearch = () => ({
     type: "HIDE_SEARCH",
+});
+
+export const addNotifications = (notifications) => ({
+    type: "ADD_NOTIFICATIONS",
+    notifications,
+});
+
+export const clearNotifications = () => ({
+    type: "CLEAR_NOTIFICATIONS",
 });

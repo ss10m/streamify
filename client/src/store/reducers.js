@@ -74,10 +74,25 @@ const showSearchReducer = (state = false, action) => {
     }
 };
 
+const ADD_NOTIFICATIONS = "ADD_NOTIFICATIONS";
+const CLEAR_NOTIFICATIONS = "CLEAR_NOTIFICATIONS";
+
+const notificationsReducer = (state = [], action) => {
+    switch (action.type) {
+        case ADD_NOTIFICATIONS:
+            return [...action.notifications, ...state];
+        case CLEAR_NOTIFICATIONS:
+            return [];
+        default:
+            return state;
+    }
+};
+
 export default combineReducers({
     session: sessionReducer,
     loginError: loginErrorReducer,
     loginDisplayed: showLoginReducer,
     toggleNavbar: toggleNavbarReducer,
     searchDisplayed: showSearchReducer,
+    notifications: notificationsReducer,
 });

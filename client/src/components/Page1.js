@@ -10,7 +10,11 @@ class Page1 extends Component {
     getData = () => {
         let ret = [];
         for (let i = 0; i < 10; i++) {
-            ret.push(<div className="box2">{i}</div>);
+            ret.push(
+                <div className="box2" key={i}>
+                    {i}
+                </div>
+            );
         }
         return ret;
     };

@@ -10,11 +10,12 @@ import "./NavBar.scss";
 
 import ExtendedBar from "./ExtendedBar";
 import UserOptions from "./UserOptions";
+import Notifications from "./Notifications";
 
 class NavBar extends Component {
     constructor(props) {
         super(props);
-        this.state = { width: window.innerWidth, userOptions: false };
+        this.state = { width: window.innerWidth, userOptions: false, showNotifications: false };
     }
 
     componentDidMount() {
@@ -36,6 +37,13 @@ class NavBar extends Component {
         this.setState({ userOptions });
     };
 
+    toggleNotifications = (event) => {
+        if (event) event.stopPropagation();
+        this.setState((prevState) => ({
+            showNotifications: !prevState.showNotifications,
+        }));
+    };
+
     showSearch = () => {
         console.log("show search");
         this.props.showSearch();
@@ -54,8 +62,9 @@ class NavBar extends Component {
 
         return (
             <div>
-                <div className="user-btn flex">
-                    <FontAwesomeIcon className="icon" icon="bell" size="2x" />
+                <div className="user-btn flex" id="notifications">
+                    <FontAwesomeIcon className="icon" icon="bell" size="2x" onClick={this.toggleNotifications} />
+                    {this.state.showNotifications && <Notifications toggleNotifications={this.toggleNotifications} />}
                 </div>
                 <div className="user-btn flex" id="userDropdown">
                     <FontAwesomeIcon className="icon" icon="user-circle" size="2x" onClick={this.toggleDropDown} />

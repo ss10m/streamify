@@ -3,7 +3,7 @@ import { withRouter, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import socketIO from "socket.io-client";
 
-import { getSession, showLogin, toggleNavBar } from "../store/actions.js";
+import { getSession, showLogin, toggleNavBar, addNotifications } from "../store/actions.js";
 
 import Page1 from "./Page1";
 import Page2 from "./Page2";
@@ -49,13 +49,24 @@ class App extends Component {
 
     connectSocket = () => {
         let socket = socketIO.connect();
-        socket.on("notification", this.handleNotifications);
+        socket.on("update", this.handleUpdate);
+        socket.on("notification", this.handleNotification);
         this.setState({ socket });
     };
 
-    handleNotifications = (data) => {
-        console.log("handleNotifications");
+    handleUpdate = (data) => {
         console.log(data);
+    };
+
+    handleNotification = (data) => {
+        console.log(data);
+
+        for (let notificaiton of data) {
+            console.log(`${notificaiton.display_name} IS PLAYING ${notificaiton.game}`);
+            console.log(notificaiton.logo);
+        }
+
+        this.props.addNotifications(data);
     };
 
     hideNavbar = (event) => {
@@ -121,6 +132,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     toggleNavBar: () => {
         dispatch(toggleNavBar());
+    },
+    addNotifications: (notifications) => {
+        dispatch(addNotifications(notifications));
     },
 });
 

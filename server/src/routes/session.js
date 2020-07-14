@@ -4,6 +4,7 @@ import Joi from "joi";
 import { signIn } from "../validations/user.js";
 import { parseError, sessionizeUser, verifyPassword } from "../util/helpers.js";
 import { SESS_NAME } from "../../config.js";
+import { getRecentNotifications } from "./notification.js";
 
 const sessionRouter = express.Router();
 
@@ -27,7 +28,9 @@ sessionRouter.post("", async (req, res) => {
         if (user && verifyPassword(user, password)) {
             const sessionUser = sessionizeUser(user);
             req.session.user = sessionUser;
-            res.send(sessionUser);
+            let notifications = [];
+            if (user) notifications = await getRecentNotifications(user.id);
+            res.send({ user: sessionUser, notifications });
         } else {
             throw new Error("Invalid login credentials");
         }
@@ -53,8 +56,10 @@ sessionRouter.delete("", ({ session }, res) => {
     }
 });
 
-sessionRouter.get("", ({ session: { user } }, res) => {
-    res.send({ user });
+sessionRouter.get("", async ({ session: { user } }, res) => {
+    let notifications = [];
+    if (user) notifications = await getRecentNotifications(user.id);
+    res.send({ user, notifications });
 });
 
 export default sessionRouter;
