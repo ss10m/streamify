@@ -109,6 +109,11 @@ export const hideSearch = () => ({
     type: "HIDE_SEARCH",
 });
 
+export const setNotifications = (notifications) => ({
+    type: "SET_NOTIFICATIONS",
+    notifications,
+});
+
 export const addNotifications = (notifications) => ({
     type: "ADD_NOTIFICATIONS",
     notifications,

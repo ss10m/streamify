@@ -4,6 +4,8 @@ import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { setNotifications } from "../../store/actions.js";
+
 import "./Notifications.scss";
 
 class Notifications extends Component {
@@ -29,10 +31,36 @@ class Notifications extends Component {
         }
     };
 
+    hideNotification = async (event, id = -1) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        console.log(id);
+
+        const response = await fetch("/api/notifications/", {
+            method: "POST",
+            body: JSON.stringify({ id }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        try {
+            let data = await response.json();
+            if (response.ok) {
+                this.props.setNotifications(data);
+                return;
+            }
+            console.log(data.message || "Something went wrong.");
+        } catch (err) {
+            console.log("Something went wrong.");
+        }
+    };
+
     getHeader = () => {
         return (
             <div className="header">
-                <FontAwesomeIcon icon="trash" size="1x" className="header-icon" />
+                <FontAwesomeIcon icon="trash" size="1x" className="header-icon" onClick={this.hideNotification} />
                 <p>Notifications</p>
                 <FontAwesomeIcon
                     icon="times"
@@ -42,13 +70,6 @@ class Notifications extends Component {
                 />
             </div>
         );
-    };
-
-    hideNotificaiton = (event, id) => {
-        event.preventDefault();
-        event.stopPropagation();
-        console.log("HIDE ");
-        console.log(id);
     };
 
     getNotifications = () => {
@@ -79,7 +100,7 @@ class Notifications extends Component {
                     icon="times"
                     size="1x"
                     className="close-icon"
-                    onClick={(event) => this.hideNotificaiton(event, notification.id)}
+                    onClick={(event) => this.hideNotification(event, notification.id)}
                 />
 
                 <p className="time-since">{dateDifference(new Date(notification.sent_at), this.state.time)}</p>
@@ -102,6 +123,12 @@ const mapStateToProps = (state) => {
         notifications: state.notifications,
     };
 };
+
+const mapDispatchToProps = (dispatch) => ({
+    setNotifications: (notifications) => {
+        dispatch(setNotifications(notifications));
+    },
+});
 
 const dateDifference = (then, now) => {
     let offset = (now - then) / 1000;
@@ -142,4 +169,4 @@ const dateDifference = (then, now) => {
     }
 };
 
-export default withRouter(connect(mapStateToProps, null)(Notifications));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Notifications));

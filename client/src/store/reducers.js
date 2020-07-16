@@ -75,12 +75,15 @@ const showSearchReducer = (state = false, action) => {
 };
 
 const ADD_NOTIFICATIONS = "ADD_NOTIFICATIONS";
+const SET_NOTIFICATIONS = "SET_NOTIFICATIONS";
 const CLEAR_NOTIFICATIONS = "CLEAR_NOTIFICATIONS";
 
 const notificationsReducer = (state = [], action) => {
     switch (action.type) {
         case ADD_NOTIFICATIONS:
             return [...action.notifications, ...state];
+        case SET_NOTIFICATIONS:
+            return [...action.notifications];
         case CLEAR_NOTIFICATIONS:
             return [];
         default:

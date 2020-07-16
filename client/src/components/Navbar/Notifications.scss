@@ -83,7 +83,7 @@ $hightlight-color: #30475e;
 }
 
 .scrollable .notification {
-    margin: 3px 10px;
+    margin: 4px 10px;
     height: 60px;
 
     padding-right: 10px;
@@ -100,6 +100,8 @@ $hightlight-color: #30475e;
     padding-right: 80px;
 
     position: relative;
+
+    box-shadow: 0px 0px 3px 0px black;
 
     @media (max-width: 460px) {
         height: 80px;

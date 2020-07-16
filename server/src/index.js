@@ -7,7 +7,7 @@ import ioClient from "socket.io";
 import sharedsession from "express-socket.io-session";
 
 import { SESS_NAME, SESS_SECRET, SESS_LIFETIME } from "../config.js";
-import { userRoutes, sessionRoutes, twitchifyRoutes, setupNotifications } from "./routes/index.js";
+import { userRoutes, sessionRoutes, twitchifyRoutes, notificationsRoutes, setupNotifications } from "./routes/index.js";
 import { pgPool } from "./config/db.js";
 
 const PORT = 8080;
@@ -49,6 +49,7 @@ app.use("/api", apiRouter);
 apiRouter.use("/users", userRoutes);
 apiRouter.use("/session", sessionRoutes);
 apiRouter.use("/twitchify", twitchifyRoutes);
+apiRouter.use("/notifications", notificationsRoutes);
 
 app.get("*", (request, response) => {
     response.sendFile(path.join(CLIENT_BUILD_PATH, "index.html"));

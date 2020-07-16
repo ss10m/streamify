@@ -33,6 +33,39 @@ const sendNotifications = async (io, connections) => {
     }
 };
 
+const removeNotifications = async (session, { id }, cb) => {
+    if (!session.user) return cb({ message: "You must be logged in" }, 401);
+
+    if (id >= 0) {
+        await hideNotification(id);
+    } else {
+        await hideNotifications(session.user.id);
+    }
+
+    let notifications = await getRecentNotifications(session.user.id);
+
+    cb(notifications);
+};
+
+const hideNotification = async (notificationId) => {
+    let query = `UPDATE notifications
+                 SET hidden = TRUE
+                 WHERE id = $1`;
+    let values = [notificationId];
+    await db.query(query, values);
+    return;
+};
+
+const hideNotifications = async (userId) => {
+    let query = `UPDATE notifications
+                 SET hidden = TRUE
+                 FROM follows
+                 WHERE follows.user_id = $1 AND follows.id = notifications.follow_id`;
+    let values = [userId];
+    await db.query(query, values);
+    return;
+};
+
 const getFollowedStreamers = async (ids) => {
     let query = `SELECT *
                  FROM follows 
@@ -147,4 +180,4 @@ const getRecentNotifications = async (userId) => {
 };
 
 export default sendNotifications;
-export { getRecentNotifications };
+export { getRecentNotifications, removeNotifications };

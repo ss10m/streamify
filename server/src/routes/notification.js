@@ -1,6 +1,15 @@
-import sendNotifications from "../controllers/notifications.js";
+import express from "express";
+const router = express.Router();
+
+import sendNotifications, { removeNotifications } from "../controllers/notifications.js";
 
 const connections = new Set();
+
+router.post("", ({ session, body }, res) => {
+    removeNotifications(session, body, (data, status = 200) => {
+        res.status(status).send(data);
+    });
+});
 
 const setupNotifications = (io) => {
     io.on("connection", (socket) => {
@@ -22,4 +31,5 @@ const automateNotifications = (io) => {
     //setInterval(() => sendNotifications(io, connections), 5000);
 };
 
-export default setupNotifications;
+export default router;
+export { setupNotifications };
