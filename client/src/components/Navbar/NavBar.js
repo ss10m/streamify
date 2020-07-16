@@ -38,7 +38,7 @@ class NavBar extends Component {
     };
 
     toggleNotifications = (event) => {
-        if (event) event.stopPropagation();
+        event.stopPropagation();
         this.setState((prevState) => ({
             showNotifications: !prevState.showNotifications,
         }));

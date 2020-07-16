@@ -4,7 +4,7 @@ import Joi from "joi";
 import { signIn } from "../validations/user.js";
 import { parseError, sessionizeUser, verifyPassword } from "../util/helpers.js";
 import { SESS_NAME } from "../../config.js";
-import { getRecentNotifications } from "./notification.js";
+import { getRecentNotifications } from "../controllers/notifications.js";
 
 const sessionRouter = express.Router();
 

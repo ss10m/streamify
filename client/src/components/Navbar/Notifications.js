@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -29,12 +29,26 @@ class Notifications extends Component {
         }
     };
 
-    closeNotifications = () => {
-        this.props.toggleNotifications();
+    getHeader = () => {
+        return (
+            <div className="header">
+                <FontAwesomeIcon icon="trash" size="1x" className="header-icon" />
+                <p>Notifications</p>
+                <FontAwesomeIcon
+                    icon="times"
+                    size="1x"
+                    className="header-icon"
+                    onClick={this.props.toggleNotifications}
+                />
+            </div>
+        );
     };
 
-    getHeader = () => {
-        return <div className="header">Notifications</div>;
+    hideNotificaiton = (event, id) => {
+        event.preventDefault();
+        event.stopPropagation();
+        console.log("HIDE ");
+        console.log(id);
     };
 
     getNotifications = () => {
@@ -42,18 +56,34 @@ class Notifications extends Component {
         if (!notifications.length) {
             return (
                 <div className="empty">
-                    <FontAwesomeIcon icon="bell" size="4x" />
-                    <p>No new notifications</p>
-                    <p>Subscribe to your favorite streamers to get notified when they play selected games</p>
+                    <FontAwesomeIcon icon="bell" size="5x" className="empty-icon" />
+
+                    <p>Follow your favorite streamers to get notified when they play selected games</p>
                 </div>
             );
         }
         return notifications.map((notification) => (
-            <div className="notification" key={notification.id}>
+            <Link
+                to={"/streamer/" + notification.display_name}
+                className="notification"
+                key={notification.id}
+                onClick={this.props.toggleNotifications}
+            >
                 <img src={notification.logo} width="60" height="60" alt="MISSING" />
-                <p className="name">{notification.display_name}</p>
+                <div className="info">
+                    <p className="name">{notification.display_name}</p>
+                    <p className="game">{notification.game}</p>
+                </div>
+
+                <FontAwesomeIcon
+                    icon="times"
+                    size="1x"
+                    className="close-icon"
+                    onClick={(event) => this.hideNotificaiton(event, notification.id)}
+                />
+
                 <p className="time-since">{dateDifference(new Date(notification.sent_at), this.state.time)}</p>
-            </div>
+            </Link>
         ));
     };
 
