@@ -77,15 +77,18 @@ const showSearchReducer = (state = false, action) => {
 const ADD_NOTIFICATIONS = "ADD_NOTIFICATIONS";
 const SET_NOTIFICATIONS = "SET_NOTIFICATIONS";
 const CLEAR_NOTIFICATIONS = "CLEAR_NOTIFICATIONS";
+const CLEAR_NOTIFICATIONS_INDICATOR = "CLEAR_NOTIFICATIONS_INDICATOR";
 
-const notificationsReducer = (state = [], action) => {
+const notificationsReducer = (state = { data: [], indicator: false }, action) => {
     switch (action.type) {
         case ADD_NOTIFICATIONS:
-            return [...action.notifications, ...state];
+            return { data: [...action.notifications, ...state.data], indicator: true };
         case SET_NOTIFICATIONS:
-            return [...action.notifications];
+            return { data: [...action.notifications], indicator: false };
+        case CLEAR_NOTIFICATIONS_INDICATOR:
+            return { data: [...state.data], indicator: false };
         case CLEAR_NOTIFICATIONS:
-            return [];
+            return { data: [], indicator: false };
         default:
             return state;
     }

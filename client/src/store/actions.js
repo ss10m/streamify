@@ -13,7 +13,7 @@ export const getSession = () => async (dispatch) => {
     let defaultState = { isLoaded: true, user: null };
     if (data && data["user"]) defaultState["user"] = data["user"];
     dispatch(setSession(defaultState));
-    dispatch(addNotifications(data.notifications));
+    dispatch(setNotifications(data.notifications));
 };
 
 export const login = (userInfo) => async (dispatch) => {
@@ -30,7 +30,7 @@ export const login = (userInfo) => async (dispatch) => {
     let sessionState = { isLoaded: true, user: data.user };
     dispatch(closeLoginWindow());
     dispatch(setSession(sessionState));
-    dispatch(addNotifications(data.notifications));
+    dispatch(setNotifications(data.notifications));
 };
 
 export const register = (userInfo) => async (dispatch) => {
@@ -117,6 +117,10 @@ export const setNotifications = (notifications) => ({
 export const addNotifications = (notifications) => ({
     type: "ADD_NOTIFICATIONS",
     notifications,
+});
+
+export const clearNotificationsIndicator = () => ({
+    type: "CLEAR_NOTIFICATIONS_INDICATOR",
 });
 
 export const clearNotifications = () => ({

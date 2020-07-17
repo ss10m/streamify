@@ -73,8 +73,11 @@ class Notifications extends Component {
     };
 
     getNotifications = () => {
-        let { notifications } = this.props;
-        if (!notifications.length) {
+        let {
+            notifications: { data },
+        } = this.props;
+
+        if (!data.length) {
             return (
                 <div className="empty">
                     <FontAwesomeIcon icon="bell" size="5x" className="empty-icon" />
@@ -83,7 +86,7 @@ class Notifications extends Component {
                 </div>
             );
         }
-        return notifications.map((notification) => (
+        return data.map((notification) => (
             <Link
                 to={"/streamer/" + notification.display_name}
                 className="notification"

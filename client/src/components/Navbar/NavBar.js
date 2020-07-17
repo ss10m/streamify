@@ -4,7 +4,14 @@ import { connect } from "react-redux";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { getSession, logout, showLogin, toggleNavBar, showSearch } from "../../store/actions.js";
+import {
+    getSession,
+    logout,
+    showLogin,
+    toggleNavBar,
+    showSearch,
+    clearNotificationsIndicator,
+} from "../../store/actions.js";
 
 import "./NavBar.scss";
 
@@ -42,6 +49,7 @@ class NavBar extends Component {
         this.setState((prevState) => ({
             showNotifications: !prevState.showNotifications,
         }));
+        this.props.clearNotificationsIndicator();
     };
 
     showSearch = () => {
@@ -50,6 +58,10 @@ class NavBar extends Component {
     };
 
     getUserBtns = (user) => {
+        let {
+            notifications: { indicator },
+        } = this.props;
+
         if (!user) {
             return (
                 <div>
@@ -63,7 +75,13 @@ class NavBar extends Component {
         return (
             <div>
                 <div className="user-btn flex" id="notifications">
-                    <FontAwesomeIcon className="icon" icon="bell" size="2x" onClick={this.toggleNotifications} />
+                    <FontAwesomeIcon
+                        className="icon"
+                        icon="bell"
+                        size="2x"
+                        onClick={this.toggleNotifications}
+                    ></FontAwesomeIcon>
+                    {indicator && <span className="indicator"></span>}
                     {this.state.showNotifications && <Notifications toggleNotifications={this.toggleNotifications} />}
                 </div>
                 <div className="user-btn flex" id="userDropdown">
@@ -140,6 +158,7 @@ const mapStateToProps = (state) => {
         loginDisplayed: state.loginDisplayed,
         expandedNavbar: state.toggleNavbar,
         userOptions: state.userOptions,
+        notifications: state.notifications,
     };
 };
 
@@ -158,6 +177,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     showSearch: () => {
         dispatch(showSearch());
+    },
+    clearNotificationsIndicator: () => {
+        dispatch(clearNotificationsIndicator());
     },
 });
 
