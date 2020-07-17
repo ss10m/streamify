@@ -1,92 +1,54 @@
-import React, { Component } from "react";
+import React from "react";
 import { withRouter, Link } from "react-router-dom";
-
-import "./TopStreamers.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-class TopStreamers extends Component {
-    constructor(props) {
-        super(props);
+import "./TopStreamers.scss";
 
-        this.state = { streamers: [], width: window.innerWidth, isHidden: false };
-    }
+const TopStreamers = (props) => {
+    let { isHidden, isMinimized, toggleSideBar, streamers } = props;
+    return (
+        <div className={"top-streamers" + (isHidden || isMinimized ? " hidden" : "")}>
+            <Header isHidden={isHidden} isMinimized={isMinimized} toggleSideBar={toggleSideBar} />
+            <StreamerList isHidden={isHidden} isMinimized={isMinimized} streamers={streamers} />
+        </div>
+    );
+};
 
-    componentDidMount() {
-        this.fetchTopStreamers();
-        window.addEventListener("resize", this.updateDimensions);
-    }
+const Header = (props) => {
+    let { isHidden, isMinimized, toggleSideBar } = props;
 
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.updateDimensions);
-    }
-
-    updateDimensions = () => {
-        this.setState({ width: window.innerWidth });
-    };
-
-    fetchTopStreamers = () => {
-        fetch("/api/twitchify/top")
-            .then((res) => res.json())
-            .then((res) => this.setState({ streamers: res["data"] }));
-    };
-
-    topStreamers = () => {
-        let { width, isHidden } = this.state;
-        if (width <= 992 || isHidden) {
-            return topStreamersHidden(this.state.streamers);
-        } else {
-            return topStreamers(this.state.streamers);
-        }
-    };
-
-    getHeader = () => {
-        let { width, isHidden } = this.state;
-        if (width <= 992) {
-            return (
-                <div className="toggle">
-                    <p>TOP</p>
-                </div>
-            );
-        } else if (isHidden) {
-            return (
-                <div className="toggle">
-                    <FontAwesomeIcon className="icon" icon="caret-right" size="2x" onClick={this.toggleSideBar} />
-                </div>
-            );
-        } else {
-            return (
-                <div className="toggle expanded">
-                    <p>TOP STREAMERS</p>
-                    <FontAwesomeIcon className="icon" icon="caret-left" size="2x" onClick={this.toggleSideBar} />
-                </div>
-            );
-        }
-    };
-
-    toggleSideBar = () => {
-        this.setState((prevState) => ({
-            isHidden: !prevState.isHidden,
-        }));
-    };
-
-    render() {
-        let { width, isHidden } = this.state;
+    if (isHidden) {
         return (
-            <div className={"topStreamers" + (width <= 992 || isHidden ? " hidden" : "")}>
-                {this.getHeader()}
-                {this.topStreamers()}
+            <div className="switch">
+                <p>TOP</p>
             </div>
         );
     }
-}
+    if (isMinimized) {
+        return (
+            <div className="switch">
+                <FontAwesomeIcon className="icon" icon="caret-right" size="2x" onClick={toggleSideBar} />
+            </div>
+        );
+    }
+    return (
+        <div className="switch expanded">
+            <p>TOP STREAMERS</p>
+            <FontAwesomeIcon className="icon" icon="caret-left" size="2x" onClick={toggleSideBar} />
+        </div>
+    );
+};
 
-const topStreamers = (streamers) => {
+const StreamerList = (props) => {
+    let { isHidden, isMinimized, streamers } = props;
+
     return streamers.map((streamer) => (
-        <Link to={"/streamer/" + streamer["name"]} key={streamer["name"]} className="link">
-            <div className="topStreamer">
-                <div className="logo">
-                    <img src={streamer["logo"]} width="40" height="40" alt="MISSING" />
-                </div>
+        <Link className="top-streamer" to={"/streamer/" + streamer["name"]} key={streamer["name"]}>
+            <div className="logo">
+                <img src={streamer["logo"]} width="40" height="40" alt="MISSING" />
+            </div>
+
+            {!isHidden && !isMinimized && (
                 <div className="info">
                     <div className="stream">
                         <div className="name">{streamer["display_name"]}</div>
@@ -97,19 +59,7 @@ const topStreamers = (streamers) => {
                     </div>
                     <div className="game">{streamer["game"]}</div>
                 </div>
-            </div>
-        </Link>
-    ));
-};
-
-const topStreamersHidden = (streamers) => {
-    return streamers.map((streamer) => (
-        <Link to={"/streamer/" + streamer["name"]} key={streamer["name"]}>
-            <div className="topStreamer">
-                <div className="logo">
-                    <img src={streamer["logo"]} width="40" height="40" alt="MISSING" />
-                </div>
-            </div>
+            )}
         </Link>
     ));
 };

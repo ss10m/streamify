@@ -9,7 +9,7 @@ import Page1 from "./Page1";
 import Page2 from "./Page2";
 import LoginPage from "./LoginPage/LoginPage";
 import NavBar from "./Navbar/NavBar";
-import TopStreamers from "./TopStreamers/TopStreamers";
+import TopStreamers from "./TopStreamers/TopStreamersContainer";
 import Streamers from "./Streamers/Streamers";
 import Streamer from "./Streamer/Streamer";
 import Search from "./Search/Search";

@@ -1,11 +1,9 @@
-.topStreamers {
+.top-streamers {
     width: 250px;
     height: 100%;
-
     background-color: #121a21;
     color: #d0d0d0;
     box-shadow: 0px 0px 3px 1px black;
-
     -ms-overflow-style: none;
     scrollbar-width: none;
     z-index: 2;
@@ -14,89 +12,11 @@
         display: none;
     }
 
-    .link {
-        text-decoration: none;
+    &.hidden {
+        width: 50px;
     }
 
-    .topStreamer {
-        height: 50px;
-
-        display: flex;
-        flex-direction: row;
-        color: #d0d0d0;
-
-        .logo {
-            width: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            img {
-                border-radius: 50%;
-            }
-        }
-
-        .info {
-            padding: 0 10px 0 2px;
-            flex: 1;
-
-            .stream {
-                height: 68%;
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                font-weight: 500;
-
-                .name {
-                    width: 140px;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    overflow: hidden;
-                }
-
-                .viewer-count {
-                    font-weight: 400;
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    font-size: 14px;
-
-                    .indicator {
-                        width: 10px;
-                        height: 10px;
-                        background-color: red;
-                        border-radius: 50%;
-                        margin-right: 3px;
-                    }
-                }
-            }
-
-            .game {
-                height: 20px;
-                width: 185px;
-                position: relative;
-                bottom: 10px;
-
-                font-size: 14px;
-                color: grey;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                overflow: hidden;
-            }
-        }
-
-        &:hover {
-            background-color: #1c4269;
-            cursor: pointer;
-        }
-
-        &:focus {
-            background-color: #1c4269;
-        }
-    }
-
-    .toggle {
+    .switch {
         height: 40px;
         display: flex;
         align-items: center;
@@ -104,6 +24,15 @@
         font-weight: 800;
         font-size: 15px;
         color: whitesmoke;
+
+        &.expanded {
+            justify-content: space-between;
+            margin: 0 5px 0 10px;
+
+            .icon {
+                padding: 3px 12px 3px 8px;
+            }
+        }
 
         .icon {
             padding: 3px 10px 3px 12px;
@@ -115,18 +44,82 @@
                 cursor: pointer;
             }
         }
+    }
+}
 
-        &.expanded {
-            justify-content: space-between;
-            margin: 0 5px 0 10px;
+.top-streamer {
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    color: #d0d0d0;
+    text-decoration: none;
 
-            .icon {
-                padding: 3px 12px 3px 8px;
-            }
+    &:hover {
+        background-color: #1c4269;
+        cursor: pointer;
+    }
+
+    &:focus {
+        background-color: #1c4269;
+    }
+
+    .logo {
+        min-width: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            border-radius: 50%;
         }
     }
 
-    &.hidden {
-        width: 50px;
+    .info {
+        padding: 0 10px 0 2px;
+        flex: 1;
+
+        .stream {
+            height: 68%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+
+            .name {
+                width: 140px;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+
+            .viewer-count {
+                font-weight: 400;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                font-size: 14px;
+
+                .indicator {
+                    width: 10px;
+                    height: 10px;
+                    background-color: red;
+                    border-radius: 50%;
+                    margin-right: 3px;
+                }
+            }
+        }
+
+        .game {
+            height: 20px;
+            width: 185px;
+            position: relative;
+            bottom: 10px;
+            font-size: 14px;
+            color: grey;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
     }
 }

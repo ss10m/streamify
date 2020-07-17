@@ -27,8 +27,8 @@ const setupNotifications = (io) => {
 };
 
 const automateNotifications = (io) => {
-    //setInterval(() => sendNotifications(io, connections), 300000);
-    setInterval(() => sendNotifications(io, connections), 100000);
+    setInterval(() => sendNotifications(io, connections), 300000);
+    //setInterval(() => sendNotifications(io, connections), 100000);
 };
 
 export default router;
