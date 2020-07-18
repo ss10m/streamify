@@ -16,18 +16,56 @@ export const getFollows = async (session, cb) => {
     let username = session.user.username;
 
     try {
-        let query = `SELECT streamers.name, streamers.display_name, streamers.logo, follows.followed_at
+        let query = `SELECT streamers.id, streamers.name, streamers.display_name, streamers.logo, follows.followed_at
                      FROM follows
                      INNER JOIN users ON users.id = follows.user_id
                      INNER JOIN streamers ON streamers.id = follows.streamer_id
                      WHERE users.username = $1`;
         let values = [username];
         let result = await db.query(query, values);
-        if (!result.rows.length) throw new Error();
-        cb(result.rows);
+
+        let followed = result.rows;
+
+        let ids = followed.map((stream) => stream.id);
+
+        let streams = await getStreams(ids);
+
+        let liveStreams = new Map(streams.map((stream) => [parseInt(stream.user_id), stream]));
+
+        for (let stream of followed) {
+            if (liveStreams.has(stream.id)) {
+                stream.live = true;
+            } else {
+                stream.live = false;
+            }
+        }
+        cb(followed);
     } catch (err) {
         handleError(err, cb);
     }
+};
+
+const getStreams = async (ids) => {
+    let params = "";
+    ids.forEach((id) => (params += "&user_id=" + id));
+    params = params.substr(1);
+    params = "?" + params;
+
+    let options = {
+        method: "get",
+        url: "https://api.twitch.tv/helix/streams" + params,
+        headers: {
+            "Client-ID": cred.clientId,
+            Authorization: cred.auth,
+        },
+    };
+
+    let response = await axios(options);
+    if (response && response.status != "200") {
+        console.log(response.status);
+        return;
+    }
+    return response.data.data;
 };
 
 export const follow = (session, body, cb) => {

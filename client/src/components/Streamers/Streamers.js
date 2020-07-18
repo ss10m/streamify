@@ -1,119 +1,63 @@
-import React, { Component } from "react";
-import { withRouter, Link } from "react-router-dom";
-import { connect } from "react-redux";
-
-import { showLogin } from "../../store/actions.js";
+import React from "react";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import "./Streamers.scss";
 
-class Streamers extends Component {
-    constructor(props) {
-        super(props);
+const Streamers = (props) => {
+    let { user, streamers, width, dateDifference, showLogin, showSearch } = props;
 
-        this.state = { streamers: [] };
-    }
-
-    componentDidMount() {
-        this.getStreamersData();
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if (this.props.session !== prevProps.session) {
-            this.getStreamersData();
-            this.setState({ streamers: [] });
-        }
-    }
-
-    getStreamersData = async () => {
-        const response = await fetch("/api/twitchify/streamers", {});
-
-        try {
-            let data = await response.json();
-            if (response.ok) {
-                return this.setState({ streamers: data });
-            }
-            console.log(data.message || "Something went wrong.");
-        } catch (err) {
-            console.log("Something went wrong.");
-        }
-    };
-
-    getStreamers = () => {
-        return this.state.streamers.map((streamer) => (
-            <Link to={"/streamer/" + streamer["name"]} key={streamer["name"]} className="followed-streamer ">
-                <img src={streamer["logo"]} width="60" height="60" alt="MISSING" />
-                <div>{streamer["display_name"]}</div>
-                <div>{dateDifference(new Date(streamer["followed_at"]), new Date())}</div>
-            </Link>
-        ));
-    };
-
-    render() {
-        let {
-            session: { user },
-        } = this.props;
-
-        if (!user) {
-            return (
+    if (!user) {
+        return (
+            <div className="wrap">
                 <div className="unauth">
-                    <p>Log In to see followed streamers.</p>
-                    <button onClick={this.props.showLogin}>Sign In</button>
+                    <FontAwesomeIcon className="icon" icon="user-circle" size="10x" />
+                    <p>Sign In to see followed streamers.</p>
+                    <button onClick={showLogin}>SIGN IN</button>
                 </div>
-            );
-        }
-        return <div className="followed">{this.getStreamers()}</div>;
+            </div>
+        );
     }
-}
+    if (!streamers.length) {
+        return (
+            <div className="wrap">
+                <div className="unauth">
+                    <FontAwesomeIcon className="icon" icon="user-plus" size="10x" />
+                    <p>Search and follow you favourite streamers</p>
+                    <button onClick={showSearch}>SEARCH STREAMERS </button>
+                </div>
+            </div>
+        );
+    }
+    return (
+        <div className="followed">
+            {streamers.map((streamer) => (
+                <Link to={"/streamer/" + streamer["name"]} key={streamer["name"]} className="followed-streamer ">
+                    <img src={streamer["logo"]} width="100" height="100" alt="MISSING" />
 
-const mapStateToProps = (state) => {
-    return {
-        session: state.session,
-    };
+                    {width < 500 ? (
+                        <div className="minimized">
+                            <p>{streamer.display_name}</p>
+
+                            <div className="status">
+                                {streamer.live ? <p className="indicator">LIVE</p> : <p>OFFLINE</p>}
+                            </div>
+                        </div>
+                    ) : (
+                        <>
+                            <p>{streamer.display_name}</p>
+                            <div className="status gap">
+                                {streamer.live ? <p className="indicator">LIVE</p> : <p>OFFLINE</p>}
+                            </div>
+                        </>
+                    )}
+                    <div className="time-since">
+                        Followed: <span>{dateDifference(new Date(streamer["followed_at"]), new Date())}</span>
+                    </div>
+                </Link>
+            ))}
+        </div>
+    );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-    showLogin: () => {
-        dispatch(showLogin());
-    },
-});
-
-const dateDifference = (then, now) => {
-    let offset = (now - then) / 1000;
-    let delta_s = parseInt(offset % 60);
-    offset /= 60;
-    let delta_m = parseInt(offset % 60);
-    offset /= 60;
-    let delta_h = parseInt(offset % 24);
-    offset /= 24;
-    let delta_d = parseInt(offset);
-
-    if (delta_d > 365) {
-        let years = parseInt(delta_d / 365);
-        let plural = years > 1 ? "s" : "";
-        return `${years} year${plural} ago`;
-    }
-    if (delta_d > 30) {
-        let months = parseInt(delta_d / 30);
-        let plural = months > 1 ? "s" : "";
-        return `${months} month${plural} ago`;
-    }
-    if (delta_d > 0) {
-        let plural = delta_d > 1 ? "s" : "";
-        return `${delta_d} day${plural} ago`;
-    }
-    if (delta_h > 0) {
-        let plural = delta_h > 1 ? "s" : "";
-        return `${delta_h} hour${plural} ago`;
-    }
-    if (delta_m > 0) {
-        let plural = delta_m > 1 ? "s" : "";
-        return `${delta_m} minute${plural} ago`;
-    }
-    if (delta_s > 10) {
-        return `${delta_s} seconds ago`;
-    } else {
-        return "just now";
-    }
-};
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Streamers));
+export default Streamers;
