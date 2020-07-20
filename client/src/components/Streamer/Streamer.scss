@@ -22,11 +22,19 @@
 .streamer {
     width: 100%;
     height: 100%;
+    position: absolute;
     background-color: #18181b;
 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overflow: auto;
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 .tops {

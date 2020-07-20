@@ -26,7 +26,7 @@ class Streamer extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.match.params.id !== this.props.match.params.id) {
-            this.setState({ streamer: null, direction: null, seat: 0, recent_games: [] });
+            this.setState({ streamer: null, direction: null, seat: 0, recent_games: [], showFollowPrompt: false });
             this.getStreamersData();
         }
         if (this.props.session !== prevProps.session) {
@@ -39,7 +39,7 @@ class Streamer extends Component {
                 let streamer = this.state.streamer;
                 streamer.following = false;
                 streamer.followed_games = [];
-                this.setState(streamer);
+                this.setState({ streamer });
             }
         }
     }
@@ -54,7 +54,6 @@ class Streamer extends Component {
                 return res;
             })
             .then((data) => {
-                console.log(data);
                 let recent_games = [];
                 recent_games = [...data.recent_games];
 
@@ -199,7 +198,6 @@ class Streamer extends Component {
     };
 
     handleFollowChange = async (action, data = {}) => {
-        console.log(action, data);
         data.username = this.props.match.params.id;
         const response = await fetch("/api/twitchify/follow", {
             method: "POST",

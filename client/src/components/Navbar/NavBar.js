@@ -133,7 +133,7 @@ class NavBar extends Component {
                             <>
                                 <hr />
                                 <Link to="/streamers" className="followed-link">
-                                    FOLLOWED
+                                    FOLLOWING
                                 </Link>
                             </>
                         )}

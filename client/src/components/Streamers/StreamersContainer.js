@@ -13,7 +13,7 @@ import "./Streamers.scss";
 class StreamersContainer extends Component {
     constructor(props) {
         super(props);
-        this.state = { streamers: [], width: window.innerWidth };
+        this.state = { streamers: [], width: window.innerWidth, loading: true };
     }
 
     componentDidMount() {
@@ -32,7 +32,7 @@ class StreamersContainer extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (this.props.session !== prevProps.session) {
             this.getStreamersData();
-            this.setState({ streamers: [] });
+            this.setState({ streamers: [], loading: true });
         }
     }
 
@@ -42,7 +42,7 @@ class StreamersContainer extends Component {
         try {
             let data = await response.json();
             if (response.ok) {
-                return this.setState({ streamers: data });
+                return this.setState({ streamers: data, loading: false });
             }
             console.log(data.message || "Something went wrong.");
         } catch (err) {
@@ -56,7 +56,7 @@ class StreamersContainer extends Component {
             showLogin,
             showSearch,
         } = this.props;
-        let { streamers, width } = this.state;
+        let { streamers, width, loading } = this.state;
         return (
             <div className="followed">
                 <Streamers
@@ -66,6 +66,7 @@ class StreamersContainer extends Component {
                     showLogin={showLogin}
                     showSearch={showSearch}
                     width={width}
+                    loading={loading}
                 />
             </div>
         );

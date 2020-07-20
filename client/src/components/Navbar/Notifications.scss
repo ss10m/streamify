@@ -30,23 +30,24 @@ $hightlight-color: #30475e;
         }
 
         .header {
-            background-color: #151515;
             height: 60px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            border-bottom: 1px solid black;
 
             padding: 0 15px;
 
             font-size: 20px;
             font-weight: 700;
+            background-color: #121a21;
 
             .header-icon {
                 padding: 6px 8px;
                 border-radius: 7px;
 
                 &:hover {
-                    background-color: #3a3a3a;
+                    background-color: #30475e;
                     cursor: pointer;
                 }
             }
@@ -91,7 +92,7 @@ $hightlight-color: #30475e;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #1d1d1d;
+    background-color: #121a21;
 
     border-radius: 7px;
 
@@ -149,7 +150,7 @@ $hightlight-color: #30475e;
         border-radius: 4px;
 
         &:hover {
-            background-color: #3a3a3a;
+            background-color: $hightlight-color;
         }
     }
 
