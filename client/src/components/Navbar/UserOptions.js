@@ -55,19 +55,19 @@ class UserOptions extends Component {
                 <hr className="divider" />
 
                 <div className="option">
-                    <a className="button selectable" type="button">
+                    <div className="button selectable">
                         <FontAwesomeIcon className="option-icon" icon="cog" size="2x" />
                         Settings
-                    </a>
+                    </div>
                 </div>
                 <div className="option">
-                    <a className="button selectable" type="button">
+                    <div className="button selectable" type="button">
                         <FontAwesomeIcon className="option-icon" icon="globe-americas" size="2x" />
                         Language
-                    </a>
+                    </div>
                 </div>
                 <div className="option">
-                    <a className="button" type="button" style={{ cursor: "default" }}>
+                    <div className="button" type="button" style={{ cursor: "default" }}>
                         <FontAwesomeIcon className="option-icon" icon="bell" size="2x" />
                         Notifications
                         <input
@@ -76,15 +76,15 @@ class UserOptions extends Component {
                             style={{ marginLeft: "30px" }}
                             onChange={this.toggleNotifications}
                         />
-                    </a>
+                    </div>
                 </div>
 
                 <hr className="divider" />
                 <div className="option">
-                    <a className="button selectable" type="button" onClick={this.logout}>
+                    <div className="button selectable" type="button" onClick={this.logout}>
                         <FontAwesomeIcon className="option-icon" icon="sign-out-alt" size="2x" />
                         Log Out
-                    </a>
+                    </div>
                 </div>
             </div>
         );

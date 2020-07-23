@@ -75,15 +75,18 @@
                 &.wide {
                     width: 60px;
                     padding: 7px 8px;
-                    text-decoration: none;
 
-                    a {
+                    button {
                         height: 35px;
                         width: 100%;
-                        text-align: center;
                         line-height: 35px;
-                        background-color: #121a21;
+                        font-weight: 500;
+                        font-size: 15px;
+                        border: none;
+                        outline: none;
                         border-radius: 5px;
+                        background-color: #121a21;
+                        color: whitesmoke;
 
                         &:hover {
                             cursor: pointer;

@@ -12,10 +12,6 @@
     border-radius: 7px;
     position: relative;
 
-    :hover {
-        cursor: pointer;
-    }
-
     .loading {
         background-color: #121a21;
         border-radius: 7px;
@@ -43,6 +39,7 @@
 
         &:hover {
             color: #cbcbcb;
+            cursor: pointer;
         }
     }
 }

@@ -108,6 +108,8 @@ class Streamer extends Component {
                 case UNFOLLOW_GAME:
                     streamer.followed_games = [...data];
                     break;
+                default:
+                    return;
             }
             this.setState({ streamer });
         } catch (err) {
@@ -119,6 +121,8 @@ class Streamer extends Component {
                     return this.props.showLogin();
                 case FOLLOW_STREAMER:
                     return this.toggleFollowPrompt();
+                default:
+                    return;
             }
         }
     };

@@ -46,7 +46,7 @@ class NavBar extends Component {
             return (
                 <div>
                     <div className="user-btn wide flex">
-                        <a onClick={this.props.showLogin}>Sign In</a>
+                        <button onClick={this.props.showLogin}>Sign In</button>
                     </div>
                 </div>
             );
