@@ -8,18 +8,18 @@ const RecentGames = (props) => {
         <div>
             <Header searchBtn={searchBtn} />
             <div className="recent-games">
-                <a role="button" onClick={() => handleCarousel(false)}>
+                <div className="controls left" onClick={() => handleCarousel(false)}>
                     ‹
-                </a>
+                </div>
                 <div className="list">
                     <ul className={carouselClass}>
                         <Games recentGames={recentGames} followGame={followGame} />
                     </ul>
                 </div>
 
-                <a role="button" onClick={() => handleCarousel(true)}>
+                <div className="controls right" onClick={() => handleCarousel(true)}>
                     ›
-                </a>
+                </div>
             </div>
         </div>
     );
