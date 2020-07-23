@@ -4,9 +4,12 @@ import { connect } from "react-redux";
 
 import { showSearchGames, showLogin } from "../../store/actions.js";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import "./Streamer.scss";
 import Spinner from "../Spinner/Spinner";
 import FollowModal from "./FollowModal";
+import RecentGames from "./components/RecentGames/RecentGamesContainer";
 
 const FOLLOW_STREAMER = "FOLLOW_STREAMER";
 const UNFOLLOW_STREAMER = "UNFOLLOW_STREAMER";
@@ -17,16 +20,37 @@ const LOGIN = "LOGIN";
 class Streamer extends Component {
     constructor(props) {
         super(props);
-        this.state = { streamer: null, direction: null, seat: 0, recent_games: [], showFollowPrompt: false };
+        this.state = {
+            streamer: null,
+            showFollowPrompt: false,
+            previewLoaded: false,
+            width: window.innerWidth,
+        };
     }
 
     componentDidMount() {
         this.getStreamersData();
+        window.addEventListener("resize", this.updateDimensions);
     }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.updateDimensions);
+    }
+
+    updateDimensions = () => {
+        this.setState({ width: window.innerWidth });
+    };
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.match.params.id !== this.props.match.params.id) {
-            this.setState({ streamer: null, direction: null, seat: 0, recent_games: [], showFollowPrompt: false });
+            this.setState({
+                streamer: null,
+                direction: null,
+                seat: 0,
+                recent_games: [],
+                showFollowPrompt: false,
+                previewLoaded: false,
+            });
             this.getStreamersData();
         }
         if (this.props.session !== prevProps.session) {
@@ -54,55 +78,11 @@ class Streamer extends Component {
                 return res;
             })
             .then((data) => {
-                let recent_games = [];
-                recent_games = [...data.recent_games];
-
-                if (recent_games.length < 8) {
-                    for (let i = recent_games.length; i < 8; i++) {
-                        recent_games.push({
-                            box_art_url: "https://static-cdn.jtvnw.net/ttv-static/404_boxart-200x300.jpg",
-                            id: i,
-                            name: "Suggested " + i,
-                        });
-                    }
-                }
-
-                for (let i = 0; i < recent_games.length - 1; i++) {
-                    recent_games[i].order = i + 2;
-                    recent_games[i].next = recent_games[i + 1];
-                }
-                recent_games[recent_games.length - 1].order = 1;
-                recent_games[recent_games.length - 1].next = recent_games[0];
-
-                this.setState({ streamer: data, direction: null, recent_games, seat: recent_games.length - 1 });
+                this.setState({ streamer: data });
             })
             .catch((err) => {
                 console.log(err);
             });
-    };
-
-    handleCarousel = (moveRight) => {
-        let { recent_games, seat } = this.state;
-
-        let newSeat = 0;
-        let newDirection = null;
-        if (moveRight) {
-            newSeat = seat + 1 >= recent_games.length ? 0 : seat + 1;
-            newDirection = "right";
-        } else {
-            newSeat = seat - 1 < 0 ? recent_games.length - 1 : seat - 1;
-            newDirection = "left";
-        }
-
-        let current = recent_games[newSeat];
-        current.order = 1;
-
-        for (let i = 1; i < recent_games.length; i++) {
-            current = current.next;
-            current.order = i + 1;
-        }
-
-        this.setState({ seat: newSeat, direction: newDirection });
     };
 
     getFollowedGames = () => {
@@ -115,7 +95,7 @@ class Streamer extends Component {
             games.push(
                 <div className="tag" key={game.id}>
                     <p className="name">{game.name}</p>
-                    <p className="remove" onClick={() => this.handleFollowChange(UNFOLLOW_GAME, this.parseGame(game))}>
+                    <p className="remove" onClick={() => this.handleFollowChange(UNFOLLOW_GAME, game)}>
                         &#x2715;
                     </p>
                 </div>
@@ -123,72 +103,11 @@ class Streamer extends Component {
         }
 
         let header = <p>Not following any games</p>;
-        if (games.length) header = "FOLLOWED GAMES";
+        if (games.length) header = <div className="header">FOLLOWED GAMES</div>;
         return (
             <div className="followed-games">
                 {header}
                 {games}
-            </div>
-        );
-    };
-
-    getData = () => {
-        let { streamer, recent_games, direction } = this.state;
-        let { session } = this.props;
-
-        let directionClass = "";
-        if (direction === "right") {
-            directionClass = " forward";
-            setTimeout(() => this.setState({ direction: null }), 50);
-        } else if (direction === "left") {
-            directionClass = " reverse";
-            setTimeout(() => this.setState({ direction: null }), 50);
-        } else {
-            directionClass = " reset";
-        }
-
-        let carouselClass = "items" + directionClass;
-
-        let searchBtn;
-        if (!session.user) {
-            searchBtn = () => this.props.showLogin();
-        } else if (!streamer.following) {
-            searchBtn = () => this.setState({ showFollowPrompt: true });
-        } else {
-            searchBtn = () => this.props.showSearchGames(streamer, this.handleFollowChange);
-        }
-
-        return (
-            <div>
-                <div className="recent-games-header">
-                    <div className="recent-games-title">Recent Games</div>
-                    <button onClick={searchBtn}>Search Games</button>
-                </div>
-                <div className="recent-games">
-                    <a role="button" onClick={() => this.handleCarousel(false)}>
-                        ‹
-                    </a>
-                    <div className="list">
-                        <ul className={carouselClass}>
-                            {recent_games.map((game) => (
-                                <li key={game.id} className="item" style={{ order: game.order }}>
-                                    <div>{game.name}</div>
-                                    <img
-                                        src={game["box_art_url"]}
-                                        width="200"
-                                        height="300"
-                                        alt="MISSING"
-                                        onClick={() => this.handleFollowChange(FOLLOW_GAME, this.parseGame(game))}
-                                    />
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    <a role="button" onClick={() => this.handleCarousel(true)}>
-                        ›
-                    </a>
-                </div>
             </div>
         );
     };
@@ -198,6 +117,9 @@ class Streamer extends Component {
     };
 
     handleFollowChange = async (action, data = {}) => {
+        if (action === FOLLOW_GAME || FOLLOW_GAME === UNFOLLOW_GAME) {
+            data = this.parseGame(data);
+        }
         data.username = this.props.match.params.id;
         const response = await fetch("/api/twitchify/follow", {
             method: "POST",
@@ -252,13 +174,8 @@ class Streamer extends Component {
     };
 
     render() {
-        /*
-        let {
-            session: { user },
-        } = this.props;
-        */
-
-        let { streamer, showFollowPrompt } = this.state;
+        let { streamer, showFollowPrompt, previewLoaded, width } = this.state;
+        let { session, showLogin, showSearchGames } = this.props;
 
         if (!streamer) {
             return <Spinner />;
@@ -267,6 +184,8 @@ class Streamer extends Component {
         let button = <button onClick={() => this.handleFollowChange(FOLLOW_STREAMER)}>FOLLOW</button>;
         if (streamer.following)
             button = <button onClick={() => this.handleFollowChange(UNFOLLOW_STREAMER)}>UNFOLLOW</button>;
+
+        let previewWidth = Math.max(280, Math.min(width - 90, 450));
 
         return (
             <>
@@ -277,14 +196,54 @@ class Streamer extends Component {
                 )}
                 <div className="streamer">
                     <div className="tops">
-                        <img src={streamer["logo"]} width="200" height="200" alt="MISSING" />
+                        <img src={streamer["logo"]} width="200" height="200" alt="MISING" />
                         <p>{streamer["display_name"]}</p>
                     </div>
                     <div className="follow">{button}</div>
 
-                    <div>{this.getFollowedGames()}</div>
+                    <div className="second_row">
+                        <div
+                            className="preview"
+                            style={{
+                                height: previewWidth * 0.53 + 20,
+                                width: previewWidth,
+                            }}
+                        >
+                            {previewLoaded ? null : (
+                                <div
+                                    className="loading"
+                                    style={{
+                                        height: previewWidth * 0.53,
+                                        width: previewWidth,
+                                    }}
+                                />
+                            )}
+                            <img
+                                src={streamer.preview}
+                                alt="MISING"
+                                onClick={() => {
+                                    window.open(`https://www.twitch.tv/${streamer.name}`, "_blank");
+                                }}
+                                onLoad={() => this.setState({ previewLoaded: true })}
+                            />
+                            {streamer.stream && (
+                                <div className="icon">
+                                    <FontAwesomeIcon icon="play" size="4x" />
+                                </div>
+                            )}
+                        </div>
 
-                    {this.getData()}
+                        <div>{this.getFollowedGames()}</div>
+                    </div>
+
+                    <RecentGames
+                        streamer={streamer}
+                        handleFollowChange={this.handleFollowChange}
+                        showLogin={showLogin}
+                        showSearchGames={showSearchGames}
+                        showFollowPrompt={this.toggleFollowPrompt}
+                        isLoggedIn={session.user}
+                    />
                 </div>
             </>
         );

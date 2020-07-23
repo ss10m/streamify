@@ -8,6 +8,8 @@ export const getStreamer = async (session, streamerName, cb) => {
         let user = await getUser(streamerName);
         let [stream, recent] = await Promise.all([getStream(user.login), getRecentGames(user.id)]);
 
+        console.log(stream);
+
         let recentGames = [];
         if (recent.length) recentGames = await getRecentGamesBoxArt(recent);
 
@@ -140,8 +142,21 @@ const parseData = (user, stream, recentGames) => {
     streamer.display_name = user.display_name;
     streamer.logo = user.profile_image_url;
     streamer.preview = user.offline_image_url;
+    if (recentGames.length < 8) {
+        for (let i = recentGames.length; i < 8; i++) {
+            recentGames.push({
+                box_art_url: "https://static-cdn.jtvnw.net/ttv-static/404_boxart-200x300.jpg",
+                id: i,
+                name: "Suggested " + i,
+            });
+        }
+    }
     streamer.recent_games = recentGames;
     if (stream) {
+        let preview = stream.thumbnail_url;
+        preview = preview.replace(/{width}/g, "500");
+        preview = preview.replace(/{height}/g, "285");
+        streamer.preview = preview;
         let gameName,
             gameLogo = "";
         for (let game of recentGames) {
@@ -156,7 +171,6 @@ const parseData = (user, stream, recentGames) => {
             viewers: stream.viewer_count,
             started_at: stream.started_at,
             title: stream.title,
-            preview: stream.thumbnail_url,
         };
     }
     return streamer;

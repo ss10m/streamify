@@ -29,6 +29,7 @@ import {
     faTrash,
     faTrashAlt,
     faUserPlus,
+    faPlay,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -49,7 +50,8 @@ library.add(
     faUsers,
     faTrash,
     faTrashAlt,
-    faUserPlus
+    faUserPlus,
+    faPlay
 );
 
 const store = createStore(reducers, applyMiddleware(thunk));
