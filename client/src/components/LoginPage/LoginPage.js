@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { login, closeLoginWindow, register, hideLoginError } from "../../store/actions.js";
+import { login, closeLoginWindow, register, hideLoginError } from "store/actions.js";
 
 import "./LoginPage.scss";
 

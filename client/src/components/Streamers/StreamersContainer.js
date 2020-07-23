@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { showLogin, showSearch } from "../../store/actions.js";
+import { showLogin, showSearch } from "store/actions.js";
 
-import { dateDifference } from "../../helpers";
+import { dateDifference } from "helpers";
 
 import Streamers from "./Streamers";
 
@@ -13,21 +13,12 @@ import "./Streamers.scss";
 class StreamersContainer extends Component {
     constructor(props) {
         super(props);
-        this.state = { streamers: [], width: window.innerWidth, loading: true };
+        this.state = { streamers: [], loading: true };
     }
 
     componentDidMount() {
-        window.addEventListener("resize", this.updateDimensions);
         this.getStreamersData();
     }
-
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.updateDimensions);
-    }
-
-    updateDimensions = () => {
-        this.setState({ width: window.innerWidth });
-    };
 
     componentDidUpdate(prevProps, prevState) {
         if (this.props.session !== prevProps.session) {
@@ -55,8 +46,9 @@ class StreamersContainer extends Component {
             session: { user },
             showLogin,
             showSearch,
+            windowSize,
         } = this.props;
-        let { streamers, width, loading } = this.state;
+        let { streamers, loading } = this.state;
         return (
             <div className="followed">
                 <Streamers
@@ -65,7 +57,7 @@ class StreamersContainer extends Component {
                     dateDifference={dateDifference}
                     showLogin={showLogin}
                     showSearch={showSearch}
-                    width={width}
+                    width={windowSize}
                     loading={loading}
                 />
             </div>
@@ -76,6 +68,7 @@ class StreamersContainer extends Component {
 const mapStateToProps = (state) => {
     return {
         session: state.session,
+        windowSize: state.windowSize,
     };
 };
 

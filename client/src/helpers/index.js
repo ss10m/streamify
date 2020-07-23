@@ -36,3 +36,17 @@ export const dateDifference = (then, now) => {
         return "just now";
     }
 };
+
+export const liveTime = (then, now) => {
+    let offset = (now - then) / 1000;
+    let delta_s = parseInt(offset % 60);
+    offset /= 60;
+    let delta_m = parseInt(offset % 60);
+    offset /= 60;
+    let delta_h = parseInt(offset % 24);
+
+    if (delta_m < 10) delta_m = "0" + delta_m;
+    if (delta_s < 10) delta_s = "0" + delta_s;
+
+    return `${delta_h}:${delta_m}:${delta_s}`;
+};

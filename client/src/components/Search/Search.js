@@ -3,11 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { hideSearch } from "../../store/actions";
+import { hideSearch } from "store/actions";
 
 import Spinner from "../Spinner/Spinner";
 
 import "./Search.scss";
+import { liveTime } from "helpers";
 
 const SEARCH_USERS = "USERS";
 const SEARCH_GAMES = "GAMES";
@@ -18,22 +19,16 @@ class Search extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { searchInput: "", results: [], noResults: false, time: Date.now(), width: window.innerWidth };
+        this.state = { searchInput: "", results: [], noResults: false, time: Date.now() };
     }
 
     componentDidMount() {
         this.interval = setInterval(() => this.setState({ time: Date.now() }), 1000);
-        window.addEventListener("resize", this.updateDimensions);
     }
 
     componentWillUnmount() {
         clearInterval(this.interval);
-        window.removeEventListener("resize", this.updateDimensions);
     }
-
-    updateDimensions = () => {
-        this.setState({ width: window.innerWidth });
-    };
 
     handleChange = (event) => {
         var searchInput = event.target.value.trim();
@@ -149,6 +144,7 @@ class Search extends Component {
 
     gameInfo = (result) => {
         let { handleFollowChange } = this.props.mode;
+        let { windowSize } = this.props;
         let btnClass = result.following ? "unfollow" : "";
         let button = (
             <button
@@ -160,12 +156,9 @@ class Search extends Component {
         );
 
         return (
-            <div className={"info" + (window.innerWidth <= 500 ? " mini" : "")}>
+            <div className={"info" + (windowSize <= 500 ? " mini" : "")}>
                 <div className="name center">{result.name}</div>
-                <div
-                    className="options center"
-                    style={{ justifyContent: window.innerWidth <= 500 ? "center" : "start" }}
-                >
+                <div className="options center" style={{ justifyContent: windowSize <= 500 ? "center" : "start" }}>
                     {button}
                 </div>
             </div>
@@ -174,14 +167,14 @@ class Search extends Component {
 
     userInfo = (result, time) => {
         return (
-            <div className={"info" + (window.innerWidth <= 500 ? " mini" : "")}>
+            <div className={"info" + (this.props.windowSize <= 500 ? " mini" : "")}>
                 <div className="name center">{result.display_name.toUpperCase()}</div>
                 <div className="options center">
                     <div className="status">
                         {result.is_live ? (
                             <>
                                 <p className="indicator">LIVE</p>
-                                <p className="time">{dateDifference(new Date(result.started_at), time)}</p>
+                                <p className="time">{liveTime(new Date(result.started_at), time)}</p>
                             </>
                         ) : (
                             <p>OFFLINE</p>
@@ -223,24 +216,16 @@ class Search extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        windowSize: state.windowSize,
+    };
+};
+
 const mapDispatchToProps = (dispatch) => ({
     hideSearch: () => {
         dispatch(hideSearch());
     },
 });
 
-const dateDifference = (then, now) => {
-    let offset = (now - then) / 1000;
-    let delta_s = parseInt(offset % 60);
-    offset /= 60;
-    let delta_m = parseInt(offset % 60);
-    offset /= 60;
-    let delta_h = parseInt(offset % 24);
-
-    if (delta_m < 10) delta_m = "0" + delta_m;
-    if (delta_s < 10) delta_s = "0" + delta_s;
-
-    return `${delta_h}:${delta_m}:${delta_s}`;
-};
-
-export default withRouter(connect(null, mapDispatchToProps)(Search));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Search));

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { showSearchGames, showLogin } from "../../store/actions.js";
+import { showSearchGames, showLogin } from "store/actions.js";
 
 import "./Streamer.scss";
 import Spinner from "../Spinner/Spinner";
@@ -22,22 +22,12 @@ class Streamer extends Component {
         this.state = {
             streamer: null,
             showFollowPrompt: false,
-            width: window.innerWidth,
         };
     }
 
     componentDidMount() {
         this.getStreamersData();
-        window.addEventListener("resize", this.updateDimensions);
     }
-
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.updateDimensions);
-    }
-
-    updateDimensions = () => {
-        this.setState({ width: window.innerWidth });
-    };
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.match.params.id !== this.props.match.params.id) {
@@ -145,8 +135,8 @@ class Streamer extends Component {
     };
 
     render() {
-        let { streamer, showFollowPrompt, width } = this.state;
-        let { session, showLogin, showSearchGames } = this.props;
+        let { streamer, showFollowPrompt } = this.state;
+        let { session, showLogin, showSearchGames, windowSize } = this.props;
 
         if (!streamer) {
             return <Spinner />;
@@ -170,7 +160,7 @@ class Streamer extends Component {
                     </div>
                     <div className="follow">{button}</div>
 
-                    <StreamerView width={width} streamer={streamer} handleFollowChange={this.handleFollowChange} />
+                    <StreamerView width={windowSize} streamer={streamer} handleFollowChange={this.handleFollowChange} />
                     <RecentGames
                         streamer={streamer}
                         handleFollowChange={this.handleFollowChange}
@@ -188,6 +178,7 @@ class Streamer extends Component {
 const mapStateToProps = (state) => {
     return {
         session: state.session,
+        windowSize: state.windowSize,
     };
 };
 

@@ -126,3 +126,8 @@ export const clearNotificationsIndicator = () => ({
 export const clearNotifications = () => ({
     type: "CLEAR_NOTIFICATIONS",
 });
+
+export const updateWindowSize = (width) => ({
+    type: "UPDATE_WINDOW_SIZE",
+    width,
+});

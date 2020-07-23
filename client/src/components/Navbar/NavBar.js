@@ -4,14 +4,7 @@ import { connect } from "react-redux";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import {
-    getSession,
-    logout,
-    showLogin,
-    toggleNavBar,
-    showSearch,
-    clearNotificationsIndicator,
-} from "../../store/actions.js";
+import { getSession, logout, showLogin, toggleNavBar, showSearch, clearNotificationsIndicator } from "store/actions.js";
 
 import "./NavBar.scss";
 
@@ -22,21 +15,8 @@ import Notifications from "./Notifications";
 class NavBar extends Component {
     constructor(props) {
         super(props);
-        this.state = { width: window.innerWidth, userOptions: false, showNotifications: false };
+        this.state = { userOptions: false, showNotifications: false };
     }
-
-    componentDidMount() {
-        window.addEventListener("resize", this.updateDimensions);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.updateDimensions);
-    }
-
-    updateDimensions = () => {
-        if (this.props.expandedNavbar && window.innerWidth >= 650) this.props.toggleNavBar();
-        this.setState({ width: window.innerWidth });
-    };
 
     toggleDropDown = (event) => {
         if (event) event.stopPropagation();
@@ -110,13 +90,15 @@ class NavBar extends Component {
     render() {
         let user = this.props.session.user;
 
-        let extended = this.props.expandedNavbar ? " navExpanded" : "";
+        let { windowSize, expandedNavbar } = this.props;
+
+        let extended = expandedNavbar && windowSize < 650 ? " navExpanded" : "";
 
         return (
             <div className={"navbar" + extended}>
                 <div className="top">
                     <div>
-                        {this.state.width < 650 && (
+                        {windowSize < 650 && (
                             <div className="user-btn flex">
                                 <FontAwesomeIcon
                                     icon="bars"
@@ -129,7 +111,7 @@ class NavBar extends Component {
                         <Link to="/" className="title">
                             STREAMIFY
                         </Link>
-                        {this.state.width >= 650 && (
+                        {windowSize >= 650 && (
                             <>
                                 <hr />
                                 <Link to="/streamers" className="followed-link">
@@ -139,7 +121,7 @@ class NavBar extends Component {
                         )}
                     </div>
 
-                    {this.state.width >= 650 && this.getSearchField()}
+                    {windowSize >= 650 && this.getSearchField()}
                     {this.getUserBtns(user)}
                 </div>
                 {extended && (
@@ -159,6 +141,7 @@ const mapStateToProps = (state) => {
         expandedNavbar: state.toggleNavbar,
         userOptions: state.userOptions,
         notifications: state.notifications,
+        windowSize: state.windowSize,
     };
 };
 

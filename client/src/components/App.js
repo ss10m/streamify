@@ -3,8 +3,9 @@ import { withRouter, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import socketIO from "socket.io-client";
 
-import { getSession, showLogin, toggleNavBar, addNotifications } from "../store/actions.js";
+import { getSession, showLogin, toggleNavBar, addNotifications } from "store/actions.js";
 
+import WindowSize from "./WindowSize/WindowSize";
 import Page1 from "./Page1";
 import Page2 from "./Page2";
 import LoginPage from "./LoginPage/LoginPage";
@@ -86,30 +87,33 @@ class App extends Component {
         }
 
         return (
-            <div className="app">
-                <NavBar />
-                {loginDisplayed && <LoginPage />}
-                {searchDisplayed && <Search mode={searchDisplayed} />}
+            <>
+                <WindowSize />
+                <div className="app">
+                    <NavBar />
+                    {loginDisplayed && <LoginPage />}
+                    {searchDisplayed && <Search mode={searchDisplayed} />}
 
-                <div className="mainbody" onClick={this.hideNavbar}>
-                    <TopStreamers />
-                    <div className="streamers">
-                        <Switch>
-                            <Route exact path="/">
-                                <Page1 />
-                            </Route>
-                            <Route exact path="/page2">
-                                <Page2 />
-                            </Route>
-                            <Route exact path="/streamer/:id" render={(props) => <Streamer />} />
-                            <Route exact path="/streamers">
-                                <Streamers />
-                            </Route>
-                            <Route render={() => <h1>404</h1>} />
-                        </Switch>
+                    <div className="mainbody" onClick={this.hideNavbar}>
+                        <TopStreamers />
+                        <div className="streamers">
+                            <Switch>
+                                <Route exact path="/">
+                                    <Page1 />
+                                </Route>
+                                <Route exact path="/page2">
+                                    <Page2 />
+                                </Route>
+                                <Route exact path="/streamer/:id" render={(props) => <Streamer />} />
+                                <Route exact path="/streamers">
+                                    <Streamers />
+                                </Route>
+                                <Route render={() => <h1>404</h1>} />
+                            </Switch>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </>
         );
     }
 }
