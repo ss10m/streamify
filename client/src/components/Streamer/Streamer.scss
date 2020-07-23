@@ -12,54 +12,6 @@
     &::-webkit-scrollbar {
         display: none;
     }
-
-    .second_row {
-        display: flex;
-
-        @media (max-width: 900px) {
-            flex-direction: column;
-        }
-    }
-
-    .preview {
-        margin: 20px;
-        max-width: 450px;
-        border-radius: 17px;
-        position: relative;
-
-        :hover {
-            cursor: pointer;
-        }
-
-        .loading {
-            background-color: #121a21;
-            border-radius: 17px;
-            box-shadow: 0px 0px 10px 1px black;
-        }
-
-        img {
-            border-radius: 17px;
-            box-shadow: 0px 0px 10px 1px black;
-            max-width: 100%;
-            object-fit: contain;
-            //border: 5px solid black;
-        }
-
-        .icon {
-            color: whitesmoke;
-            position: absolute;
-
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            pointer-events: none;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    }
 }
 
 .tops {
@@ -85,45 +37,6 @@
         &:hover {
             cursor: pointer;
             background-color: #30475e;
-        }
-    }
-}
-
-.followed-games {
-    margin-bottom: 20px;
-    margin-left: 20px;
-    flex: 1;
-
-    //background-color: red;
-
-    .header {
-        font-weight: 600;
-        color: whitesmoke;
-    }
-
-    .tag {
-        padding: 10px;
-
-        .name {
-            display: inline;
-            background-color: whitesmoke;
-            padding: 2px 10px;
-            border-radius: 5px 0px 0px 5px;
-            box-shadow: 0px 0px 5px 0px black;
-        }
-
-        .remove {
-            display: inline;
-            padding: 2px 5px;
-            border-radius: 0px 5px 5px 0px;
-            background-color: #122941;
-            color: white;
-            box-shadow: 0px 0px 5px 0px black;
-
-            &:hover {
-                background-color: #1c4269;
-                cursor: pointer;
-            }
         }
     }
 }

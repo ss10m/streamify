@@ -6,6 +6,7 @@ export const getStreamer = async (session, streamerName, cb) => {
     try {
         let username = session.user ? session.user.username : "";
         let user = await getUser(streamerName);
+        console.log(user);
         let [stream, recent] = await Promise.all([getStream(user.login), getRecentGames(user.id)]);
 
         console.log(stream);
@@ -154,8 +155,8 @@ const parseData = (user, stream, recentGames) => {
     streamer.recent_games = recentGames;
     if (stream) {
         let preview = stream.thumbnail_url;
-        preview = preview.replace(/{width}/g, "500");
-        preview = preview.replace(/{height}/g, "285");
+        preview = preview.replace(/{width}/g, "450");
+        preview = preview.replace(/{height}/g, "240");
         streamer.preview = preview;
         let gameName,
             gameLogo = "";
