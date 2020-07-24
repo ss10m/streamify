@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { withRouter, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
-import socketIO from "socket.io-client";
 
 import { getSession, showLogin, toggleNavBar, addNotifications } from "store/actions.js";
 
 import WindowSize from "./WindowSize/WindowSize";
+import Notifications from "./Notifications/Notifications";
 import Page1 from "./Page1";
 import Page2 from "./Page2";
 import LoginPage from "./LoginPage/LoginPage";
@@ -27,49 +27,6 @@ class App extends Component {
         this.props.getSession();
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        let { session } = this.props;
-        let { socket } = this.state;
-
-        if (session !== prevProps.session) {
-            console.log("SESSION GOT UPDATED");
-            if (session.user) {
-                console.log("LOGGED IN");
-                console.log("CONNECTING SESSION");
-                this.connectSocket();
-            }
-
-            if (!session.user && socket) {
-                console.log("LOGGED OUT");
-                console.log("DISCONNECTING SESSION");
-                socket.disconnect();
-                this.setState({ socket: null });
-            }
-        }
-    }
-
-    connectSocket = () => {
-        let socket = socketIO.connect();
-        socket.on("update", this.handleUpdate);
-        socket.on("notification", this.handleNotification);
-        this.setState({ socket });
-    };
-
-    handleUpdate = (data) => {
-        console.log(data);
-    };
-
-    handleNotification = (data) => {
-        console.log(data);
-
-        for (let notificaiton of data) {
-            console.log(`${notificaiton.display_name} IS PLAYING ${notificaiton.game}`);
-            console.log(notificaiton.logo);
-        }
-
-        this.props.addNotifications(data);
-    };
-
     hideNavbar = (event) => {
         event.preventDefault();
         if (this.props.expandedNavbar) this.props.toggleNavBar();
@@ -89,6 +46,7 @@ class App extends Component {
         return (
             <>
                 <WindowSize />
+                <Notifications />
                 <div className="app">
                     <NavBar />
                     {loginDisplayed && <LoginPage />}

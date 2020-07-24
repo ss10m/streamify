@@ -112,11 +112,12 @@ const notifyUser = async (connection, idToStreamer, ids) => {
                 // send new notficiation if time since last one is > 60 sec
                 let recentNotification = await getNotifications(followedGame.follow_id, followedGame.id);
                 if (!recentNotification || (new Date() - recentNotification.sent_at) / 1000 > 120) {
-                    console.log(`${followedGame.display_name} IS PLAYING ${followedGame.name}`);
+                    //console.log(`${followedGame.display_name} IS PLAYING ${followedGame.name}`);
 
                     let notification = await storeNotification(followedGame.follow_id, followedGame.id);
                     let msg = {
                         id: notification.id,
+                        name: followedGame.streamer_name,
                         display_name: followedGame.display_name,
                         logo: followedGame.logo,
                         game: followedGame.name,
@@ -132,7 +133,7 @@ const notifyUser = async (connection, idToStreamer, ids) => {
 };
 
 const getFollowedGames = async (userId) => {
-    let query = `SELECT follows.streamer_id, streamers.display_name, streamers.logo, followed_games.follow_id, games.name, games.id
+    let query = `SELECT follows.streamer_id, streamers.name AS streamer_name, streamers.display_name, streamers.logo, followed_games.follow_id, games.name, games.id
                  FROM follows 
                  INNER JOIN streamers on streamers.id = follows.streamer_id
                  INNER JOIN followed_games on follow_id = follows.id
@@ -165,7 +166,7 @@ const storeNotification = async (followId, gameId) => {
 };
 
 const getRecentNotifications = async (userId) => {
-    let query = `SELECT streamers.display_name, streamers.logo, games.name as game, notifications.sent_at, notifications.id
+    let query = `SELECT streamers.display_name, streamers.name, streamers.logo, games.name as game, notifications.sent_at, notifications.id
                  FROM follows
                  INNER JOIN streamers ON streamers.id = follows.streamer_id
                  INNER JOIN notifications ON notifications.follow_id = follows.id

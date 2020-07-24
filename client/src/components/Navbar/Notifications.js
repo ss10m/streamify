@@ -37,8 +37,6 @@ class Notifications extends Component {
         event.preventDefault();
         event.stopPropagation();
 
-        console.log(id);
-
         const response = await fetch("/api/notifications/", {
             method: "POST",
             body: JSON.stringify({ id }),
@@ -90,7 +88,7 @@ class Notifications extends Component {
         }
         return data.map((notification) => (
             <Link
-                to={"/streamer/" + notification.display_name}
+                to={"/streamer/" + notification.name}
                 className="notification"
                 key={notification.id}
                 onClick={this.props.toggleNotifications}

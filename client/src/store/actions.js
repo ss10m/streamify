@@ -13,7 +13,7 @@ export const getSession = () => async (dispatch) => {
     let defaultState = { isLoaded: true, user: null };
     if (data && data["user"]) defaultState["user"] = data["user"];
     dispatch(setSession(defaultState));
-    dispatch(setNotifications(data.notifications));
+    dispatch(addNotifications(data.notifications));
 };
 
 export const login = (userInfo) => async (dispatch) => {
@@ -30,7 +30,7 @@ export const login = (userInfo) => async (dispatch) => {
     let sessionState = { isLoaded: true, user: data.user };
     dispatch(closeLoginWindow());
     dispatch(setSession(sessionState));
-    dispatch(setNotifications(data.notifications));
+    dispatch(addNotifications(data.notifications));
 };
 
 export const register = (userInfo) => async (dispatch) => {

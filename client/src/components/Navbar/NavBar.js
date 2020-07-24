@@ -39,7 +39,7 @@ class NavBar extends Component {
 
     getUserBtns = (user) => {
         let {
-            notifications: { indicator },
+            notifications: { newNotifications },
         } = this.props;
 
         if (!user) {
@@ -61,7 +61,7 @@ class NavBar extends Component {
                         size="2x"
                         onClick={this.toggleNotifications}
                     ></FontAwesomeIcon>
-                    {indicator && <span className="indicator"></span>}
+                    {newNotifications > 0 && <span className="indicator"></span>}
                     {this.state.showNotifications && <Notifications toggleNotifications={this.toggleNotifications} />}
                 </div>
                 <div className="user-btn flex" id="userDropdown">
