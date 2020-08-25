@@ -5,9 +5,9 @@ import { parseResponse } from "helpers";
 export const getSession = () => async (dispatch) => {
     const response = await fetch("/api/session", { method: "GET" });
     let parsed = await parseResponse(response);
-    if (!parsed) return; // show error view
+    if (!parsed) return dispatch(setError("Something went wrong"));
     let { meta, data } = parsed;
-    if (!meta.ok) return; // show error view
+    if (!meta.ok) return dispatch(setError(meta.message));
     let defaultState = { isLoaded: true, user: null };
     if (data["user"]) defaultState["user"] = data["user"];
     batch(() => {
@@ -15,12 +15,10 @@ export const getSession = () => async (dispatch) => {
         dispatch(addNotifications(data.notifications));
     });
 };
-
 const setSession = (session) => ({
     type: "SET_SESSION",
     session,
 });
-
 const clearSession = () => ({
     type: "CLEAR_SESSION",
 });
@@ -36,13 +34,13 @@ export const login = (userInfo) => async (dispatch) => {
     });
 
     let parsed = await parseResponse(response);
-    if (!parsed) return; // show error view
+    if (!parsed) return dispatch(setError("Something went wrong"));
     let { meta, data } = parsed;
     if (!meta.ok) {
         if (meta.action) {
             return dispatch(showLoginError(meta.message));
         }
-        return; // show error view
+        return dispatch(setError("Something went wrong"));
     }
     let sessionState = { isLoaded: true, user: data.user };
     batch(() => {
@@ -61,15 +59,14 @@ export const register = (userInfo) => async (dispatch) => {
     });
 
     let parsed = await parseResponse(response);
-    if (!parsed) return; // show error view
+    if (!parsed) return dispatch(setError("Something went wrong"));
     let { meta, data } = parsed;
     if (!meta.ok) {
         if (meta.action) {
             return dispatch(showLoginError(meta.message));
         }
-        return; // show error view
+        return dispatch(setError("Something went wrong"));
     }
-    console.log(data);
     let sessionState = { isLoaded: true, user: data.user };
     batch(() => {
         dispatch(closeLoginWindow());
@@ -79,9 +76,14 @@ export const register = (userInfo) => async (dispatch) => {
 export const logout = () => async (dispatch) => {
     const response = await fetch("/api/session", { method: "DELETE" });
     let parsed = await parseResponse(response);
-    if (!parsed) return; // show error view
+    if (!parsed) return dispatch(setError("Something went wrong"));
     let { meta } = parsed;
-    if (!meta.ok) return; // show error view;
+    if (!meta.ok) {
+        if (meta.action) {
+            return dispatch(showLoginError(meta.message));
+        }
+        return dispatch(setError("Something went wrong"));
+    }
     batch(() => {
         dispatch(clearSession());
         dispatch(clearNotifications());
@@ -145,4 +147,10 @@ export const clearNotificationsIndicator = () => ({
 export const updateWindowSize = (width) => ({
     type: "UPDATE_WINDOW_SIZE",
     width,
+});
+
+// Error Actions
+export const setError = (message) => ({
+    type: "SET_ERROR",
+    message,
 });

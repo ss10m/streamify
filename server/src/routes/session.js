@@ -11,8 +11,6 @@ const router = express.Router();
 import db from "../config/db.js";
 
 router.post("", async (req, res) => {
-    console.log("sign in");
-
     try {
         const { username, password } = req.body;
         await Joi.validate({ username, password }, signIn);
@@ -40,7 +38,7 @@ router.post("", async (req, res) => {
             res.send({
                 meta: {
                     ok: true,
-                    message: "done",
+                    message: "",
                 },
                 data: { user: sessionUser, notifications },
             });
@@ -77,12 +75,16 @@ router.delete("", ({ session }, res) => {
 });
 
 router.get("", async ({ session: { user } }, res) => {
-    let notifications = [];
-    if (user) notifications = await getRecentNotifications(user.id);
-    res.send({
-        meta: { ok: true, message: "" },
-        data: { user, notifications },
-    });
+    try {
+        let notifications = [];
+        if (user) notifications = await getRecentNotifications(user.id);
+        res.send({
+            meta: { ok: true, message: "" },
+            data: { user, notifications },
+        });
+    } catch (err) {
+        res.send({ meta: { ok: false, message: parseError(err) }, data: {} });
+    }
 });
 
 export default router;

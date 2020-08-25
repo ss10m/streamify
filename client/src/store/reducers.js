@@ -66,7 +66,11 @@ const showSearchReducer = (state = false, action) => {
         case SHOW_SEARCH:
             return { type: SEARCH_USERS };
         case SHOW_SEARCH_GAMES:
-            return { type: SEARCH_GAMES, user: action.user, handleFollowChange: action.handleFollowChange };
+            return {
+                type: SEARCH_GAMES,
+                user: action.user,
+                handleFollowChange: action.handleFollowChange,
+            };
         case HIDE_SEARCH:
             return false;
         default:
@@ -79,10 +83,16 @@ const SET_NOTIFICATIONS = "SET_NOTIFICATIONS";
 const CLEAR_NOTIFICATIONS = "CLEAR_NOTIFICATIONS";
 const CLEAR_NOTIFICATIONS_INDICATOR = "CLEAR_NOTIFICATIONS_INDICATOR";
 
-const notificationsReducer = (state = { data: [], newNotifications: 0 }, action) => {
+const notificationsReducer = (
+    state = { data: [], newNotifications: 0 },
+    action
+) => {
     switch (action.type) {
         case ADD_NOTIFICATIONS:
-            return { data: [...action.notifications, ...state.data], newNotifications: action.notifications.length };
+            return {
+                data: [...action.notifications, ...state.data],
+                newNotifications: action.notifications.length,
+            };
         case SET_NOTIFICATIONS:
             return { data: [...action.notifications], newNotifications: 0 };
         case CLEAR_NOTIFICATIONS_INDICATOR:
@@ -105,6 +115,17 @@ const windowSizeReducer = (state = 0, action) => {
     }
 };
 
+const SET_ERROR = "SET_ERROR";
+
+const errorReducer = (state = { isVisible: false, message: "" }, action) => {
+    switch (action.type) {
+        case SET_ERROR:
+            return { isVisible: true, message: action.message };
+        default:
+            return state;
+    }
+};
+
 export default combineReducers({
     session: sessionReducer,
     loginError: loginErrorReducer,
@@ -113,4 +134,5 @@ export default combineReducers({
     searchDisplayed: showSearchReducer,
     notifications: notificationsReducer,
     windowSize: windowSizeReducer,
+    error: errorReducer,
 });

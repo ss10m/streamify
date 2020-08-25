@@ -2,7 +2,12 @@ import React, { Component } from "react";
 import { withRouter, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { getSession, showLogin, toggleNavBar, addNotifications } from "store/actions.js";
+import {
+    getSession,
+    showLogin,
+    toggleNavBar,
+    addNotifications,
+} from "store/actions.js";
 
 import WindowSize from "./WindowSize/WindowSize";
 import Notifications from "./Notifications/Notifications";
@@ -14,6 +19,7 @@ import TopStreamers from "./TopStreamers/TopStreamersContainer";
 import Streamers from "./Streamers/StreamersContainer";
 import Streamer from "./Streamer/Streamer";
 import Search from "./Search/Search";
+import Error from "./Error/Error";
 
 import "./App.scss";
 
@@ -37,11 +43,11 @@ class App extends Component {
             session: { isLoaded },
             loginDisplayed,
             searchDisplayed,
+            error,
         } = this.props;
 
-        if (!isLoaded) {
-            return <div>Loading...</div>;
-        }
+        if (error.isVisible) return <Error error={error.message} />;
+        if (!isLoaded) return <div>Loading...</div>;
 
         return (
             <>
@@ -62,7 +68,11 @@ class App extends Component {
                                 <Route exact path="/page2">
                                     <Page2 />
                                 </Route>
-                                <Route exact path="/streamer/:id" render={(props) => <Streamer />} />
+                                <Route
+                                    exact
+                                    path="/streamer/:id"
+                                    render={(props) => <Streamer />}
+                                />
                                 <Route exact path="/streamers">
                                     <Streamers />
                                 </Route>
@@ -82,6 +92,7 @@ const mapStateToProps = (state) => {
         loginDisplayed: state.loginDisplayed,
         expandedNavbar: state.toggleNavbar,
         searchDisplayed: state.searchDisplayed,
+        error: state.error,
     };
 };
 
