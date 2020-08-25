@@ -53,7 +53,9 @@ const StreamerList = (props) => {
                     <div className="stream">
                         <div className="name">{streamer["display_name"]}</div>
                         <div className="viewer-count">
-                            <div className="indicator"></div>
+                            <div className="indicator">
+                                <FontAwesomeIcon icon="eye" />
+                            </div>
                             <div>{streamer["viewer_count"]}</div>
                         </div>
                     </div>

@@ -50,3 +50,11 @@ export const liveTime = (then, now) => {
 
     return `${delta_h}:${delta_m}:${delta_s}`;
 };
+
+export const parseResponse = async (response) => {
+    try {
+        return await response.json();
+    } catch (err) {
+        return null;
+    }
+};
