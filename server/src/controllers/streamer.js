@@ -6,16 +6,24 @@ export const getStreamer = async (session, streamerName, cb) => {
     try {
         let username = session.user ? session.user.username : "";
         let user = await getUser(streamerName);
-        let [stream, recent] = await Promise.all([getStream(user.login), getRecentGames(user.id)]);
+        let [stream, recent] = await Promise.all([
+            getStream(user.login),
+            getRecentGames(user.id),
+        ]);
 
         let recentGames = [];
         if (recent.length) recentGames = await getRecentGamesBoxArt(recent);
 
         let streamer = parseData(user, stream, recentGames);
 
-        let { isFollowing, followedGames } = await isFollowingStreamer(username, user.login);
+        let {
+            isFollowing,
+            followedAt,
+            followedGames,
+        } = await isFollowingStreamer(username, user.login);
 
         streamer.following = isFollowing;
+        streamer.followed_at = followedAt;
         streamer.followed_games = followedGames;
 
         cb(streamer);
@@ -63,7 +71,10 @@ const getStream = async (username) => {
 const getRecentGames = async (streamerId) => {
     var options = {
         method: "GET",
-        url: "https://api.twitch.tv/kraken/channels/" + streamerId + "/videos?broadcast_type=archive&limit=50",
+        url:
+            "https://api.twitch.tv/kraken/channels/" +
+            streamerId +
+            "/videos?broadcast_type=archive&limit=50",
         headers: {
             "Client-ID": cred.clientId,
             Accept: "application/vnd.twitchtv.v5+json",
@@ -143,7 +154,8 @@ const parseData = (user, stream, recentGames) => {
     if (recentGames.length < 8) {
         for (let i = recentGames.length; i < 8; i++) {
             recentGames.push({
-                box_art_url: "https://static-cdn.jtvnw.net/ttv-static/404_boxart-200x300.jpg",
+                box_art_url:
+                    "https://static-cdn.jtvnw.net/ttv-static/404_boxart-200x300.jpg",
                 id: i,
                 name: "Suggested " + i,
             });
@@ -166,7 +178,7 @@ const parseData = (user, stream, recentGames) => {
         streamer.stream = {
             game: gameName,
             game_box_art_url: gameLogo,
-            viewers: stream.viewer_count,
+            viewers: roundedToFixed(stream.viewer_count, 1),
             started_at: stream.started_at,
             title: stream.title,
         };
@@ -174,8 +186,17 @@ const parseData = (user, stream, recentGames) => {
     return streamer;
 };
 
+const roundedToFixed = (number, digits) => {
+    if (number < 1000) return number;
+    let float = number / 1000;
+    let rounded = Math.pow(10, digits);
+    let viewers = (Math.round(float * rounded) / rounded).toFixed(digits);
+    if (viewers % 1 == 0) viewers = parseInt(viewers);
+    return viewers + "K";
+};
+
 const isFollowingStreamer = async (username, streamer) => {
-    let query = `SELECT follows.id as follow_id, games.id, games.name, games.box_art_url
+    let query = `SELECT follows.id as follow_id, follows.followed_at, games.id, games.name, games.box_art_url
                  FROM follows 
                  INNER JOIN users ON users.id = follows.user_id 
                  INNER JOIN streamers ON streamers.id = follows.streamer_id
@@ -187,10 +208,12 @@ const isFollowingStreamer = async (username, streamer) => {
     let result = await db.query(query, values);
 
     let isFollowing = result.rows.length > 0;
+    let followedAt = null;
+    if (isFollowing) followedAt = result.rows[0].followed_at;
     let followedGames = [];
     for (let game of result.rows) {
         delete game.follow_id;
         if (game.id) followedGames.push(game);
     }
-    return { isFollowing, followedGames };
+    return { isFollowing, followedAt, followedGames };
 };

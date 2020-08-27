@@ -4,6 +4,10 @@ import { connect } from "react-redux";
 
 import { showSearchGames, showLogin } from "store/actions.js";
 
+import { dateDifference } from "helpers";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import "./Streamer.scss";
 import Spinner from "../Spinner/Spinner";
 import FollowModal from "./FollowModal";
@@ -97,6 +101,8 @@ class Streamer extends Component {
             switch (action) {
                 case FOLLOW_STREAMER:
                     streamer.following = true;
+                    streamer.followed_at = new Date().getTime() - 5000;
+
                     break;
                 case UNFOLLOW_STREAMER:
                     streamer.following = false;
@@ -146,25 +152,87 @@ class Streamer extends Component {
             return <Spinner />;
         }
 
-        let button = <button onClick={() => this.handleFollowChange(FOLLOW_STREAMER)}>FOLLOW</button>;
+        console.log(streamer);
+
+        let button = (
+            <button onClick={() => this.handleFollowChange(FOLLOW_STREAMER)}>
+                FOLLOW
+            </button>
+        );
         if (streamer.following)
-            button = <button onClick={() => this.handleFollowChange(UNFOLLOW_STREAMER)}>UNFOLLOW</button>;
+            button = (
+                <button
+                    onClick={() => this.handleFollowChange(UNFOLLOW_STREAMER)}
+                >
+                    UNFOLLOW
+                </button>
+            );
 
         return (
             <>
                 {showFollowPrompt && (
                     <div className="follow-prompt">
-                        <FollowModal streamer={streamer} follow={this.handleFollow} close={this.toggleFollowPrompt} />
+                        <FollowModal
+                            streamer={streamer}
+                            follow={this.handleFollow}
+                            close={this.toggleFollowPrompt}
+                        />
                     </div>
                 )}
                 <div className="streamer">
                     <div className="tops">
-                        <img src={streamer["logo"]} width="200" height="200" alt="MISING" />
-                        <p>{streamer["display_name"]}</p>
+                        <div className="img-wrapper">
+                            <img
+                                src={streamer["logo"]}
+                                width="200"
+                                height="200"
+                                alt="MISING"
+                            />
+                            <div>
+                                {streamer.stream ? (
+                                    <div
+                                        className={
+                                            streamer.stream ? "live" : ""
+                                        }
+                                    >
+                                        <FontAwesomeIcon
+                                            icon="eye"
+                                            className="icon"
+                                        />
+                                        {streamer.stream.viewers}
+                                    </div>
+                                ) : (
+                                    "OFFLINE"
+                                )}
+                            </div>
+                        </div>
+                        <div className="info">
+                            <div className="streamer-name">
+                                {streamer["display_name"]}
+                            </div>
+                            {streamer.following && (
+                                <div className="streamer-game">
+                                    {"Followed " +
+                                        dateDifference(
+                                            new Date(streamer.followed_at),
+                                            new Date()
+                                        )}
+                                </div>
+                            )}
+                            {streamer.stream && (
+                                <div className="streamer-game">
+                                    {"Playing " + streamer.stream.game}
+                                </div>
+                            )}
+                            <div className="follow">{button}</div>
+                        </div>
                     </div>
-                    <div className="follow">{button}</div>
 
-                    <StreamerView width={windowSize} streamer={streamer} handleFollowChange={this.handleFollowChange} />
+                    <StreamerView
+                        width={windowSize}
+                        streamer={streamer}
+                        handleFollowChange={this.handleFollowChange}
+                    />
                     <RecentGames
                         streamer={streamer}
                         handleFollowChange={this.handleFollowChange}
@@ -195,4 +263,6 @@ const mapDispatchToProps = (dispatch) => ({
     },
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Streamer));
+export default withRouter(
+    connect(mapStateToProps, mapDispatchToProps)(Streamer)
+);

@@ -48,9 +48,7 @@ export const getTopStreamers = (cb) => {
 
                 let viewers = streamer.viewer_count;
                 if (streamer.viewer_count >= 1000) {
-                    viewers = roundedToFixed(viewers / 1000, 1);
-                    if (viewers % 1 == 0) viewers = parseInt(viewers);
-                    viewers = viewers.toString() + "K";
+                    viewers = roundedToFixed(viewers, 1);
                 }
                 data.viewer_count = viewers;
 
@@ -64,10 +62,14 @@ export const getTopStreamers = (cb) => {
         });
 };
 
-function roundedToFixed(float, digits) {
+const roundedToFixed = (number, digits) => {
+    if (number < 1000) return number;
+    let float = number / 1000;
     let rounded = Math.pow(10, digits);
-    return (Math.round(float * rounded) / rounded).toFixed(digits);
-}
+    let viewers = (Math.round(float * rounded) / rounded).toFixed(digits);
+    if (viewers % 1 == 0) viewers = parseInt(viewers);
+    return viewers + "K";
+};
 
 const getChannels = async (ids) => {
     let idParam = "?id=" + ids.join("&id=");

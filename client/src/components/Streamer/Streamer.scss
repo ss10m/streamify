@@ -15,7 +15,8 @@
 }
 
 .tops {
-    padding: 10px;
+    padding: 20px;
+    padding-bottom: 10px;
     display: flex;
     flex-direction: row;
 
@@ -23,13 +24,65 @@
 
     color: whitesmoke;
 
-    img {
-        width: 10vw;
-        height: 10vw;
-        max-width: 200px;
-        max-height: 200px;
-        min-height: 100px;
-        min-width: 100px;
+    .img-wrapper {
+        display: flex;
+        flex-direction: column;
+        img {
+            width: 10vw;
+            height: 10vw;
+            max-width: 200px;
+            max-height: 200px;
+            min-height: 100px;
+            min-width: 100px;
+            border-radius: 5px 5px 0 0;
+        }
+
+        div {
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            border-radius: 0 0 5px 5px;
+            background-color: #121a21;
+            font-size: 16px;
+            letter-spacing: 2px;
+            font-weight: 700;
+            color: red;
+
+            &.live {
+                color: green;
+
+                .icon {
+                    margin-right: 3px;
+                }
+            }
+        }
+    }
+
+    .info {
+        flex: 1;
+        height: 100%;
+
+        margin-left: 15px;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+
+        .streamer-name {
+            font-size: 5vw;
+            font-weight: 600;
+            line-height: 5vw;
+
+            @media (max-width: 370px) {
+                font-size: 20px;
+                line-height: 20px;
+            }
+        }
+
+        .streamer-game {
+            font-size: 14px;
+            color: #c4c4c4;
+        }
     }
 
     p {
@@ -48,18 +101,18 @@
 }
 
 .follow {
-    margin: 20px;
     button {
         outline: none;
         border: none;
         padding: 12px 50px;
         border-radius: 5px;
-        background-color: #202e3a;
+        font-weight: 500;
+        background-color: #2d5477;
         color: whitesmoke;
 
         &:hover {
             cursor: pointer;
-            background-color: #30475e;
+            background-color: #ff4e4e;
         }
     }
 }
