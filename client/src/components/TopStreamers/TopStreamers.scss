@@ -87,7 +87,8 @@
             font-weight: 500;
 
             .name {
-                width: 140px;
+                width: 135px;
+
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
@@ -101,9 +102,11 @@
                 font-size: 14px;
 
                 .indicator {
-                    //border-radius: 50%;
-                    color: red;
-                    margin-right: 3px;
+                    width: 8px;
+                    height: 8px;
+                    background-color: red;
+                    border-radius: 50%;
+                    margin-right: 2px;
                 }
             }
         }

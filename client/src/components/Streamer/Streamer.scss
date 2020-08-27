@@ -79,9 +79,14 @@
             }
         }
 
-        .streamer-game {
+        .small-info {
             font-size: 14px;
+
             color: #c4c4c4;
+
+            &.follow-age {
+                height: 20px;
+            }
         }
     }
 
@@ -104,14 +109,18 @@
     button {
         outline: none;
         border: none;
-        padding: 12px 50px;
+        width: 175px;
+        padding: 12px 0;
         border-radius: 5px;
         font-weight: 500;
-        background-color: #2d5477;
+        background-color: #394250;
         color: whitesmoke;
 
         &:hover {
             cursor: pointer;
+        }
+
+        &.unfollow {
             background-color: #ff4e4e;
         }
     }

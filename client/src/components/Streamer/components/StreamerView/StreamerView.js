@@ -4,7 +4,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./StreamerView.scss";
 
 const StreamerView = (props) => {
-    let { streamer, previewLoaded, previewWidth, unfollowGame, onPreviewLoad } = props;
+    let {
+        streamer,
+        previewLoaded,
+        previewWidth,
+        unfollowGame,
+        onPreviewLoad,
+    } = props;
 
     return (
         <div className="streamer-view">
@@ -27,12 +33,20 @@ const Preview = ({ streamer, previewLoaded, previewWidth, onPreviewLoad }) => {
     return (
         <div className="preview" style={style}>
             {previewLoaded ? null : <div className="loading" style={style} />}
-            <img src={streamer.preview} alt="MISING" style={previewLoaded ? style : null} onLoad={onPreviewLoad} />
+            <img
+                src={streamer.preview}
+                alt="MISING"
+                style={previewLoaded ? style : null}
+                onLoad={onPreviewLoad}
+            />
             {streamer.stream && (
                 <div
                     className="icon"
                     onClick={() => {
-                        window.open(`https://www.twitch.tv/${streamer.name}`, "_blank");
+                        window.open(
+                            `https://www.twitch.tv/${streamer.name}`,
+                            "_blank"
+                        );
                     }}
                 >
                     <FontAwesomeIcon icon="play" size="4x" />
@@ -51,14 +65,17 @@ const FollowedGames = ({ streamer, unfollowGame }) => {
 
             {!streamer.followed_games.length ? (
                 <div className="empty">
-                    <p>Nothing appears to be here</p>
+                    <p>Follow games to get notified</p>
                 </div>
             ) : (
                 <div className="tags">
                     {streamer.followed_games.map((game) => (
                         <div className="tag" key={game.id}>
                             <div className="name">{game.name}</div>
-                            <div className="remove" onClick={() => unfollowGame(game)}>
+                            <div
+                                className="remove"
+                                onClick={() => unfollowGame(game)}
+                            >
                                 &#x2715;
                             </div>
                         </div>

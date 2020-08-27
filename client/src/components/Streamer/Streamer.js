@@ -162,6 +162,7 @@ class Streamer extends Component {
         if (streamer.following)
             button = (
                 <button
+                    className="unfollow"
                     onClick={() => this.handleFollowChange(UNFOLLOW_STREAMER)}
                 >
                     UNFOLLOW
@@ -210,20 +211,22 @@ class Streamer extends Component {
                             <div className="streamer-name">
                                 {streamer["display_name"]}
                             </div>
-                            {streamer.following && (
-                                <div className="streamer-game">
-                                    {"Followed " +
-                                        dateDifference(
-                                            new Date(streamer.followed_at),
-                                            new Date()
-                                        )}
-                                </div>
-                            )}
                             {streamer.stream && (
-                                <div className="streamer-game">
+                                <div className="small-info">
                                     {"Playing " + streamer.stream.game}
                                 </div>
                             )}
+
+                            <div className="small-info follow-age">
+                                {streamer.following
+                                    ? "Followed " +
+                                      dateDifference(
+                                          new Date(streamer.followed_at),
+                                          new Date()
+                                      )
+                                    : ""}
+                            </div>
+
                             <div className="follow">{button}</div>
                         </div>
                     </div>
