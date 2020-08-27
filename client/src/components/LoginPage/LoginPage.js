@@ -1,236 +1,172 @@
-import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+// Libraries & utils
+import React from "react";
+
+// Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { login, closeLoginWindow, register, hideLoginError } from "store/actions.js";
-
+// SCSS
 import "./LoginPage.scss";
 
-import Input from "./Input";
-
-class LoginPageView extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            view: "default",
-            title: "LOGIN TO TWITCHIFY",
-            username: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
-        };
-    }
-
-    handleClickOutside = (event) => {
-        event.preventDefault();
-
-        if (event.target.className === "login-page") {
-            this.props.closeLoginWindow();
-        }
-    };
-
-    handleInput = (inputType) => {
-        return (event) => {
-            this.setState({
-                [inputType]: event.target.value,
-            });
-        };
-    };
-
-    handleKeyPress = (func) => {
-        return (event) => {
-            if (event.key === "Enter") {
-                func();
-            }
-        };
-    };
-
-    switchView = (view) => {
-        let title = "";
-        switch (view) {
-            case "login":
-                title = "LOGIN TO TWITCHIFY";
-                break;
-            case "register":
-                title = "REGISTER ACCOUNT";
-                break;
-            default:
-                title = "LOGIN TO TWITCHIFY";
-                break;
-        }
-        this.props.hideLoginError();
-        this.setState({ view, title, username: "", email: "", password: "", confirmPassword: "" });
-    };
-
-    getView = () => {
-        let { view } = this.state;
-        switch (view) {
-            case "login":
-                return this.getLoginView();
-            case "register":
-                return this.getRegistrationView();
-            default:
-                return this.getDefaultView();
-        }
-    };
-
-    getDefaultView = () => {
-        return (
-            <>
-                <div className="top flex">
-                    <FontAwesomeIcon
-                        icon="user-circle"
-                        size="10x"
-                        onClick={() => this.setState({ showAddItems: true })}
-                    />
+export default (props) => {
+    return (
+        <div className="login-page" onClick={props.handleClickOutside}>
+            <div className="login-box">
+                <div className="login-header">{props.title}</div>
+                {props.loginError && (
+                    <div className="error-msg center">
+                        <p>{props.loginError}</p>
+                    </div>
+                )}
+                <div className="login-body">
+                    <View {...props} />
                 </div>
-                <div className="btn login flex" onClick={() => this.switchView("login")}>
-                    LOGIN
-                </div>
-                <div className="btn register flex" onClick={() => this.switchView("register")}>
-                    CREATE ACCOUNT
-                </div>
-            </>
-        );
-    };
-
-    getLoginView = () => {
-        return (
-            <>
-                <div className="top flex">
-                    <Input
-                        title="Username"
-                        icon="user"
-                        value={this.state.username}
-                        onChangeValue={this.handleInput("username")}
-                        onKeyPress={this.handleKeyPress(this.login)}
-                        autoFocus={true}
-                    />
-                    <Input
-                        title="Password"
-                        icon="key"
-                        value={this.state.password}
-                        onChangeValue={this.handleInput("password")}
-                        onKeyPress={this.handleKeyPress(this.login)}
-                    />
-                </div>
-                <div className="btn login flex" onClick={this.login}>
-                    LOGIN
-                </div>
-                <div className="btn cancel flex" onClick={() => this.switchView("default")}>
-                    CANCEL
-                </div>
-            </>
-        );
-    };
-
-    getRegistrationView = () => {
-        return (
-            <>
-                <div className="top flex">
-                    <Input
-                        title="Username"
-                        icon="user"
-                        value={this.state.username}
-                        onChangeValue={this.handleInput("username")}
-                        onKeyPress={this.handleKeyPress(this.register)}
-                        autoFocus={true}
-                    />
-                    <Input
-                        title="Email"
-                        icon="at"
-                        value={this.state.email}
-                        onChangeValue={this.handleInput("email")}
-                        onKeyPress={this.handleKeyPress(this.register)}
-                    />
-                    <Input
-                        title="Password"
-                        icon="key"
-                        value={this.state.password}
-                        onChangeValue={this.handleInput("password")}
-                        onKeyPress={this.handleKeyPress(this.register)}
-                    />
-                    <Input
-                        title="Confirm Password"
-                        icon="key"
-                        value={this.state.confirmPassword}
-                        onChangeValue={this.handleInput("confirmPassword")}
-                        onKeyPress={this.handleKeyPress(this.register)}
-                    />
-                </div>
-                <div className="btn login flex" onClick={this.register}>
-                    CREATE ACCOUNT
-                </div>
-                <div className="btn cancel flex" onClick={() => this.switchView("default")}>
-                    CANCEL
-                </div>
-            </>
-        );
-    };
-
-    login = () => {
-        let { username, password } = this.state;
-
-        //loginHelper("czelo22@email.com", "Password1!");
-        let userInfo = { username, password };
-        console.log(userInfo);
-        //let userInfo = { username: "czelo22", password: "Password1!" };
-        this.props.login(userInfo);
-    };
-
-    register = () => {
-        let { username, email, password, confirmPassword } = this.state;
-        let userInfo = { username, email, password, confirmPassword };
-        this.props.register(userInfo);
-    };
-
-    render() {
-        return (
-            <div className="login-page" onClick={this.handleClickOutside}>
-                <div className="login-box">
-                    <div className="flex header">{this.state.title}</div>
-                    {this.props.loginError && (
-                        <div className="error-msg flex">
-                            <p>{this.props.loginError}</p>
-                        </div>
-                    )}
-                    <div className="body">{this.getView()}</div>
-                    <hr className="divider" />
-                    <div className="footer">
-                        <div className="flex">
-                            <p onClick={() => console.log("TOS")}>Terms of Service</p>
-                        </div>
-                        <div className="flex">
-                            <p onClick={() => console.log("PP")}>Privacy Policy</p>
-                        </div>
+                <hr className="divider" />
+                <div className="login-footer">
+                    <div>
+                        <p>Terms of Service</p>
+                    </div>
+                    <div>
+                        <p>Privacy Policy</p>
                     </div>
                 </div>
             </div>
-        );
-    }
-}
-
-const mapStateToProps = (state) => {
-    return {
-        session: state.session,
-        loginError: state.loginError,
-    };
+        </div>
+    );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-    login: (userInfo) => {
-        dispatch(login(userInfo));
-    },
-    register: (userInfo) => {
-        dispatch(register(userInfo));
-    },
-    closeLoginWindow: () => {
-        dispatch(closeLoginWindow());
-    },
-    hideLoginError: () => {
-        dispatch(hideLoginError());
-    },
-});
+const View = (props) => {
+    switch (props.view) {
+        case "login":
+            return <LoginView {...props} />;
+        case "register":
+            return <RegistrationView {...props} />;
+        default:
+            return <DefaultView {...props} />;
+    }
+};
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginPageView));
+const DefaultView = (props) => {
+    return (
+        <>
+            <div className="top center">
+                <FontAwesomeIcon icon="user-circle" size="10x" />
+            </div>
+            <div
+                className="btn login center"
+                onClick={() => props.switchView("login")}
+            >
+                LOGIN
+            </div>
+            <div
+                className="btn register center"
+                onClick={() => props.switchView("register")}
+            >
+                CREATE ACCOUNT
+            </div>
+        </>
+    );
+};
+
+const LoginView = (props) => {
+    return (
+        <>
+            <div className="top center">
+                <Input
+                    title="Username"
+                    icon="user"
+                    value={props.username}
+                    onChangeValue={props.handleInput("username")}
+                    onKeyPress={props.handleKeyPress(props.login)}
+                    autoFocus={true}
+                />
+                <Input
+                    title="Password"
+                    icon="key"
+                    value={props.password}
+                    onChangeValue={props.handleInput("password")}
+                    onKeyPress={props.handleKeyPress(props.login)}
+                />
+            </div>
+            <div className="btn login center" onClick={props.login}>
+                LOGIN
+            </div>
+            <div
+                className="btn cancel center"
+                onClick={() => props.switchView("default")}
+            >
+                CANCEL
+            </div>
+        </>
+    );
+};
+
+const RegistrationView = (props) => {
+    return (
+        <>
+            <div className="top center">
+                <Input
+                    title="Username"
+                    icon="user"
+                    value={props.username}
+                    onChangeValue={props.handleInput("username")}
+                    onKeyPress={props.handleKeyPress(props.register)}
+                    autoFocus={true}
+                />
+                <Input
+                    title="Email"
+                    icon="at"
+                    value={props.email}
+                    onChangeValue={props.handleInput("email")}
+                    onKeyPress={props.handleKeyPress(props.register)}
+                />
+                <Input
+                    title="Password"
+                    icon="key"
+                    value={props.password}
+                    onChangeValue={props.handleInput("password")}
+                    onKeyPress={props.handleKeyPress(props.register)}
+                />
+                <Input
+                    title="Confirm Password"
+                    icon="key"
+                    value={props.confirmPassword}
+                    onChangeValue={props.handleInput("confirmPassword")}
+                    onKeyPress={props.handleKeyPress(props.register)}
+                />
+            </div>
+            <div className="btn login center" onClick={props.register}>
+                CREATE ACCOUNT
+            </div>
+            <div
+                className="btn cancel center"
+                onClick={() => props.switchView("default")}
+            >
+                CANCEL
+            </div>
+        </>
+    );
+};
+
+const Input = (props) => {
+    const activeClass = props.value.length > 0 ? " active" : "";
+    return (
+        <div className="input">
+            <div className="icon">
+                <FontAwesomeIcon icon={props.icon} size="1x" />
+            </div>
+            <div className={"field" + activeClass}>
+                <label>
+                    <input
+                        type={props.type || "text"}
+                        value={props.value}
+                        onChange={(e) => props.onChangeValue(e)}
+                        onKeyPress={props.onKeyPress}
+                        spellCheck={false}
+                        autoFocus={props.autoFocus}
+                    />
+                    <span className="title">{props.title}</span>
+                </label>
+            </div>
+        </div>
+    );
+};

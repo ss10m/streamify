@@ -13,7 +13,7 @@ import WindowSize from "./WindowSize/WindowSize";
 import Notifications from "./Notifications/Notifications";
 import Page1 from "./Page1";
 import Page2 from "./Page2";
-import LoginPage from "./LoginPage/LoginPage";
+import LoginPage from "./LoginPage/LoginPageContainer";
 import NavBar from "./Navbar/NavBar";
 import TopStreamers from "./TopStreamers/TopStreamersContainer";
 import Streamers from "./Streamers/StreamersContainer";
