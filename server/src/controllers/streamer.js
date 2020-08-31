@@ -6,7 +6,17 @@ export const getStreamer = async (session, streamerName, cb) => {
     try {
         let username = session.user ? session.user.username : "";
         let user = await getUser(streamerName);
-        console.log(user);
+        if (!user) {
+            cb({
+                meta: {
+                    ok: false,
+                    message: "Streamer not found",
+                },
+                data: {},
+            });
+            return;
+        }
+
         let [stream, recent] = await Promise.all([
             getStream(user.login),
             getRecentGames(user.id),
@@ -27,7 +37,15 @@ export const getStreamer = async (session, streamerName, cb) => {
         streamer.followed_at = followedAt;
         streamer.followed_games = followedGames;
 
-        cb(streamer);
+        let response = {
+            meta: {
+                ok: true,
+                message: "ok",
+            },
+            data: { streamer },
+        };
+
+        cb(response);
     } catch (err) {
         console.log(err);
     }

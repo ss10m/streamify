@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 
 import { showSearchGames, showLogin, hideSearch } from "store/actions.js";
 
+import { parseResponse } from "helpers";
+
 import { dateDifference } from "helpers";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -60,21 +62,14 @@ class Streamer extends Component {
         }
     }
 
-    getStreamersData = () => {
-        fetch("/api/twitchify/streamer/" + this.props.match.params.id, {})
-            .then((res) => res.json())
-            .then((res) => {
-                if (res.error) {
-                    throw res;
-                }
-                return res;
-            })
-            .then((data) => {
-                this.setState({ streamer: data });
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+    getStreamersData = async () => {
+        const url = "/api/twitchify/streamer/" + this.props.match.params.id;
+        const response = await fetch(url, { method: "GET" });
+        let parsed = await parseResponse(response);
+        if (!parsed) return;
+        let { meta, data } = parsed;
+        if (!meta.ok) return this.props.history.push("/");
+        this.setState({ streamer: data.streamer });
     };
 
     parseGame = (game) => {
