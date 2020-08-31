@@ -47,7 +47,13 @@ export const getStreamer = async (session, streamerName, cb) => {
 
         cb(response);
     } catch (err) {
-        console.log(err);
+        cb({
+            meta: {
+                ok: false,
+                message: "Something went wrong",
+            },
+            data: {},
+        });
     }
 };
 
@@ -125,7 +131,6 @@ const getRecentGames = async (streamerId) => {
 
 const getRecentGamesBoxArt = async (recentGames) => {
     var requestParameters = "";
-    var currentGameIncluded = false;
 
     Array.from(recentGames).forEach((recentGame) => {
         var alphaNumeric = /^[a-z\d\-_\s\'\!\:\+]+$/i;
@@ -139,7 +144,6 @@ const getRecentGamesBoxArt = async (recentGames) => {
     var options = {
         method: "GET",
         url: "https://api.twitch.tv/helix/games?" + requestParameters,
-        //qs: { offset: '0', limit: '2' },
         headers: {
             "Client-ID": cred.clientId,
             Authorization: cred.auth,
@@ -157,8 +161,6 @@ const getRecentGamesBoxArt = async (recentGames) => {
     for (let game of response.data.data) {
         game.box_art_url = game.box_art_url.replace(/{width}/g, "200");
         game.box_art_url = game.box_art_url.replace(/{height}/g, "300");
-        //if (game.name.length > 25) game.name = game.name.substring(0, 23) + "..";
-        //game.name = "asdgoijsadog asopdigjsapdogijsad sapdogijasdpogij";
     }
 
     return response.data.data;
