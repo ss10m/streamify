@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { showSearchGames, showLogin } from "store/actions.js";
+import { showSearchGames, showLogin, hideSearch } from "store/actions.js";
 
 import { dateDifference } from "helpers";
 
@@ -82,8 +82,9 @@ class Streamer extends Component {
     };
 
     handleFollowChange = async (action, data = {}) => {
-        if (action === FOLLOW_GAME || FOLLOW_GAME === UNFOLLOW_GAME) {
+        if (action === FOLLOW_GAME || action === UNFOLLOW_GAME) {
             data = this.parseGame(data);
+            this.props.hideSearch();
         }
         data.username = this.props.match.params.id;
         const response = await fetch("/api/twitchify/follow", {
@@ -260,6 +261,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
     showSearchGames: (user, handleFollowChange) => {
         dispatch(showSearchGames(user, handleFollowChange));
+    },
+    hideSearch: () => {
+        dispatch(hideSearch());
     },
     showLogin: () => {
         dispatch(showLogin());

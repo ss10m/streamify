@@ -80,12 +80,10 @@ $secondary-color: #273747;
     .close-btn {
         height: 60px;
         width: 60px;
-
         display: flex;
         justify-content: center;
         align-items: center;
         border-radius: 50%;
-
         webkit-transition: background-color 150ms linear;
         -moz-transition: background-color 150ms linear;
         -o-transition: background-color 150ms linear;
@@ -131,11 +129,8 @@ $secondary-color: #273747;
 
 .search .results {
     margin-top: 40px;
-
     flex-grow: 1;
-
     color: whitesmoke;
-
     -ms-overflow-style: none;
     scrollbar-width: none;
 
@@ -147,7 +142,6 @@ $secondary-color: #273747;
     .result {
         margin: 10px 0;
         height: 100px;
-
         background-color: #121a21;
         display: flex;
         flex-direction: row;
@@ -165,7 +159,6 @@ $secondary-color: #273747;
 .result .info {
     flex: 1;
     height: 100%;
-
     display: flex;
     color: whitesmoke;
     min-width: 0;
@@ -230,7 +223,6 @@ $secondary-color: #273747;
     .status {
         width: 80px;
         height: 100%;
-
         display: flex;
         flex-direction: column;
         justify-content: center;

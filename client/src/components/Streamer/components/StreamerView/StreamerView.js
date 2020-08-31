@@ -1,6 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import offline from "./offline.jpg";
 import "./StreamerView.scss";
 
 const StreamerView = (props) => {
@@ -34,7 +35,7 @@ const Preview = ({ streamer, previewLoaded, previewWidth, onPreviewLoad }) => {
         <div className="preview" style={style}>
             {previewLoaded ? null : <div className="loading" style={style} />}
             <img
-                src={streamer.preview}
+                src={streamer.preview || offline}
                 alt="MISING"
                 style={previewLoaded ? style : null}
                 onLoad={onPreviewLoad}

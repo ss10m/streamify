@@ -18,7 +18,7 @@ import NavBar from "./Navbar/NavBar";
 import TopStreamers from "./TopStreamers/TopStreamersContainer";
 import Streamers from "./Streamers/StreamersContainer";
 import Streamer from "./Streamer/Streamer";
-import Search from "./Search/Search";
+import Search from "./Search/SearchContainer";
 import Error from "./Error/Error";
 
 import "./App.scss";

@@ -6,6 +6,7 @@ export const getStreamer = async (session, streamerName, cb) => {
     try {
         let username = session.user ? session.user.username : "";
         let user = await getUser(streamerName);
+        console.log(user);
         let [stream, recent] = await Promise.all([
             getStream(user.login),
             getRecentGames(user.id),
