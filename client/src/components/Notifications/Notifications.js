@@ -1,8 +1,10 @@
+// Libraries & utils
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Helmet } from "react-helmet";
 import socketIO from "socket.io-client";
+import { Helmet } from "react-helmet";
 
+//Redux
+import { connect } from "react-redux";
 import { addNotifications } from "store/actions.js";
 
 class Notifications extends Component {
@@ -37,22 +39,12 @@ class Notifications extends Component {
 
     connectSocket = () => {
         let socket = socketIO.connect();
-        socket.on("update", this.handleUpdate);
         socket.on("notification", this.handleNotification);
         this.setState({ socket });
     };
 
     handleNotification = (data) => {
-        console.log(data);
-        for (let notificaiton of data) {
-            console.log(`${notificaiton.display_name} IS PLAYING ${notificaiton.game}`);
-        }
-
         this.props.addNotifications(data);
-    };
-
-    handleUpdate = (data) => {
-        console.log(data);
     };
 
     render() {

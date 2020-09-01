@@ -1,7 +1,10 @@
+// Libraries & utils
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+
+// Redux
 import { connect } from "react-redux";
 
+// Components
 import TopStreamers from "./TopStreamers";
 
 const MIN_WIN_SIZE = 992;
@@ -30,7 +33,13 @@ class TopStreamersContainer extends Component {
 
     render() {
         let isHidden = this.props.windowSize <= MIN_WIN_SIZE;
-        return <TopStreamers {...this.state} isHidden={isHidden} toggleSideBar={this.toggleSideBar} />;
+        return (
+            <TopStreamers
+                {...this.state}
+                isHidden={isHidden}
+                toggleSideBar={this.toggleSideBar}
+            />
+        );
     }
 }
 
@@ -40,4 +49,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default withRouter(connect(mapStateToProps)(TopStreamersContainer));
+export default connect(mapStateToProps)(TopStreamersContainer);

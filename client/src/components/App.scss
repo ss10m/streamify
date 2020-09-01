@@ -49,24 +49,3 @@ body {
     justify-content: center;
     align-items: center;
 }
-
-.box2 {
-    background-color: green;
-    border: 5px solid black;
-    height: 200px;
-}
-
-.page1,
-.page2 {
-    background-color: whitesmoke;
-    padding-top: 160px;
-    overflow: auto;
-    flex: 1;
-
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    &::-webkit-scrollbar {
-        display: none;
-    }
-    overflow: auto;
-}

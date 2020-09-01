@@ -148,8 +148,6 @@ class Streamer extends Component {
             return <Spinner />;
         }
 
-        console.log(streamer);
-
         let button = (
             <button onClick={() => this.handleFollowChange(FOLLOW_STREAMER)}>
                 FOLLOW

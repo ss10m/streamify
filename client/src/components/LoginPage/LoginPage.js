@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // SCSS
 import "./LoginPage.scss";
 
-export default (props) => {
+const LoginPage = (props) => {
     return (
         <div className="login-page" onClick={props.handleClickOutside}>
             <div className="login-box">
@@ -170,3 +170,5 @@ const Input = (props) => {
         </div>
     );
 };
+
+export default LoginPage;

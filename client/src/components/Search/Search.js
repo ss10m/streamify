@@ -94,6 +94,7 @@ const Results = (props) => {
         return results.map((result) => (
             <StreamerResult
                 result={result}
+                key={result.id}
                 time={time}
                 closeSearch={closeSearch}
                 windowSize={windowSize}
@@ -102,7 +103,12 @@ const Results = (props) => {
         ));
     } else if (mode.type === SEARCH_GAMES) {
         return results.map((result) => (
-            <GameResult result={result} mode={mode} windowSize={windowSize} />
+            <GameResult
+                key={result.name}
+                result={result}
+                mode={mode}
+                windowSize={windowSize}
+            />
         ));
     }
 };

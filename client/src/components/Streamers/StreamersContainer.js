@@ -1,13 +1,17 @@
+// Libraries & utils
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
 
+// Redux
+import { connect } from "react-redux";
 import { showLogin, showSearch } from "store/actions.js";
 
-import { dateDifference } from "helpers";
-
+// Components
 import Streamers from "./Streamers";
 
+// Helpers
+import { dateDifference } from "helpers";
+
+// SCSS
 import "./Streamers.scss";
 
 class StreamersContainer extends Component {
@@ -50,17 +54,15 @@ class StreamersContainer extends Component {
         } = this.props;
         let { streamers, loading } = this.state;
         return (
-            <div className="followed">
-                <Streamers
-                    user={user}
-                    streamers={streamers}
-                    dateDifference={dateDifference}
-                    showLogin={showLogin}
-                    showSearch={showSearch}
-                    width={windowSize}
-                    loading={loading}
-                />
-            </div>
+            <Streamers
+                user={user}
+                streamers={streamers}
+                dateDifference={dateDifference}
+                showLogin={showLogin}
+                showSearch={showSearch}
+                width={windowSize}
+                loading={loading}
+            />
         );
     }
 }
@@ -81,4 +83,4 @@ const mapDispatchToProps = (dispatch) => ({
     },
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(StreamersContainer));
+export default connect(mapStateToProps, mapDispatchToProps)(StreamersContainer);

@@ -1,6 +1,8 @@
+// Libraries & utils
 import { Component } from "react";
-import { connect } from "react-redux";
 
+// Redux
+import { connect } from "react-redux";
 import { updateWindowSize } from "store/actions.js";
 
 class WindowSize extends Component {

@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import "./TopStreamers.scss";
@@ -95,4 +95,4 @@ const StreamerList = (props) => {
     ));
 };
 
-export default withRouter(TopStreamers);
+export default TopStreamers;

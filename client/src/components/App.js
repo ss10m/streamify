@@ -1,18 +1,14 @@
+// Libraries & utils
 import React, { Component } from "react";
-import { withRouter, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
+
+// Redux
 import { connect } from "react-redux";
+import { getSession, toggleNavBar } from "store/actions.js";
 
-import {
-    getSession,
-    showLogin,
-    toggleNavBar,
-    addNotifications,
-} from "store/actions.js";
-
+// Components
 import WindowSize from "./WindowSize/WindowSize";
 import Notifications from "./Notifications/Notifications";
-import Page1 from "./Page1";
-import Page2 from "./Page2";
 import LoginPage from "./LoginPage/LoginPageContainer";
 import NavBar from "./Navbar/NavBar";
 import TopStreamers from "./TopStreamers/TopStreamersContainer";
@@ -21,6 +17,7 @@ import Streamer from "./Streamer/Streamer";
 import Search from "./Search/SearchContainer";
 import Error from "./Error/Error";
 
+// SCSS
 import "./App.scss";
 
 class App extends Component {
@@ -62,12 +59,11 @@ class App extends Component {
                         <TopStreamers />
                         <div className="streamers">
                             <Switch>
-                                <Route exact path="/">
-                                    <Page1 />
-                                </Route>
-                                <Route exact path="/page2">
-                                    <Page2 />
-                                </Route>
+                                <Route
+                                    exact
+                                    path="/"
+                                    render={() => <h1>Main Page</h1>}
+                                />
                                 <Route
                                     exact
                                     path="/streamer/:id"
@@ -100,15 +96,9 @@ const mapDispatchToProps = (dispatch) => ({
     getSession: () => {
         dispatch(getSession());
     },
-    showLogin: () => {
-        dispatch(showLogin());
-    },
     toggleNavBar: () => {
         dispatch(toggleNavBar());
     },
-    addNotifications: (notifications) => {
-        dispatch(addNotifications(notifications));
-    },
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+export default connect(mapStateToProps, mapDispatchToProps)(App);
