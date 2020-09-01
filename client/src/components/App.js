@@ -13,7 +13,7 @@ import LoginPage from "./LoginPage/LoginPageContainer";
 import NavBar from "./Navbar/NavBar";
 import TopStreamers from "./TopStreamers/TopStreamersContainer";
 import Streamers from "./Streamers/StreamersContainer";
-import Streamer from "./Streamer/Streamer";
+import Streamer from "./Streamer/StreamerContainer";
 import Search from "./Search/SearchContainer";
 import Error from "./Error/Error";
 

@@ -20,7 +20,8 @@ export const getFollows = async (session, cb) => {
                      FROM follows
                      INNER JOIN users ON users.id = follows.user_id
                      INNER JOIN streamers ON streamers.id = follows.streamer_id
-                     WHERE users.username = $1`;
+                     WHERE users.username = $1
+                     ORDER BY follows.followed_at ASC`;
         let values = [username];
         let result = await db.query(query, values);
 
@@ -30,7 +31,9 @@ export const getFollows = async (session, cb) => {
 
         let streams = await getStreams(ids);
 
-        let liveStreams = new Map(streams.map((stream) => [parseInt(stream.user_id), stream]));
+        let liveStreams = new Map(
+            streams.map((stream) => [parseInt(stream.user_id), stream])
+        );
 
         for (let stream of followed) {
             if (liveStreams.has(stream.id)) {
@@ -69,7 +72,8 @@ const getStreams = async (ids) => {
 };
 
 export const follow = (session, body, cb) => {
-    if (!session.user) return cb({ message: "You must be logged in", action: LOGIN }, 401);
+    if (!session.user)
+        return cb({ message: "You must be logged in", action: LOGIN }, 401);
     let username = session.user.username;
 
     switch (body.action) {
@@ -100,7 +104,8 @@ const followStreamer = async (username, { data }, cb) => {
 
         let user = await getUserData(username);
 
-        let query = "INSERT INTO follows(user_id, streamer_id) VALUES($1, $2) RETURNING *";
+        let query =
+            "INSERT INTO follows(user_id, streamer_id) VALUES($1, $2) RETURNING *";
         let values = [user.id, streamer.id];
 
         let result = await db.query(query, values);
@@ -133,15 +138,24 @@ const unfollowStreamer = async (username, { data }, cb) => {
 const followGame = async (user, { data }, cb) => {
     try {
         let followsStreamer = await isFollowingStreamer(user, data.username);
-        if (!followsStreamer) throw new CustomError(`Not following ${data.username}`, 401, FOLLOW_STREAMER);
+        if (!followsStreamer)
+            throw new CustomError(
+                `Not following ${data.username}`,
+                401,
+                FOLLOW_STREAMER
+            );
 
         let game = await getGame(data);
         if (!game) throw new Error();
 
         let followsGame = await isFollowingGame(followsStreamer.id, game.id);
-        if (followsGame) throw new CustomError(`Already following ${game.name}`, 401, NONE);
+        if (followsGame)
+            throw new CustomError(`Already following ${game.name}`, 401, NONE);
 
-        let followedGame = await startFollowingGame(followsStreamer.id, game.id);
+        let followedGame = await startFollowingGame(
+            followsStreamer.id,
+            game.id
+        );
         if (!followedGame) throw new Error();
         let followedGames = await getFollowedGames(followsStreamer.id);
 
@@ -154,10 +168,12 @@ const followGame = async (user, { data }, cb) => {
 const unfollowGame = async (user, { data }, cb) => {
     try {
         let followsStreamer = await isFollowingStreamer(user, data.username);
-        if (!followsStreamer) throw new CustomError(`Not following ${data.username}`, 401);
+        if (!followsStreamer)
+            throw new CustomError(`Not following ${data.username}`, 401);
 
         let followsGame = await isFollowingGame(followsStreamer.id, data.id);
-        if (!followsGame) throw new CustomError(`Not following ${data.name}`, 401);
+        if (!followsGame)
+            throw new CustomError(`Not following ${data.name}`, 401);
 
         let query = `DELETE FROM followed_games 
                      WHERE follow_id = $1 AND game_id = $2
@@ -207,8 +223,20 @@ const getUser = async (username) => {
         return null;
     }
 
-    let { login, id, display_name, profile_image_url, offline_image_url } = response.data.data[0];
-    let streamer = { name: login, id, display_name, logo: profile_image_url, offline_img: offline_image_url };
+    let {
+        login,
+        id,
+        display_name,
+        profile_image_url,
+        offline_image_url,
+    } = response.data.data[0];
+    let streamer = {
+        name: login,
+        id,
+        display_name,
+        logo: profile_image_url,
+        offline_img: offline_image_url,
+    };
     await addStreamer(streamer);
     return streamer;
 };
@@ -216,7 +244,13 @@ const getUser = async (username) => {
 const addStreamer = async (streamer) => {
     let query =
         "INSERT INTO streamers(name, id, display_name, logo, offline_img) VALUES($1, $2, $3, $4, $5) RETURNING *";
-    let values = [streamer.name, streamer.id, streamer.display_name, streamer.logo, streamer.offline_img];
+    let values = [
+        streamer.name,
+        streamer.id,
+        streamer.display_name,
+        streamer.logo,
+        streamer.offline_img,
+    ];
     await db.query(query, values);
 };
 
@@ -264,7 +298,8 @@ const isFollowingGame = async (followId, gameId) => {
 };
 
 const startFollowingGame = async (followId, gameId) => {
-    let query = "INSERT INTO followed_games(follow_id, game_id) VALUES($1, $2) RETURNING *";
+    let query =
+        "INSERT INTO followed_games(follow_id, game_id) VALUES($1, $2) RETURNING *";
     let values = [followId, gameId];
     let result = await db.query(query, values);
     if (!result.rows.length) return null;

@@ -22,15 +22,22 @@ class FollowModal extends Component {
     render() {
         let { streamer, follow, close } = this.props;
         return (
-            <div className="prompt">
-                <p>YOU MUST FIRST FOLLOW</p>
-                <div className="box">
-                    <img src={streamer["logo"]} width="50" height="50" alt="MISSING" />
-                    <p>{streamer.display_name}</p>
-                </div>
-                <div className="btns">
-                    <button onClick={follow}>FOLLOW</button>
-                    <button onClick={close}>CANCEL</button>
+            <div className="follow-prompt">
+                <div className="prompt">
+                    <p>YOU MUST FIRST FOLLOW</p>
+                    <div className="box">
+                        <img
+                            src={streamer["logo"]}
+                            width="50"
+                            height="50"
+                            alt="MISSING"
+                        />
+                        <p>{streamer.display_name}</p>
+                    </div>
+                    <div className="btns">
+                        <button onClick={follow}>FOLLOW</button>
+                        <button onClick={close}>CANCEL</button>
+                    </div>
                 </div>
             </div>
         );
