@@ -1,4 +1,11 @@
-export const dateDifference = (then, now) => {
+// Actions
+const LOGIN = "LOGIN";
+const FOLLOW_STREAMER = "FOLLOW_STREAMER";
+const UNFOLLOW_STREAMER = "UNFOLLOW_STREAMER";
+const FOLLOW_GAME = "FOLLOW_GAME";
+const UNFOLLOW_GAME = "UNFOLLOW_GAME";
+
+const dateDifference = (then, now) => {
     let offset = (now - then) / 1000;
     let delta_s = parseInt(offset % 60);
     offset /= 60;
@@ -37,7 +44,7 @@ export const dateDifference = (then, now) => {
     }
 };
 
-export const liveTime = (then, now) => {
+const liveTime = (then, now) => {
     let offset = (now - then) / 1000;
     let delta_s = parseInt(offset % 60);
     offset /= 60;
@@ -51,10 +58,21 @@ export const liveTime = (then, now) => {
     return `${delta_h}:${delta_m}:${delta_s}`;
 };
 
-export const parseResponse = async (response) => {
+const parseResponse = async (response) => {
     try {
         return await response.json();
     } catch (err) {
         return null;
     }
+};
+
+export {
+    LOGIN,
+    FOLLOW_STREAMER,
+    UNFOLLOW_STREAMER,
+    FOLLOW_GAME,
+    UNFOLLOW_GAME,
+    dateDifference,
+    liveTime,
+    parseResponse,
 };

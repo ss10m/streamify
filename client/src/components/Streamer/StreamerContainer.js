@@ -12,11 +12,13 @@ import "./Streamer.scss";
 import Spinner from "../Spinner/Spinner";
 import FollowModal from "./components/FollowModal/FollowModal";
 
-const FOLLOW_STREAMER = "FOLLOW_STREAMER";
-const UNFOLLOW_STREAMER = "UNFOLLOW_STREAMER";
-const FOLLOW_GAME = "FOLLOW_GAME";
-const UNFOLLOW_GAME = "UNFOLLOW_GAME";
-const LOGIN = "LOGIN";
+import {
+    LOGIN,
+    FOLLOW_STREAMER,
+    UNFOLLOW_STREAMER,
+    FOLLOW_GAME,
+    UNFOLLOW_GAME,
+} from "helpers";
 
 class StreamerContainer extends Component {
     constructor(props) {
@@ -110,13 +112,9 @@ class StreamerContainer extends Component {
                 default:
                     return;
             }
-            console.log("SETTING STREAMER");
-            //console.log(streamer);
             this.setState({ streamer });
         } catch (err) {
-            console.log(err);
             if (!err.action) return this.getStreamersData();
-
             switch (err.action) {
                 case LOGIN:
                     return this.props.showLogin();
@@ -143,8 +141,6 @@ class StreamerContainer extends Component {
         let { streamer, showFollowPrompt } = this.state;
         let { session, showLogin, showSearchGames, windowSize } = this.props;
 
-        console.log(streamer);
-
         if (!streamer) {
             return <Spinner />;
         }
@@ -161,7 +157,6 @@ class StreamerContainer extends Component {
                 <Streamer
                     handleFollowChange={this.handleFollowChange}
                     streamer={streamer}
-                    showFollowPrompt={showFollowPrompt}
                     session={session}
                     showLogin={showLogin}
                     showSearchGames={showSearchGames}

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import StreamerView from "./StreamerView";
 
-const UNFOLLOW_GAME = "UNFOLLOW_GAME";
+import { UNFOLLOW_GAME } from "helpers";
 
 class StreamerViewContainer extends Component {
     constructor(props) {

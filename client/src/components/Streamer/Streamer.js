@@ -4,17 +4,11 @@ import { connect } from "react-redux";
 
 import { showSearchGames, showLogin, hideSearch } from "store/actions.js";
 
-import { dateDifference } from "helpers";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import "./Streamer.scss";
 
+import StreamerDetails from "./components/StreamerDetails/StreamerDetails";
 import RecentGames from "./components/RecentGames/RecentGamesContainer";
 import StreamerView from "./components/StreamerView/StreamerViewContainer";
-
-const FOLLOW_STREAMER = "FOLLOW_STREAMER";
-const UNFOLLOW_STREAMER = "UNFOLLOW_STREAMER";
 
 const Streamer = (props) => {
     let {
@@ -23,73 +17,16 @@ const Streamer = (props) => {
         showSearchGames,
         windowSize,
         streamer,
-        showFollowPrompt,
         handleFollowChange,
         toggleFollowPrompt,
     } = props;
 
-    //console.log(streamer);
-
-    let button = (
-        <button onClick={() => handleFollowChange(FOLLOW_STREAMER)}>
-            FOLLOW
-        </button>
-    );
-
-    if (streamer.following)
-        button = (
-            <button
-                className="unfollow"
-                onClick={() => handleFollowChange(UNFOLLOW_STREAMER)}
-            >
-                UNFOLLOW
-            </button>
-        );
-
     return (
         <div className="streamer">
-            <div className="tops">
-                <div className="img-wrapper">
-                    <img
-                        src={streamer["logo"]}
-                        width="200"
-                        height="200"
-                        alt="MISING"
-                    />
-                    <div>
-                        {streamer.stream ? (
-                            <div className={streamer.stream ? "live" : ""}>
-                                <FontAwesomeIcon icon="eye" className="icon" />
-                                {streamer.stream.viewers}
-                            </div>
-                        ) : (
-                            "OFFLINE"
-                        )}
-                    </div>
-                </div>
-                <div className="info">
-                    <div className="streamer-name">
-                        {streamer["display_name"]}
-                    </div>
-                    {streamer.stream && (
-                        <div className="small-info">
-                            {"Playing " + streamer.stream.game}
-                        </div>
-                    )}
-
-                    <div className="small-info follow-age">
-                        {streamer.following
-                            ? "Followed " +
-                              dateDifference(
-                                  new Date(streamer.followed_at),
-                                  new Date()
-                              )
-                            : ""}
-                    </div>
-
-                    <div className="follow">{button}</div>
-                </div>
-            </div>
+            <StreamerDetails
+                streamer={streamer}
+                handleFollowChange={handleFollowChange}
+            />
 
             <StreamerView
                 width={windowSize}

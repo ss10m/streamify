@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import RecentGames from "./RecentGames";
 
-const FOLLOW_GAME = "FOLLOW_GAME";
+import { FOLLOW_GAME } from "helpers";
 
 class RecentGamesContainer extends Component {
     constructor(props) {
@@ -28,7 +28,11 @@ class RecentGamesContainer extends Component {
         recentGames[recentGames.length - 1].order = 1;
         recentGames[recentGames.length - 1].next = recentGames[0];
 
-        this.setState({ direction: null, recentGames, seat: recentGames.length - 1 });
+        this.setState({
+            direction: null,
+            recentGames,
+            seat: recentGames.length - 1,
+        });
     };
 
     handleCarousel = (moveRight) => {
@@ -61,7 +65,13 @@ class RecentGamesContainer extends Component {
 
     render() {
         let { recentGames, direction } = this.state;
-        let { streamer, isLoggedIn, showSearchGames, showLogin, showFollowPrompt } = this.props;
+        let {
+            streamer,
+            isLoggedIn,
+            showSearchGames,
+            showLogin,
+            showFollowPrompt,
+        } = this.props;
 
         let directionClass = "";
         if (direction === "right") {
@@ -82,7 +92,8 @@ class RecentGamesContainer extends Component {
         } else if (!streamer.following) {
             searchBtn = () => showFollowPrompt();
         } else {
-            searchBtn = () => showSearchGames(streamer, this.props.handleFollowChange);
+            searchBtn = () =>
+                showSearchGames(streamer, this.props.handleFollowChange);
         }
 
         return (

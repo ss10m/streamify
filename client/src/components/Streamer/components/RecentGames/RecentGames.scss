@@ -4,6 +4,7 @@
     flex-direction: row;
     align-items: center;
     background-color: #121a21;
+
     box-shadow: 0px 0px 2px 2px black;
     .recent-games-title {
         color: whitesmoke;
@@ -24,6 +25,7 @@
 }
 
 .recent-games {
+    //background-color: #1c2934;
     display: flex;
     justify-content: center;
     position: relative;
@@ -162,13 +164,21 @@
             top: 0;
             bottom: 0;
             left: 0;
-            background: linear-gradient(-90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%);
+            background: linear-gradient(
+                -90deg,
+                rgba(0, 0, 0, 0) 0%,
+                rgba(0, 0, 0, 0.8) 100%
+            );
         }
         &.right {
             top: 0;
             bottom: 0;
             right: 0;
-            background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%);
+            background: linear-gradient(
+                90deg,
+                rgba(0, 0, 0, 0) 0%,
+                rgba(0, 0, 0, 0.8) 100%
+            );
         }
     }
 }
