@@ -69,7 +69,7 @@ const Games = ({ recentGames, followGame }) => {
                     onClick={() => followGame(game)}
                 />
                 {game.suggestion && (
-                    <div class="overlay">
+                    <div className="overlay">
                         <p>Suggested</p>
                     </div>
                 )}

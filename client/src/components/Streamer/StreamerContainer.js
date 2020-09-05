@@ -14,6 +14,7 @@ import FollowModal from "./components/FollowModal/FollowModal";
 // Helpers
 import {
     LOGIN,
+    RELOG,
     FOLLOW_STREAMER,
     UNFOLLOW_STREAMER,
     FOLLOW_GAME,
@@ -75,48 +76,29 @@ class StreamerContainer extends Component {
         return { id: game.id, name: game.name, box_art_url: game.box_art_url };
     };
 
-    handleFollowChange = async (action, data = {}) => {
+    handleFollowChange = async (action, actionData = {}) => {
         if (action === FOLLOW_GAME || action === UNFOLLOW_GAME) {
-            data = this.parseGame(data);
+            actionData = this.parseGame(actionData);
             this.props.hideSearch();
         }
-        data.username = this.props.match.params.id;
+        actionData.username = this.props.match.params.id;
+
         const response = await fetch("/api/twitchify/follow", {
             method: "POST",
-            body: JSON.stringify({ action, data }),
+            body: JSON.stringify({ action, data: actionData }),
             headers: {
                 "Content-Type": "application/json",
             },
         });
-        try {
-            let data = await response.json();
-            if (!response.ok) throw data;
+        let parsed = await parseResponse(response);
+        if (!parsed) return;
+        let { meta, data } = parsed;
 
-            let streamer = { ...this.state.streamer };
-            switch (action) {
-                case FOLLOW_STREAMER:
-                    streamer.following = true;
-                    streamer.followed_at = new Date().getTime() - 5000;
-
-                    break;
-                case UNFOLLOW_STREAMER:
-                    streamer.following = false;
-                    streamer.followed_at = null;
-                    streamer.followed_games = [];
-                    break;
-                case FOLLOW_GAME:
-                    streamer.followed_games = [...data];
-                    break;
-                case UNFOLLOW_GAME:
-                    streamer.followed_games = [...data];
-                    break;
-                default:
-                    return;
-            }
-            this.setState({ streamer });
-        } catch (err) {
-            if (!err.action) return this.getStreamersData();
-            switch (err.action) {
+        if (!meta.ok) {
+            if (!meta.action) return this.props.history.push("/");
+            switch (meta.action) {
+                case RELOG:
+                    return this.getStreamersData();
                 case LOGIN:
                     return this.props.showLogin();
                 case FOLLOW_STREAMER:
@@ -125,6 +107,28 @@ class StreamerContainer extends Component {
                     return;
             }
         }
+
+        let streamer = { ...this.state.streamer };
+        switch (action) {
+            case FOLLOW_STREAMER:
+                streamer.following = true;
+                streamer.followed_at = new Date().getTime() - 5000;
+                break;
+            case UNFOLLOW_STREAMER:
+                streamer.following = false;
+                streamer.followed_at = null;
+                streamer.followed_games = [];
+                break;
+            case FOLLOW_GAME:
+                streamer.followed_games = [...data];
+                break;
+            case UNFOLLOW_GAME:
+                streamer.followed_games = [...data];
+                break;
+            default:
+                return;
+        }
+        this.setState({ streamer });
     };
 
     toggleFollowPrompt = () => {

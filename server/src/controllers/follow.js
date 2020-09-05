@@ -73,7 +73,14 @@ const getStreams = async (ids) => {
 
 export const follow = (session, body, cb) => {
     if (!session.user)
-        return cb({ message: "You must be logged in", action: LOGIN }, 401);
+        return cb({
+            meta: {
+                ok: false,
+                message: "You must be logged in",
+                action: "LOGIN",
+            },
+            data: {},
+        });
     let username = session.user.username;
 
     switch (body.action) {
@@ -95,24 +102,42 @@ export const follow = (session, body, cb) => {
 const followStreamer = async (username, { data }, cb) => {
     try {
         let streamerName = data.username;
-
         let isFollowing = await isFollowingStreamer(username, streamerName);
-        if (isFollowing) return cb({ status: "ok" });
-
+        if (isFollowing) {
+            return cb({
+                meta: {
+                    ok: false,
+                    message: "Mismatched data",
+                    action: "RELOG",
+                },
+                data: {},
+            });
+        }
         let streamer = await getStreamerData(streamerName);
         if (!streamer) throw new Error();
 
         let user = await getUserData(username);
-
         let query =
             "INSERT INTO follows(user_id, streamer_id) VALUES($1, $2) RETURNING *";
         let values = [user.id, streamer.id];
-
         let result = await db.query(query, values);
         if (!result.rows.length) throw new Error();
-        cb({ status: "ok" });
+
+        cb({
+            meta: {
+                ok: true,
+                message: "ok",
+            },
+            data: {},
+        });
     } catch (err) {
-        handleError(err, cb);
+        return cb({
+            meta: {
+                ok: false,
+                message: "Something went wrong",
+            },
+            data: {},
+        });
     }
 };
 
@@ -121,7 +146,16 @@ const unfollowStreamer = async (username, { data }, cb) => {
         let streamerName = data.username;
 
         let isFollowing = await isFollowingStreamer(username, streamerName);
-        if (!isFollowing) return cb({ status: "ok" });
+        if (!isFollowing) {
+            return cb({
+                meta: {
+                    ok: false,
+                    message: "Mismatched data",
+                    action: "RELOG",
+                },
+                data: {},
+            });
+        }
 
         let query = `DELETE FROM follows 
                      WHERE id = $1
@@ -129,9 +163,21 @@ const unfollowStreamer = async (username, { data }, cb) => {
         let values = [isFollowing.id];
         await db.query(query, values);
 
-        cb({ status: "ok" });
+        cb({
+            meta: {
+                ok: true,
+                message: "ok",
+            },
+            data: {},
+        });
     } catch (err) {
-        handleError(err, cb);
+        return cb({
+            meta: {
+                ok: false,
+                message: "Something went wrong",
+            },
+            data: {},
+        });
     }
 };
 
