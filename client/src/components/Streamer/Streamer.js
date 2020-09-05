@@ -1,14 +1,13 @@
+// Libraries & utils
 import React from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
 
-import { showSearchGames, showLogin, hideSearch } from "store/actions.js";
-
-import "./Streamer.scss";
-
+// Components
 import StreamerDetails from "./components/StreamerDetails/StreamerDetails";
 import RecentGames from "./components/RecentGames/RecentGamesContainer";
 import StreamerView from "./components/StreamerView/StreamerViewContainer";
+
+// SCSS
+import "./Streamer.scss";
 
 const Streamer = (props) => {
     let {
@@ -45,25 +44,4 @@ const Streamer = (props) => {
     );
 };
 
-const mapStateToProps = (state) => {
-    return {
-        session: state.session,
-        windowSize: state.windowSize,
-    };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-    showSearchGames: (user, handleFollowChange) => {
-        dispatch(showSearchGames(user, handleFollowChange));
-    },
-    hideSearch: () => {
-        dispatch(hideSearch());
-    },
-    showLogin: () => {
-        dispatch(showLogin());
-    },
-});
-
-export default withRouter(
-    connect(mapStateToProps, mapDispatchToProps)(Streamer)
-);
+export default Streamer;

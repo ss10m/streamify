@@ -2,6 +2,10 @@ import * as cred from "../config/credentials.js";
 import axios from "axios";
 import db from "../config/db.js";
 
+import _ from "lodash";
+
+import { topGames } from "../util/topGames.js";
+
 export const getStreamer = async (session, streamerName, cb) => {
     try {
         let username = session.user ? session.user.username : "";
@@ -173,14 +177,7 @@ const parseData = (user, stream, recentGames) => {
     streamer.logo = user.profile_image_url;
     streamer.preview = user.offline_image_url;
     if (recentGames.length < 8) {
-        for (let i = recentGames.length; i < 8; i++) {
-            recentGames.push({
-                box_art_url:
-                    "https://static-cdn.jtvnw.net/ttv-static/404_boxart-200x300.jpg",
-                id: i,
-                name: "Suggested " + i,
-            });
-        }
+        getGamesSuggestions(recentGames);
     }
     streamer.recent_games = recentGames;
     if (stream) {
@@ -205,6 +202,32 @@ const parseData = (user, stream, recentGames) => {
         };
     }
     return streamer;
+};
+
+const getGamesSuggestions = async (recentGames) => {
+    let query = `SELECT *
+                 FROM game_suggestions`;
+    let values = [];
+    let res = await db.query(query, values);
+    let suggestions = _.shuffle(res.rows);
+
+    let recentGamesIds = new Set();
+    for (let game of recentGames) {
+        recentGamesIds.add(game.id);
+    }
+
+    let numRecentGames = recentGamesIds.size;
+    let suggestionsIndex = 0;
+
+    while (numRecentGames <= 8 && suggestionsIndex < suggestions.length) {
+        let current = suggestions[suggestionsIndex];
+        if (!recentGamesIds.has(current.id)) {
+            current["suggestion"] = true;
+            recentGames.push(current);
+            numRecentGames++;
+        }
+        suggestionsIndex++;
+    }
 };
 
 const roundedToFixed = (number, digits) => {
@@ -238,3 +261,15 @@ const isFollowingStreamer = async (username, streamer) => {
     }
     return { isFollowing, followedAt, followedGames };
 };
+
+const handleTopGames = async () => {
+    for (let game of topGames) {
+        let query = `INSERT INTO game_suggestions(id, name, box_art_url) 
+                 VALUES($1, $2, $3)
+                 RETURNING *`;
+        let values = [game.id, game.name, game.box_art_url];
+        await db.query(query, values);
+    }
+};
+
+//handleTopGames();

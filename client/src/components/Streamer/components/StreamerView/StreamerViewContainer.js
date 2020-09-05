@@ -1,7 +1,10 @@
+// Libraries & utils
 import React, { Component } from "react";
 
+// Components
 import StreamerView from "./StreamerView";
 
+// Helpers
 import { UNFOLLOW_GAME } from "helpers";
 
 class StreamerViewContainer extends Component {

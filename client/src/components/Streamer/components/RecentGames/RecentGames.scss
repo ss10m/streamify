@@ -25,7 +25,6 @@
 }
 
 .recent-games {
-    //background-color: #1c2934;
     display: flex;
     justify-content: center;
     position: relative;
@@ -101,84 +100,115 @@
                 transform: none;
                 transition: transform 0.4s cubic-bezier(0.25, 1, 0.35, 1);
             }
-
-            .item {
-                flex: 1 0 100%;
-                display: flex;
-                align-items: center;
-                flex-direction: column;
-                color: whitesmoke;
-                margin-bottom: 20px;
-                @media (min-width: 600px) {
-                    flex-basis: 50%;
-                }
-                @media (min-width: 900px) {
-                    flex-basis: 33.33333%;
-                }
-                @media (min-width: 1200px) {
-                    flex-basis: 25%;
-                }
-                @media (min-width: 1500px) {
-                    flex-basis: 20%;
-                }
-                @media (min-width: 1800px) {
-                    flex-basis: 16.66666%;
-                }
-
-                div {
-                    max-width: 240px;
-                    margin: 15px 0;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    overflow: hidden;
-                }
-
-                img {
-                    //box-shadow: 0 0 3px whitesmoke;
-                    box-shadow: 0px 0px 10px 1px black;
-                    border-radius: 5px;
-                }
-
-                img:hover {
-                    cursor: pointer;
-                }
-            }
         }
     }
+}
 
-    .controls {
-        position: absolute;
-        color: #fff;
-        font-size: 5em;
-        background: rgb(0, 0, 0);
-        width: 80px;
-        text-align: center;
-        padding-top: 110px;
-        z-index: 1;
+.recent-game-item {
+    flex: 1 0 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    color: whitesmoke;
+    margin-bottom: 20px;
+    @media (min-width: 600px) {
+        flex-basis: 50%;
+    }
+    @media (min-width: 900px) {
+        flex-basis: 33.33333%;
+    }
+    @media (min-width: 1200px) {
+        flex-basis: 25%;
+    }
+    @media (min-width: 1500px) {
+        flex-basis: 20%;
+    }
+    @media (min-width: 1800px) {
+        flex-basis: 16.66666%;
+    }
+
+    div {
+        max-width: 240px;
+        height: 45px;
+        line-height: 45px;
+
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .container {
+        position: relative;
+        width: 200px;
+        height: 300px;
+        box-shadow: 0px 0px 10px 1px black;
+        border-radius: 5px;
 
         &:hover {
             cursor: pointer;
         }
 
-        &.left {
-            top: 0;
-            bottom: 0;
-            left: 0;
-            background: linear-gradient(
-                -90deg,
-                rgba(0, 0, 0, 0) 0%,
-                rgba(0, 0, 0, 0.8) 100%
-            );
+        img {
+            border-radius: 5px;
         }
-        &.right {
-            top: 0;
-            bottom: 0;
-            right: 0;
+
+        .overlay {
             background: linear-gradient(
-                90deg,
+                -180deg,
                 rgba(0, 0, 0, 0) 0%,
-                rgba(0, 0, 0, 0.8) 100%
+                rgba(0, 0, 0, 0.5) 30%,
+                rgba(0, 0, 0, 0.7) 50%,
+                rgba(0, 0, 0, 0.9) 100%
             );
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 35px;
+            pointer-events: none;
+
+            p {
+                margin: 0;
+                padding: 0;
+                color: #ffd700;
+                font-size: 14px;
+                padding-left: 5px;
+            }
         }
+    }
+}
+
+.recent-games-controls {
+    position: absolute;
+    color: #fff;
+    font-size: 5em;
+    background: rgb(0, 0, 0);
+    width: 80px;
+    text-align: center;
+    padding-top: 110px;
+    z-index: 1;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &.left {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        background: linear-gradient(
+            -90deg,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 0.8) 100%
+        );
+    }
+    &.right {
+        top: 0;
+        bottom: 0;
+        right: 0;
+        background: linear-gradient(
+            90deg,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 0.8) 100%
+        );
     }
 }

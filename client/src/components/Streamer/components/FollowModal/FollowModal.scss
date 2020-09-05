@@ -1,31 +1,29 @@
-.follow-prompt {
+.prompt-container {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(1, 1, 1, 0.93);
-    z-index: 2;
-
+    min-width: 370px;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: rgba(1, 1, 1, 0.93);
+    z-index: 2;
 }
 
 .prompt {
     width: 350px;
-
+    border-radius: 7px;
     background-color: #202e3a;
     color: whitesmoke;
-    flex-direction: column;
-    border-radius: 7px;
     box-shadow: 0px 0px 5px 1px black;
 
     p {
         text-align: center;
     }
 
-    .box {
+    .streamer-info {
         height: 50px;
         display: flex;
         justify-content: center;
@@ -49,7 +47,6 @@
         button {
             width: 50%;
             height: 50px;
-
             color: whitesmoke;
             font-weight: 600;
             outline: none;

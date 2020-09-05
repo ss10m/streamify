@@ -56,3 +56,9 @@ CREATE TABLE "notifications" (
 	"sent_at" TIMESTAMP DEFAULT NOW(),
     FOREIGN KEY ("follow_id", "game_id") REFERENCES "followed_games"("follow_id", "game_id") ON DELETE CASCADE
 );
+
+CREATE TABLE "game_suggestions" (
+	"id" VARCHAR(20) PRIMARY KEY,
+	"name" VARCHAR(80) UNIQUE NOT NULL, 
+	"box_art_url" VARCHAR NOT NULL
+);

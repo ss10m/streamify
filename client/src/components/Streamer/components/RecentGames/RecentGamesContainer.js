@@ -1,7 +1,10 @@
+// Libraries & utils
 import React, { Component } from "react";
 
+// Components
 import RecentGames from "./RecentGames";
 
+// Helpers
 import { FOLLOW_GAME } from "helpers";
 
 class RecentGamesContainer extends Component {

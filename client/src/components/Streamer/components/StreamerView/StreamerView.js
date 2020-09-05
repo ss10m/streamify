@@ -1,8 +1,14 @@
+// Libraries & utils
 import React from "react";
+
+// Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import offline from "./offline.jpg";
+// SCSS
 import "./StreamerView.scss";
+
+// Images
+import offline from "./offline.jpg";
 
 const StreamerView = (props) => {
     let {
@@ -32,7 +38,7 @@ const Preview = ({ streamer, previewLoaded, previewWidth, onPreviewLoad }) => {
         height: previewWidth * 0.53,
     };
     return (
-        <div className="preview" style={style}>
+        <div className="stream-preview" style={style}>
             {previewLoaded ? null : <div className="loading" style={style} />}
             <img
                 src={streamer.preview || offline}
@@ -69,7 +75,7 @@ const FollowedGames = ({ streamer, unfollowGame }) => {
                     <p>Follow games to get notified</p>
                 </div>
             ) : (
-                <div className="tags">
+                <div className="game-tags">
                     {streamer.followed_games.map((game) => (
                         <div className="tag" key={game.id}>
                             <div className="name">{game.name}</div>
@@ -86,14 +92,5 @@ const FollowedGames = ({ streamer, unfollowGame }) => {
         </div>
     );
 };
-
-/*
-
- <div className="name">{game.name}</div>
-                            <p className="remove" onClick={() => unfollowGame(game)}>
-                                &#x2715;
-                            </p>
-
-                            */
 
 export default StreamerView;

@@ -1,6 +1,8 @@
+// Libraries & utils
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 
+// SCSS
 import "./FollowModal.scss";
 
 class FollowModal extends Component {
@@ -22,10 +24,10 @@ class FollowModal extends Component {
     render() {
         let { streamer, follow, close } = this.props;
         return (
-            <div className="follow-prompt">
+            <div className="prompt-container">
                 <div className="prompt">
                     <p>YOU MUST FIRST FOLLOW</p>
-                    <div className="box">
+                    <div className="streamer-info">
                         <img
                             src={streamer["logo"]}
                             width="50"

@@ -1,16 +1,18 @@
+// Libraries & utils
 import React from "react";
 
-import { dateDifference } from "helpers";
-
+// Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { FOLLOW_STREAMER, UNFOLLOW_STREAMER } from "helpers";
+// Helpers
+import { dateDifference, FOLLOW_STREAMER, UNFOLLOW_STREAMER } from "helpers";
 
+// SCSS
 import "./StreamerDetails.scss";
 
 const StreamerDetails = (props) => {
     return (
-        <div className="tops">
+        <div className="streamer-details">
             <Logo streamer={props.streamer} />
             <StreamInfo {...props} />
         </div>
@@ -42,15 +44,21 @@ const StreamInfo = (props) => {
             <div className="streamer-name">{streamer["display_name"]}</div>
             {streamer.stream && (
                 <div className="small-info">
-                    {"Playing " + streamer.stream.game}
+                    <span>Playing </span>
+                    {streamer.stream.game || "Nothing"}
                 </div>
             )}
 
             <div className="small-info follow-age">
-                {streamer.following
-                    ? "Followed " +
-                      dateDifference(new Date(streamer.followed_at), new Date())
-                    : ""}
+                {streamer.following && (
+                    <>
+                        <span>Followed </span>
+                        {dateDifference(
+                            new Date(streamer.followed_at),
+                            new Date()
+                        )}
+                    </>
+                )}
             </div>
             <FollowButton {...props} />
         </div>
@@ -75,7 +83,7 @@ const FollowButton = ({ streamer, handleFollowChange }) => {
             </button>
         );
     }
-    return <div className="follow">{button}</div>;
+    return <div className="streamer-follow-btn">{button}</div>;
 };
 
 export default StreamerDetails;

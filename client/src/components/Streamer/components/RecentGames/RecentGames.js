@@ -1,23 +1,40 @@
+// Libraries & utils
 import React from "react";
 
+// SCSS
 import "./RecentGames.scss";
 
 const RecentGames = (props) => {
-    let { recentGames, searchBtn, carouselClass, followGame, handleCarousel } = props;
+    let {
+        recentGames,
+        searchBtn,
+        carouselClass,
+        followGame,
+        handleCarousel,
+    } = props;
     return (
         <div>
             <Header searchBtn={searchBtn} />
             <div className="recent-games">
-                <div className="controls left" onClick={() => handleCarousel(false)}>
+                <div
+                    className="recent-games-controls left"
+                    onClick={() => handleCarousel(false)}
+                >
                     ‹
                 </div>
                 <div className="list">
                     <ul className={carouselClass}>
-                        <Games recentGames={recentGames} followGame={followGame} />
+                        <Games
+                            recentGames={recentGames}
+                            followGame={followGame}
+                        />
                     </ul>
                 </div>
 
-                <div className="controls right" onClick={() => handleCarousel(true)}>
+                <div
+                    className="recent-games-controls right"
+                    onClick={() => handleCarousel(true)}
+                >
                     ›
                 </div>
             </div>
@@ -35,10 +52,28 @@ const Header = ({ searchBtn }) => {
 };
 
 const Games = ({ recentGames, followGame }) => {
+    console.log(recentGames);
     return recentGames.map((game) => (
-        <li key={game.id} className="item" style={{ order: game.order }}>
+        <li
+            key={game.id}
+            className="recent-game-item"
+            style={{ order: game.order }}
+        >
             <div>{game.name}</div>
-            <img src={game["box_art_url"]} width="200" height="300" alt="MISSING" onClick={() => followGame(game)} />
+            <div className="container">
+                <img
+                    src={game["box_art_url"]}
+                    width="200"
+                    height="300"
+                    alt="MISSING"
+                    onClick={() => followGame(game)}
+                />
+                {game.suggestion && (
+                    <div class="overlay">
+                        <p>Suggested</p>
+                    </div>
+                )}
+            </div>
         </li>
     ));
 };

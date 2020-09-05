@@ -1,24 +1,28 @@
+// Libraries & utils
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
 
+// Redux
+import { connect } from "react-redux";
 import { showSearchGames, showLogin, hideSearch } from "store/actions.js";
 
-import { parseResponse } from "helpers";
-
+// Components
 import Streamer from "./Streamer";
-
-import "./Streamer.scss";
 import Spinner from "../Spinner/Spinner";
 import FollowModal from "./components/FollowModal/FollowModal";
 
+// Helpers
 import {
     LOGIN,
     FOLLOW_STREAMER,
     UNFOLLOW_STREAMER,
     FOLLOW_GAME,
     UNFOLLOW_GAME,
+    parseResponse,
 } from "helpers";
+
+// SCSS
+import "./Streamer.scss";
 
 class StreamerContainer extends Component {
     constructor(props) {
@@ -46,10 +50,7 @@ class StreamerContainer extends Component {
             this.getStreamersData();
         }
         if (this.props.session !== prevProps.session) {
-            let {
-                session: { user },
-            } = this.props;
-            if (user) {
+            if (this.props.session.user) {
                 this.getStreamersData();
             } else {
                 let streamer = this.state.streamer;
