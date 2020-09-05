@@ -1,6 +1,6 @@
 // Actions
 const LOGIN = "LOGIN";
-const RELOG = "RELOG";
+const REFRESH = "REFRESH";
 const FOLLOW_STREAMER = "FOLLOW_STREAMER";
 const UNFOLLOW_STREAMER = "UNFOLLOW_STREAMER";
 const FOLLOW_GAME = "FOLLOW_GAME";
@@ -69,7 +69,7 @@ const parseResponse = async (response) => {
 
 export {
     LOGIN,
-    RELOG,
+    REFRESH,
     FOLLOW_STREAMER,
     UNFOLLOW_STREAMER,
     FOLLOW_GAME,

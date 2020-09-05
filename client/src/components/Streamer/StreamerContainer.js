@@ -14,7 +14,7 @@ import FollowModal from "./components/FollowModal/FollowModal";
 // Helpers
 import {
     LOGIN,
-    RELOG,
+    REFRESH,
     FOLLOW_STREAMER,
     UNFOLLOW_STREAMER,
     FOLLOW_GAME,
@@ -97,7 +97,7 @@ class StreamerContainer extends Component {
         if (!meta.ok) {
             if (!meta.action) return this.props.history.push("/");
             switch (meta.action) {
-                case RELOG:
+                case REFRESH:
                     return this.getStreamersData();
                 case LOGIN:
                     return this.props.showLogin();
@@ -120,10 +120,10 @@ class StreamerContainer extends Component {
                 streamer.followed_games = [];
                 break;
             case FOLLOW_GAME:
-                streamer.followed_games = [...data];
+                streamer.followed_games = [...data.followedGames];
                 break;
             case UNFOLLOW_GAME:
-                streamer.followed_games = [...data];
+                streamer.followed_games = [...data.followedGames];
                 break;
             default:
                 return;

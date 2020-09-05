@@ -65,7 +65,6 @@ const getStreams = async (ids) => {
 
     let response = await axios(options);
     if (response && response.status != "200") {
-        console.log(response.status);
         return;
     }
     return response.data.data;
@@ -108,7 +107,7 @@ const followStreamer = async (username, { data }, cb) => {
                 meta: {
                     ok: false,
                     message: "Mismatched data",
-                    action: "RELOG",
+                    action: "REFRESH",
                 },
                 data: {},
             });
@@ -151,7 +150,7 @@ const unfollowStreamer = async (username, { data }, cb) => {
                 meta: {
                     ok: false,
                     message: "Mismatched data",
-                    action: "RELOG",
+                    action: "REFRESH",
                 },
                 data: {},
             });
@@ -184,19 +183,31 @@ const unfollowStreamer = async (username, { data }, cb) => {
 const followGame = async (user, { data }, cb) => {
     try {
         let followsStreamer = await isFollowingStreamer(user, data.username);
-        if (!followsStreamer)
-            throw new CustomError(
-                `Not following ${data.username}`,
-                401,
-                FOLLOW_STREAMER
-            );
+        if (!followsStreamer) {
+            return cb({
+                meta: {
+                    ok: false,
+                    message: `Not following ${data.username}`,
+                    action: "FOLLOW_STREAMER",
+                },
+                data: {},
+            });
+        }
 
         let game = await getGame(data);
         if (!game) throw new Error();
 
         let followsGame = await isFollowingGame(followsStreamer.id, game.id);
-        if (followsGame)
-            throw new CustomError(`Already following ${game.name}`, 401, NONE);
+        if (followsGame) {
+            return cb({
+                meta: {
+                    ok: false,
+                    message: `Already following ${game.name}`,
+                    action: "REFRESH",
+                },
+                data: {},
+            });
+        }
 
         let followedGame = await startFollowingGame(
             followsStreamer.id,
@@ -204,22 +215,49 @@ const followGame = async (user, { data }, cb) => {
         );
         if (!followedGame) throw new Error();
         let followedGames = await getFollowedGames(followsStreamer.id);
-
-        cb(followedGames);
+        return cb({
+            meta: {
+                ok: true,
+                message: "ok",
+            },
+            data: { followedGames },
+        });
     } catch (err) {
-        handleError(err, cb);
+        return cb({
+            meta: {
+                ok: false,
+                message: "Something went wrong",
+            },
+            data: {},
+        });
     }
 };
 
 const unfollowGame = async (user, { data }, cb) => {
     try {
         let followsStreamer = await isFollowingStreamer(user, data.username);
-        if (!followsStreamer)
-            throw new CustomError(`Not following ${data.username}`, 401);
+        if (!followsStreamer) {
+            return cb({
+                meta: {
+                    ok: false,
+                    message: `Not following streamer`,
+                    action: "REFRESH",
+                },
+                data: {},
+            });
+        }
 
         let followsGame = await isFollowingGame(followsStreamer.id, data.id);
-        if (!followsGame)
-            throw new CustomError(`Not following ${data.name}`, 401);
+        if (!followsGame) {
+            return cb({
+                meta: {
+                    ok: false,
+                    message: `Not following game`,
+                    action: "REFRESH",
+                },
+                data: {},
+            });
+        }
 
         let query = `DELETE FROM followed_games 
                      WHERE follow_id = $1 AND game_id = $2
@@ -229,9 +267,21 @@ const unfollowGame = async (user, { data }, cb) => {
         if (!result.rows.length) throw new Error();
 
         let followedGames = await getFollowedGames(followsStreamer.id);
-        cb(followedGames);
+        return cb({
+            meta: {
+                ok: true,
+                message: "ok",
+            },
+            data: { followedGames },
+        });
     } catch (err) {
-        handleError(err, cb);
+        return cb({
+            meta: {
+                ok: false,
+                message: "Something went wrong",
+            },
+            data: {},
+        });
     }
 };
 
