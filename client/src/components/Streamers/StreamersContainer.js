@@ -9,7 +9,7 @@ import { showLogin, showSearch } from "store/actions.js";
 import Streamers from "./Streamers";
 
 // Helpers
-import { dateDifference } from "helpers";
+import { dateDifference, parseResponse } from "helpers";
 
 // SCSS
 import "./Streamers.scss";
@@ -33,16 +33,11 @@ class StreamersContainer extends Component {
 
     getStreamersData = async () => {
         const response = await fetch("/api/twitchify/streamers", {});
-
-        try {
-            let data = await response.json();
-            if (response.ok) {
-                return this.setState({ streamers: data, loading: false });
-            }
-            console.log(data.message || "Something went wrong.");
-        } catch (err) {
-            console.log("Something went wrong.");
-        }
+        let parsed = await parseResponse(response);
+        if (!parsed) return;
+        let { meta, data } = parsed;
+        if (!meta.ok) return;
+        this.setState({ streamers: data.followed, loading: false });
     };
 
     render() {

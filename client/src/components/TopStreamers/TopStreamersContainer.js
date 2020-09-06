@@ -7,6 +7,9 @@ import { connect } from "react-redux";
 // Components
 import TopStreamers from "./TopStreamers";
 
+// Helpers
+import { parseResponse } from "helpers";
+
 const MIN_WIN_SIZE = 992;
 
 class TopStreamersContainer extends Component {
@@ -19,10 +22,13 @@ class TopStreamersContainer extends Component {
         this.fetchTopStreamers();
     }
 
-    fetchTopStreamers = () => {
-        fetch("/api/twitchify/top")
-            .then((res) => res.json())
-            .then((res) => this.setState({ streamers: res["data"] }));
+    fetchTopStreamers = async () => {
+        const response = await fetch("/api/twitchify/top");
+        let parsed = await parseResponse(response);
+        if (!parsed) return;
+        let { meta, data } = parsed;
+        if (!meta.ok) return;
+        this.setState({ streamers: data.streamers });
     };
 
     toggleSideBar = () => {

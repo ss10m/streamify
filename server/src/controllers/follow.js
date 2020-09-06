@@ -1,6 +1,5 @@
 import * as cred from "../config/credentials.js";
 import axios from "axios";
-import { CustomError, handleError } from "../util/helpers.js";
 import db from "../config/db.js";
 
 // ACTIONS
@@ -8,8 +7,6 @@ const FOLLOW_STREAMER = "FOLLOW_STREAMER";
 const UNFOLLOW_STREAMER = "UNFOLLOW_STREAMER";
 const FOLLOW_GAME = "FOLLOW_GAME";
 const UNFOLLOW_GAME = "UNFOLLOW_GAME";
-const LOGIN = "LOGIN";
-const NONE = "NONE";
 
 export const getFollows = async (session, cb) => {
     if (!session.user) return cb({ message: "You must be logged in" }, 401);
@@ -24,13 +21,9 @@ export const getFollows = async (session, cb) => {
                      ORDER BY follows.followed_at ASC`;
         let values = [username];
         let result = await db.query(query, values);
-
         let followed = result.rows;
-
         let ids = followed.map((stream) => stream.id);
-
         let streams = await getStreams(ids);
-
         let liveStreams = new Map(
             streams.map((stream) => [parseInt(stream.user_id), stream])
         );
@@ -42,9 +35,22 @@ export const getFollows = async (session, cb) => {
                 stream.live = false;
             }
         }
-        cb(followed);
+
+        cb({
+            meta: {
+                ok: true,
+                message: "ok",
+            },
+            data: { followed },
+        });
     } catch (err) {
-        handleError(err, cb);
+        cb({
+            meta: {
+                ok: false,
+                message: "Internal Server Error",
+            },
+            data: {},
+        });
     }
 };
 

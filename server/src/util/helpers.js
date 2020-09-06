@@ -47,3 +47,12 @@ export const verifyPassword = (user, password) => {
         .toString("hex");
     return user.hash === hash;
 };
+
+export const roundedToFixed = (number, digits) => {
+    if (number < 1000) return number;
+    let float = number / 1000;
+    let rounded = Math.pow(10, digits);
+    let viewers = (Math.round(float * rounded) / rounded).toFixed(digits);
+    if (viewers % 1 == 0) viewers = parseInt(viewers);
+    return viewers + "K";
+};
