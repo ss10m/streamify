@@ -4,7 +4,14 @@ import { connect } from "react-redux";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { getSession, logout, showLogin, toggleNavBar, showSearch, clearNotificationsIndicator } from "store/actions.js";
+import {
+    getSession,
+    logout,
+    showLogin,
+    toggleNavBar,
+    showSearch,
+    clearNotificationsIndicator,
+} from "store/actions.js";
 
 import "./NavBar.scss";
 
@@ -33,7 +40,6 @@ class NavBar extends Component {
     };
 
     showSearch = () => {
-        console.log("show search");
         this.props.showSearch();
     };
 
@@ -61,13 +67,28 @@ class NavBar extends Component {
                         size="2x"
                         onClick={this.toggleNotifications}
                     ></FontAwesomeIcon>
-                    {newNotifications > 0 && <span className="indicator"></span>}
-                    {this.state.showNotifications && <Notifications toggleNotifications={this.toggleNotifications} />}
+                    {newNotifications > 0 && (
+                        <span className="indicator"></span>
+                    )}
+                    {this.state.showNotifications && (
+                        <Notifications
+                            toggleNotifications={this.toggleNotifications}
+                        />
+                    )}
                 </div>
                 <div className="user-btn flex" id="userDropdown">
-                    <FontAwesomeIcon className="icon" icon="user-circle" size="2x" onClick={this.toggleDropDown} />
+                    <FontAwesomeIcon
+                        className="icon"
+                        icon="user-circle"
+                        size="2x"
+                        onClick={this.toggleDropDown}
+                    />
                     {this.state.userOptions && (
-                        <UserOptions user={user} logout={this.props.logout} toggleDropDown={this.toggleDropDown} />
+                        <UserOptions
+                            user={user}
+                            logout={this.props.logout}
+                            toggleDropDown={this.toggleDropDown}
+                        />
                     )}
                 </div>
             </div>

@@ -4,17 +4,19 @@ import db from "../config/db.js";
 
 const sendNotifications = async (io, connections) => {
     try {
-        console.log("=======================-------NOTIFICATIONS-------====================");
-        console.log("# of connections: " + connections.size);
         if (!connections.size) return;
         let srvSockets = io.sockets.sockets;
 
-        let connectedClientsIds = Object.keys(srvSockets).map((socket) => srvSockets[socket].handshake.session.user.id);
+        let connectedClientsIds = Object.keys(srvSockets).map(
+            (socket) => srvSockets[socket].handshake.session.user.id
+        );
 
         let followedStreamers = await getFollowedStreamers(connectedClientsIds);
         if (!followedStreamers.length) return;
 
-        let followedIds = new Set(followedStreamers.map((streamer) => streamer.streamer_id));
+        let followedIds = new Set(
+            followedStreamers.map((streamer) => streamer.streamer_id)
+        );
 
         let streamers = await getStreams(followedIds);
         if (!streamers) return;
@@ -29,22 +31,36 @@ const sendNotifications = async (io, connections) => {
             notifyUser(connection, idToStreamer, ids);
         }
     } catch (err) {
-        console.log(err.message);
+        return;
     }
 };
 
 const removeNotifications = async (session, { id }, cb) => {
-    if (!session.user) return cb({ message: "You must be logged in" }, 401);
+    try {
+        if (!session.user) throw new Error();
+        if (id >= 0) {
+            await hideNotification(id);
+        } else {
+            await hideNotifications(session.user.id);
+        }
 
-    if (id >= 0) {
-        await hideNotification(id);
-    } else {
-        await hideNotifications(session.user.id);
+        let notifications = await getRecentNotifications(session.user.id);
+        cb({
+            meta: {
+                ok: true,
+                message: "ok",
+            },
+            data: { notifications },
+        });
+    } catch (err) {
+        cb({
+            meta: {
+                ok: false,
+                message: "Something went wrong",
+            },
+            data: {},
+        });
     }
-
-    let notifications = await getRecentNotifications(session.user.id);
-
-    cb(notifications);
 };
 
 const hideNotification = async (notificationId) => {
@@ -94,7 +110,6 @@ const getStreams = async (ids) => {
 
     let response = await axios(options);
     if (response && response.status != "200") {
-        console.log(response.status);
         return;
     }
     return response.data.data;
@@ -102,19 +117,24 @@ const getStreams = async (ids) => {
 
 const notifyUser = async (connection, idToStreamer, ids) => {
     let user = connection.handshake.session.user;
-    console.log(user);
     let newNotifications = [];
     let followedGames = await getFollowedGames(user.id);
     for (let followedGame of followedGames) {
         if (followedGame.streamer_id in idToStreamer) {
             let streamer = idToStreamer[followedGame.streamer_id];
             if (streamer.game_id == followedGame.id) {
-                // send new notficiation if time since last one is > 60 sec
-                let recentNotification = await getNotifications(followedGame.follow_id, followedGame.id);
-                if (!recentNotification || (new Date() - recentNotification.sent_at) / 1000 > 120) {
-                    //console.log(`${followedGame.display_name} IS PLAYING ${followedGame.name}`);
-
-                    let notification = await storeNotification(followedGame.follow_id, followedGame.id);
+                let recentNotification = await getNotifications(
+                    followedGame.follow_id,
+                    followedGame.id
+                );
+                if (
+                    !recentNotification ||
+                    (new Date() - recentNotification.sent_at) / 1000 > 120
+                ) {
+                    let notification = await storeNotification(
+                        followedGame.follow_id,
+                        followedGame.id
+                    );
                     let msg = {
                         id: notification.id,
                         name: followedGame.streamer_name,
@@ -128,7 +148,8 @@ const notifyUser = async (connection, idToStreamer, ids) => {
             }
         }
     }
-    if (newNotifications.length) connection.emit("notification", newNotifications);
+    if (newNotifications.length)
+        connection.emit("notification", newNotifications);
     connection.emit("update", user.username + " " + new Date() + ids);
 };
 

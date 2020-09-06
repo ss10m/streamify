@@ -73,7 +73,6 @@ const getUser = async (username) => {
 
     let response = await axios(options);
     if (response && response.status != "200") {
-        console.log(response.status);
         return;
     }
     return response.data.data[0];
@@ -91,7 +90,6 @@ const getStream = async (username) => {
 
     let response = await axios(options);
     if (response && response.status != "200") {
-        console.log(response.status);
         return;
     }
     return response.data.data[0];
@@ -112,7 +110,6 @@ const getRecentGames = async (streamerId) => {
 
     let response = await axios(options);
     if (response && response.status != "200") {
-        console.log(response.status);
         return;
     }
 
@@ -156,11 +153,8 @@ const getRecentGamesBoxArt = async (recentGames) => {
 
     let response = await axios(options);
     if (response && response.status != "200") {
-        console.log(response.status);
         return;
     }
-
-    console.log(response.headers["ratelimit-remaining"]);
 
     for (let game of response.data.data) {
         game.box_art_url = game.box_art_url.replace(/{width}/g, "200");

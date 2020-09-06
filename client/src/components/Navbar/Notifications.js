@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { setNotifications } from "store/actions.js";
 
-import { dateDifference } from "helpers";
+import { dateDifference, parseResponse } from "helpers";
 
 import "./Notifications.scss";
 
@@ -18,7 +18,10 @@ class Notifications extends Component {
 
     componentDidMount() {
         document.addEventListener("click", this.handleClickOutside, true);
-        this.interval = setInterval(() => this.setState({ time: Date.now() }), 1000);
+        this.interval = setInterval(
+            () => this.setState({ time: Date.now() }),
+            1000
+        );
     }
 
     componentWillUnmount() {
@@ -45,22 +48,24 @@ class Notifications extends Component {
             },
         });
 
-        try {
-            let data = await response.json();
-            if (response.ok) {
-                this.props.setNotifications(data);
-                return;
-            }
-            console.log(data.message || "Something went wrong.");
-        } catch (err) {
-            console.log("Something went wrong.");
+        let parsed = await parseResponse(response);
+        if (!parsed) return;
+        let { meta, data } = parsed;
+        if (!meta.ok) {
+            return window.location.reload(false);
         }
+        this.props.setNotifications(data.notifications);
     };
 
     getHeader = () => {
         return (
             <div className="header">
-                <FontAwesomeIcon icon="trash" size="1x" className="header-icon" onClick={this.hideNotification} />
+                <FontAwesomeIcon
+                    icon="trash"
+                    size="1x"
+                    className="header-icon"
+                    onClick={this.hideNotification}
+                />
                 <p>Notifications</p>
                 <FontAwesomeIcon
                     icon="times"
@@ -80,9 +85,16 @@ class Notifications extends Component {
         if (!data.length) {
             return (
                 <div className="empty">
-                    <FontAwesomeIcon icon="bell" size="5x" className="empty-icon" />
+                    <FontAwesomeIcon
+                        icon="bell"
+                        size="5x"
+                        className="empty-icon"
+                    />
 
-                    <p>Follow your favorite streamers to get notified when they play selected games</p>
+                    <p>
+                        Follow your favorite streamers to get notified when they
+                        play selected games
+                    </p>
                 </div>
             );
         }
@@ -93,7 +105,12 @@ class Notifications extends Component {
                 key={notification.id}
                 onClick={this.props.toggleNotifications}
             >
-                <img src={notification.logo} width="60" height="60" alt="MISSING" />
+                <img
+                    src={notification.logo}
+                    width="60"
+                    height="60"
+                    alt="MISSING"
+                />
                 <div className="info">
                     <p className="name">{notification.display_name}</p>
                     <p className="game">{notification.game}</p>
@@ -103,10 +120,17 @@ class Notifications extends Component {
                     icon="times"
                     size="1x"
                     className="close-icon"
-                    onClick={(event) => this.hideNotification(event, notification.id)}
+                    onClick={(event) =>
+                        this.hideNotification(event, notification.id)
+                    }
                 />
 
-                <p className="time-since">{dateDifference(new Date(notification.sent_at), this.state.time)}</p>
+                <p className="time-since">
+                    {dateDifference(
+                        new Date(notification.sent_at),
+                        this.state.time
+                    )}
+                </p>
             </Link>
         ));
     };
@@ -133,4 +157,6 @@ const mapDispatchToProps = (dispatch) => ({
     },
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Notifications));
+export default withRouter(
+    connect(mapStateToProps, mapDispatchToProps)(Notifications)
+);

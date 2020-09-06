@@ -15,7 +15,6 @@ class Notifications extends Component {
 
     componentDidMount() {
         let { session } = this.props;
-        console.log(session);
         if (session.user) {
             this.connectSocket();
         }

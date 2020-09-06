@@ -9,7 +9,7 @@ import { hideSearch } from "store/actions";
 import Search from "./Search";
 
 // Helpers
-import { liveTime } from "helpers";
+import { liveTime, parseResponse } from "helpers";
 
 const SEARCH_USERS = "USERS";
 const SEARCH_GAMES = "GAMES";
@@ -49,16 +49,22 @@ class SearchContainer extends Component {
         if (query !== this.state.searchInput || query.length === 0) {
             return;
         }
+
         let body;
-        if (type === SEARCH_USERS) {
-            body = JSON.stringify({ query, type });
-        } else if (type === SEARCH_GAMES) {
-            body = JSON.stringify({
-                query,
-                type,
-                username: user.name,
-                id: user._id,
-            });
+        switch (type) {
+            case SEARCH_USERS:
+                body = JSON.stringify({ query, type });
+                break;
+            case SEARCH_GAMES:
+                body = JSON.stringify({
+                    query,
+                    type,
+                    username: user.name,
+                    id: user._id,
+                });
+                break;
+            default:
+                break;
         }
 
         const response = await fetch("/api/twitchify/search", {
@@ -68,22 +74,16 @@ class SearchContainer extends Component {
                 "Content-Type": "application/json",
             },
         });
-
-        try {
-            let data = await response.json();
-
-            if (response.ok) {
-                if (!Array.isArray(data)) data = [];
-                if (data.length === 0) {
-                    return this.setState({ noResults: true });
-                }
-                return this.setState({ results: data, noResults: false });
-            }
-            this.setState({ noResults: true });
-        } catch (err) {
-            console.log(err);
-            console.log("Something went wrong.");
+        let parsed = await parseResponse(response);
+        if (!parsed) return this.setState({ noResults: true });
+        let { meta, data } = parsed;
+        if (!meta.ok) return this.setState({ noResults: true });
+        let results = data.result;
+        if (!Array.isArray(results)) results = [];
+        if (results.length === 0) {
+            return this.setState({ noResults: true });
         }
+        this.setState({ results: results, noResults: false });
     };
 
     render() {

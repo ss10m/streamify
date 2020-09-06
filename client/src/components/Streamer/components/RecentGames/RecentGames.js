@@ -52,7 +52,6 @@ const Header = ({ searchBtn }) => {
 };
 
 const Games = ({ recentGames, followGame }) => {
-    console.log(recentGames);
     return recentGames.map((game) => (
         <li
             key={game.id}

@@ -2,8 +2,6 @@ import * as cred from "../config/credentials.js";
 import axios from "axios";
 import db from "../config/db.js";
 
-import { handleError } from "../util/helpers.js";
-
 const SEARCH_USERS = "USERS";
 const SEARCH_GAMES = "GAMES";
 
@@ -13,30 +11,42 @@ export const search = (session, data, cb) => {
 };
 
 const searchUsers = async (data, cb) => {
-    let options = {
-        method: "get",
-        url: "https://api.twitch.tv/helix/search/channels?query=" + data.query,
-        headers: {
-            "Client-ID": cred.clientId,
-            Authorization: cred.auth,
-        },
-        params: {
-            first: 10,
-        },
-    };
-
-    let response;
     try {
-        response = await axios(options);
+        let options = {
+            method: "get",
+            url:
+                "https://api.twitch.tv/helix/search/channels?query=" +
+                data.query,
+            headers: {
+                "Client-ID": cred.clientId,
+                Authorization: cred.auth,
+            },
+            params: {
+                first: 10,
+            },
+        };
+
+        let response = await axios(options);
+        if (response && response.status != "200") {
+            throw new Error();
+        }
+
+        cb({
+            meta: {
+                ok: true,
+                message: "ok",
+            },
+            data: { result: response.data.data },
+        });
     } catch (err) {
-        return cb({ message: "Something went wrong" });
+        cb({
+            meta: {
+                ok: false,
+                message: "Something went wrong",
+            },
+            data: {},
+        });
     }
-
-    if (response.status != "200") {
-        return cb({ message: "Something went wrong" });
-    }
-
-    cb(response.data.data);
 };
 
 const searchGames = async ({ user }, data, cb) => {
@@ -45,7 +55,9 @@ const searchGames = async ({ user }, data, cb) => {
 
         let options = {
             method: "get",
-            url: "https://api.twitch.tv/helix/search/categories?query=" + data.query,
+            url:
+                "https://api.twitch.tv/helix/search/categories?query=" +
+                data.query,
             headers: {
                 "Client-ID": cred.clientId,
                 Authorization: cred.auth,
@@ -61,8 +73,6 @@ const searchGames = async ({ user }, data, cb) => {
         }
 
         let result = response.data.data;
-        if (!result) return cb({ data: [] });
-
         let followedGames = await getFollowedGames(username, data.username);
         let gameIds = new Set();
         for (let followedGame of followedGames) {
@@ -72,13 +82,23 @@ const searchGames = async ({ user }, data, cb) => {
         for (let game of result) {
             game.following = gameIds.has(parseInt(game.id));
             game.box_art_url = game.box_art_url.replace("52x72", "67x100");
-            console.log(game);
         }
 
-        cb(result);
+        cb({
+            meta: {
+                ok: true,
+                message: "ok",
+            },
+            data: { result },
+        });
     } catch (err) {
-        console.log(err.message);
-        handleError(err, cb);
+        cb({
+            meta: {
+                ok: false,
+                message: "Something went wrong",
+            },
+            data: {},
+        });
     }
 };
 
