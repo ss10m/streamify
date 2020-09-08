@@ -8,14 +8,13 @@ $hightlight-color: #30475e;
 
     .notifications {
         width: 400px;
-        min-width: 300px;
+        min-width: 370px;
         height: 365px;
         position: absolute;
         top: 53px;
         left: -350px;
         border-radius: 7px;
         background-color: $primary-color;
-
         box-shadow: 0px 0px 2px 1px black;
         display: flex;
         flex-direction: column;
@@ -35,9 +34,7 @@ $hightlight-color: #30475e;
             align-items: center;
             justify-content: space-between;
             border-bottom: 1px solid black;
-
             padding: 0 15px;
-
             font-size: 20px;
             font-weight: 700;
             background-color: #121a21;
@@ -86,22 +83,16 @@ $hightlight-color: #30475e;
 .scrollable .notification {
     margin: 4px 10px;
     height: 60px;
-
     padding-right: 10px;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #121a21;
-
     border-radius: 7px;
-
     text-decoration: none;
     color: whitesmoke;
     padding-right: 80px;
-
     position: relative;
-
     box-shadow: 0px 0px 3px 0px black;
 
     @media (max-width: 460px) {

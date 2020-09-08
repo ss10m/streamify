@@ -9,7 +9,16 @@ const FOLLOW_GAME = "FOLLOW_GAME";
 const UNFOLLOW_GAME = "UNFOLLOW_GAME";
 
 export const getFollows = async (session, cb) => {
-    if (!session.user) return cb({ message: "You must be logged in" }, 401);
+    console.log(session);
+    if (!session.user) {
+        return cb({
+            meta: {
+                ok: false,
+                message: "You must be logged in",
+            },
+            data: {},
+        });
+    }
     let username = session.user.username;
 
     try {

@@ -1,28 +1,40 @@
+// Libraries & utils
 import React from "react";
 import { Link } from "react-router-dom";
 
+// Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+// SCSS
 import "./ExtendedBar.scss";
 
-export default (props) => {
+const ExtendedBar = (props) => {
     return (
         <div className="extended-bar">
-            <Link to="/streamers" className="streamers-link" onClick={() => props.toggleNavBar()}>
+            <Link
+                to="/streamers"
+                className="link"
+                onClick={() => props.toggleNavBar()}
+            >
                 <FontAwesomeIcon icon="users" style={{ marginRight: "10px" }} />
-                STREAMERS
+                FOLLOWING
             </Link>
 
             <div
-                className="streamers-link"
+                className="link"
                 onClick={() => {
                     props.toggleNavBar();
                     props.showSearch();
                 }}
             >
-                <FontAwesomeIcon icon="search" style={{ marginRight: "10px" }} />
+                <FontAwesomeIcon
+                    icon="search"
+                    style={{ marginRight: "10px" }}
+                />
                 SEARCH
             </div>
         </div>
     );
 };
+
+export default ExtendedBar;

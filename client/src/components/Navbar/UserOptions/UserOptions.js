@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 
+import { connect } from "react-redux";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { dateDifference } from "helpers";
+
+import { logout } from "store/actions.js";
 
 import "./UserOptions.scss";
 
@@ -42,7 +46,7 @@ class UserOptions extends Component {
     };
 
     render() {
-        let { username, last_login } = this.props.user;
+        let { username, last_login } = this.props.session.user;
         let loggedIn = dateDifference(new Date(last_login), this.state.time);
 
         return (
@@ -121,4 +125,16 @@ class UserOptions extends Component {
     }
 }
 
-export default UserOptions;
+const mapStateToProps = (state) => {
+    return {
+        session: state.session,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+    logout: () => {
+        dispatch(logout());
+    },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserOptions);

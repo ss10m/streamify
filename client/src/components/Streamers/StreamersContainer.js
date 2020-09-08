@@ -32,6 +32,7 @@ class StreamersContainer extends Component {
     }
 
     getStreamersData = async () => {
+        if (!this.props.session.user) return;
         const response = await fetch("/api/twitchify/streamers", {});
         let parsed = await parseResponse(response);
         if (!parsed) return;

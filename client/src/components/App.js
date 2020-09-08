@@ -10,7 +10,7 @@ import { getSession, toggleNavBar } from "store/actions.js";
 import WindowSize from "./WindowSize/WindowSize";
 import Notifications from "./Notifications/Notifications";
 import LoginPage from "./LoginPage/LoginPageContainer";
-import NavBar from "./Navbar/NavBar";
+import NavBar from "./Navbar/NavBarContainer";
 import TopStreamers from "./TopStreamers/TopStreamersContainer";
 import Streamers from "./Streamers/StreamersContainer";
 import Streamer from "./Streamer/StreamerContainer";
