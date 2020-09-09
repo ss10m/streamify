@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // Components
 import ExtendedBar from "./ExtendedBar/ExtendedBar";
-import UserOptions from "./UserOptions/UserOptions";
+import UserOptions from "./UserOptions/UserOptionsContainer";
 import Notifications from "./Notifications/NotificationsContainer";
 
 // SCSS

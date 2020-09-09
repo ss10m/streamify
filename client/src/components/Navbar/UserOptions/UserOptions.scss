@@ -14,25 +14,23 @@ $hightlight-color: #30475e;
         left: -150px;
         border-radius: 7px;
         background-color: $primary-color;
-        //box-shadow: 0 0 5px rgba(33, 33, 33, 0.5);
         box-shadow: 0px 0px 2px 1px black;
         display: flex;
         flex-direction: column;
         z-index: 10;
 
-        .top {
+        .dropdown-header {
             display: flex;
             flex-direction: column;
             border-radius: 7px 7px 0 0;
             padding: 8px 20px 1px 20px;
-
             background-color: $primary-color;
-
             color: $top-color;
 
             .info {
                 color: white;
                 margin-top: 10px;
+
                 .user-icon {
                     font-size: 28px;
                 }
@@ -52,43 +50,6 @@ $hightlight-color: #30475e;
             }
         }
 
-        .option {
-            height: 35px;
-            margin: 0 15px;
-            font-weight: 300;
-            font-size: 16px;
-            color: $top-color;
-
-            display: flex;
-            align-items: center;
-
-            .button {
-                width: 100%;
-                height: 20px;
-                display: flex;
-                align-items: center;
-                color: white;
-                text-decoration: none;
-                background-color: $primary-color;
-                padding: 7px 8px;
-                border-radius: 5px;
-                cursor: pointer;
-
-                .option-icon {
-                    font-size: 18px;
-                    margin-right: 8px;
-                }
-            }
-
-            .selectable:hover {
-                background-color: $hightlight-color;
-            }
-
-            &:last-child {
-                margin-bottom: 8px;
-            }
-        }
-
         .divider {
             height: 1px;
             margin: 8px 20px;
@@ -97,5 +58,41 @@ $hightlight-color: #30475e;
             background-color: white;
             color: white;
         }
+    }
+}
+
+.dropdown-option {
+    height: 35px;
+    margin: 0 15px;
+    font-weight: 300;
+    font-size: 16px;
+    color: $top-color;
+    display: flex;
+    align-items: center;
+
+    .button {
+        width: 100%;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        color: white;
+        text-decoration: none;
+        background-color: $primary-color;
+        padding: 7px 8px;
+        border-radius: 5px;
+        cursor: pointer;
+
+        .option-icon {
+            font-size: 18px;
+            margin-right: 8px;
+        }
+    }
+
+    .selectable:hover {
+        background-color: $hightlight-color;
+    }
+
+    &:last-child {
+        margin-bottom: 8px;
     }
 }

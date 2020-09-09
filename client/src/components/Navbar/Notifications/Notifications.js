@@ -63,7 +63,11 @@ const NotificationList = (props) => {
         );
     }
     return data.map((notification) => (
-        <Notification {...props} notification={notification} />
+        <Notification
+            {...props}
+            key={notification.id}
+            notification={notification}
+        />
     ));
 };
 
