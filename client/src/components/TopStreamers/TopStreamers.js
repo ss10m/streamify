@@ -1,7 +1,11 @@
+// Libraries & utils
 import React from "react";
 import { Link } from "react-router-dom";
+
+// Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+// SCSS
 import "./TopStreamers.scss";
 
 const TopStreamers = (props) => {

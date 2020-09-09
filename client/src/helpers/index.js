@@ -5,6 +5,8 @@ const FOLLOW_STREAMER = "FOLLOW_STREAMER";
 const UNFOLLOW_STREAMER = "UNFOLLOW_STREAMER";
 const FOLLOW_GAME = "FOLLOW_GAME";
 const UNFOLLOW_GAME = "UNFOLLOW_GAME";
+const SEARCH_USERS = "USERS";
+const SEARCH_GAMES = "GAMES";
 
 const dateDifference = (then, now) => {
     let offset = (now - then) / 1000;
@@ -74,6 +76,8 @@ export {
     UNFOLLOW_STREAMER,
     FOLLOW_GAME,
     UNFOLLOW_GAME,
+    SEARCH_USERS,
+    SEARCH_GAMES,
     dateDifference,
     liveTime,
     parseResponse,

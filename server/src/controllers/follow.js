@@ -9,7 +9,6 @@ const FOLLOW_GAME = "FOLLOW_GAME";
 const UNFOLLOW_GAME = "UNFOLLOW_GAME";
 
 export const getFollows = async (session, cb) => {
-    console.log(session);
     if (!session.user) {
         return cb({
             meta: {

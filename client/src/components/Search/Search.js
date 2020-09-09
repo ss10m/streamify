@@ -1,18 +1,25 @@
+// Libraries & utils
 import React from "react";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 
+// ICONS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+// Helpers
+import {
+    liveTime,
+    SEARCH_USERS,
+    SEARCH_GAMES,
+    FOLLOW_GAME,
+    UNFOLLOW_GAME,
+} from "helpers";
+
+// Components
 import Spinner from "../Spinner/Spinner";
 
+// SCSS
 import "./Search.scss";
-import { liveTime } from "helpers";
-
-const SEARCH_USERS = "USERS";
-const SEARCH_GAMES = "GAMES";
-const FOLLOW_GAME = "FOLLOW_GAME";
-const UNFOLLOW_GAME = "UNFOLLOW_GAME";
 
 export default (props) => {
     return (
