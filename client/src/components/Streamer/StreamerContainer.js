@@ -29,6 +29,7 @@ class StreamerContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            isLoaded: false,
             streamer: null,
             showFollowPrompt: false,
         };
@@ -41,12 +42,12 @@ class StreamerContainer extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.match.params.id !== this.props.match.params.id) {
             this.setState({
+                isLoaded: false,
                 streamer: null,
                 direction: null,
                 seat: 0,
                 recent_games: [],
                 showFollowPrompt: false,
-                previewLoaded: false,
             });
             this.getStreamersData();
         }
@@ -69,7 +70,25 @@ class StreamerContainer extends Component {
         if (!parsed) return;
         let { meta, data } = parsed;
         if (!meta.ok) return this.props.history.push("/");
-        this.setState({ streamer: data.streamer });
+        this.cacheImages(data.streamer);
+    };
+
+    cacheImages = (streamer) => {
+        let urls = [],
+            cached = 0;
+        urls.push(streamer.logo);
+        if (streamer.preview) urls.push(streamer.preview);
+        streamer.recent_games.forEach((game) => urls.push(game.box_art_url));
+        urls.forEach((url) => {
+            const image = new window.Image();
+            image.src = url;
+            image.onload = () => {
+                cached++;
+                if (cached === urls.length) {
+                    this.setState({ isLoaded: true, streamer });
+                }
+            };
+        });
     };
 
     parseGame = (game) => {
@@ -143,10 +162,10 @@ class StreamerContainer extends Component {
     };
 
     render() {
-        let { streamer, showFollowPrompt } = this.state;
+        let { isLoaded, streamer, showFollowPrompt } = this.state;
         let { session, showLogin, showSearchGames, windowSize } = this.props;
 
-        if (!streamer) {
+        if (!isLoaded) {
             return <Spinner />;
         }
 
@@ -192,6 +211,4 @@ const mapDispatchToProps = (dispatch) => ({
     },
 });
 
-export default withRouter(
-    connect(mapStateToProps, mapDispatchToProps)(StreamerContainer)
-);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(StreamerContainer));
