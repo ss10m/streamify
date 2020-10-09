@@ -44,9 +44,6 @@ class StreamerContainer extends Component {
             this.setState({
                 isLoaded: false,
                 streamer: null,
-                direction: null,
-                seat: 0,
-                recent_games: [],
                 showFollowPrompt: false,
             });
             this.getStreamersData();
@@ -84,7 +81,7 @@ class StreamerContainer extends Component {
             image.src = url;
             image.onload = () => {
                 cached++;
-                if (cached === urls.length) {
+                if (cached === urls.length && streamer.name === this.props.match.params.id) {
                     this.setState({ isLoaded: true, streamer });
                 }
             };
