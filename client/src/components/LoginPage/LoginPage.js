@@ -51,16 +51,13 @@ const DefaultView = (props) => {
             <div className="top center">
                 <FontAwesomeIcon icon="user-circle" size="10x" />
             </div>
-            <div
-                className="btn login center"
-                onClick={() => props.switchView("login")}
-            >
+            <div className="btn login center" onClick={() => props.switchView("login")}>
                 LOGIN
             </div>
-            <div
-                className="btn register center"
-                onClick={() => props.switchView("register")}
-            >
+            <div className="btn guest center" onClick={() => props.switchView("login")}>
+                LOGIN AS GUEST
+            </div>
+            <div className="btn register center" onClick={() => props.switchView("register")}>
                 CREATE ACCOUNT
             </div>
         </>
@@ -90,10 +87,7 @@ const LoginView = (props) => {
             <div className="btn login center" onClick={props.login}>
                 LOGIN
             </div>
-            <div
-                className="btn cancel center"
-                onClick={() => props.switchView("default")}
-            >
+            <div className="btn cancel center" onClick={() => props.switchView("default")}>
                 CANCEL
             </div>
         </>
@@ -137,10 +131,7 @@ const RegistrationView = (props) => {
             <div className="btn login center" onClick={props.register}>
                 CREATE ACCOUNT
             </div>
-            <div
-                className="btn cancel center"
-                onClick={() => props.switchView("default")}
-            >
+            <div className="btn cancel center" onClick={() => props.switchView("default")}>
                 CANCEL
             </div>
         </>

@@ -5,13 +5,7 @@ import React from "react";
 import "./RecentGames.scss";
 
 const RecentGames = (props) => {
-    let {
-        recentGames,
-        searchBtn,
-        carouselClass,
-        followGame,
-        handleCarousel,
-    } = props;
+    let { recentGames, searchBtn, carouselClass, followGame, handleCarousel } = props;
     return (
         <div>
             <Header searchBtn={searchBtn} />
@@ -24,10 +18,7 @@ const RecentGames = (props) => {
                 </div>
                 <div className="list">
                     <ul className={carouselClass}>
-                        <Games
-                            recentGames={recentGames}
-                            followGame={followGame}
-                        />
+                        <Games recentGames={recentGames} followGame={followGame} />
                     </ul>
                 </div>
 
@@ -52,12 +43,8 @@ const Header = ({ searchBtn }) => {
 };
 
 const Games = ({ recentGames, followGame }) => {
-    return recentGames.map((game) => (
-        <li
-            key={game.id}
-            className="recent-game-item"
-            style={{ order: game.order }}
-        >
+    return recentGames.map((game, index) => (
+        <li key={game.id + index} className="recent-game-item" style={{ order: game.order }}>
             <div>{game.name}</div>
             <div className="container">
                 <img

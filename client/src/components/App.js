@@ -9,6 +9,7 @@ import { getSession, toggleNavBar } from "store/actions.js";
 // Components
 import WindowSize from "./WindowSize/WindowSize";
 import Notifications from "./Notifications/Notifications";
+import Landing from "./Landing/LandingContainer";
 import LoginPage from "./LoginPage/LoginPageContainer";
 import NavBar from "./Navbar/NavBarContainer";
 import TopStreamers from "./TopStreamers/TopStreamersContainer";
@@ -59,15 +60,13 @@ class App extends Component {
                         <TopStreamers />
                         <div className="streamers">
                             <Switch>
-                                <Route
-                                    exact
-                                    path="/"
-                                    render={() => <h1>Main Page</h1>}
-                                />
+                                <Route exact path="/">
+                                    <Landing />
+                                </Route>
                                 <Route
                                     exact
                                     path="/streamer/:id"
-                                    render={(props) => <Streamer />}
+                                    render={() => <Streamer />}
                                 />
                                 <Route exact path="/streamers">
                                     <Streamers />

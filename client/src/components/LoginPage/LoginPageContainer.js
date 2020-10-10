@@ -3,12 +3,7 @@ import React, { Component } from "react";
 
 // Redux
 import { connect } from "react-redux";
-import {
-    login,
-    closeLoginWindow,
-    register,
-    hideLoginError,
-} from "store/actions.js";
+import { login, closeLoginWindow, register, hideLoginError } from "store/actions.js";
 
 // Components
 import LoginPage from "./LoginPage";

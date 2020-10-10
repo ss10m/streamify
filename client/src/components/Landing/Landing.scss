@@ -1,0 +1,123 @@
+.landing-wrapper {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overflow: auto;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    .landing {
+        max-width: 1000px;
+        display: flex;
+        flex-direction: row;
+
+        @media (max-width: 840px) {
+            flex-direction: column;
+        }
+    }
+}
+
+.landing-about {
+    margin: 10px;
+    color: whitesmoke;
+
+    h3 {
+        margin: 0;
+        color: gold;
+    }
+
+    .info {
+        margin: 0 20px 0 10px;
+
+        p {
+            margin-left: 10px;
+        }
+    }
+
+    .btn {
+        width: 210px;
+        height: 35px;
+        padding: 10px;
+        margin: 5px 20px;
+        border-radius: 5px;
+        background-color: #9c8d54;
+
+        &:hover {
+            cursor: pointer;
+            opacity: 0.9;
+        }
+
+        p {
+            font-weight: 600;
+            margin: 0;
+            line-height: 35px;
+            text-align: center;
+        }
+    }
+}
+
+.landing-instructions {
+    display: flex;
+    flex-direction: column;
+    color: whitesmoke;
+    margin: 10px 10px 20px 20px;
+
+    h3 {
+        margin: 0;
+
+        span {
+            color: gold;
+            padding-right: 10px;
+        }
+    }
+
+    .inside {
+        margin-left: 30px;
+        border-left: 3px solid black;
+
+        .btns {
+            width: 220px;
+            margin: 10px 0 10px 10px;
+            text-align: center;
+
+            p {
+                margin: 0;
+                font-weight: 600;
+                color: gold;
+            }
+
+            .btn {
+                width: 180px;
+                height: 30px;
+                padding: 10px;
+                margin: 5px 20px;
+                border-radius: 5px;
+                background-color: #121a21;
+
+                p {
+                    font-weight: 600;
+                    margin: 0;
+                    line-height: 30px;
+                    text-align: center;
+                    color: whitesmoke;
+                }
+
+                &:hover {
+                    cursor: pointer;
+                    opacity: 0.9;
+                }
+            }
+        }
+
+        img {
+            margin-left: 20px;
+            width: 90%;
+            height: auto;
+            border-radius: 7px;
+        }
+    }
+}
