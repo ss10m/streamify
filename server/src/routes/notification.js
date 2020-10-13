@@ -1,9 +1,7 @@
 import express from "express";
 const router = express.Router();
 
-import sendNotifications, {
-    removeNotifications,
-} from "../controllers/notifications.js";
+import sendNotifications, { removeNotifications } from "../controllers/notifications.js";
 
 const connections = new Set();
 
@@ -16,6 +14,7 @@ router.post("", ({ session, body }, res) => {
 const setupNotifications = (io) => {
     io.on("connection", (socket) => {
         connections.add(socket);
+        sendNotifications(io, connections);
         socket.on("disconnect", () => {
             connections.delete(socket);
         });

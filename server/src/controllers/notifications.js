@@ -14,9 +14,7 @@ const sendNotifications = async (io, connections) => {
         let followedStreamers = await getFollowedStreamers(connectedClientsIds);
         if (!followedStreamers.length) return;
 
-        let followedIds = new Set(
-            followedStreamers.map((streamer) => streamer.streamer_id)
-        );
+        let followedIds = new Set(followedStreamers.map((streamer) => streamer.streamer_id));
 
         let streamers = await getStreams(followedIds);
         if (!streamers) return;
@@ -26,9 +24,8 @@ const sendNotifications = async (io, connections) => {
             idToStreamer[steamer.user_id] = steamer;
         }
 
-        let ids = "[" + Object.keys(srvSockets).join(" - ") + "]";
         for (let connection of connections) {
-            notifyUser(connection, idToStreamer, ids);
+            notifyUser(connection, idToStreamer);
         }
     } catch (err) {
         return;
@@ -115,9 +112,9 @@ const getStreams = async (ids) => {
     return response.data.data;
 };
 
-const notifyUser = async (connection, idToStreamer, ids) => {
+const notifyUser = async (connection, idToStreamer) => {
     let user = connection.handshake.session.user;
-    let newNotifications = [];
+    let totalNotifications = 0;
     let followedGames = await getFollowedGames(user.id);
     for (let followedGame of followedGames) {
         if (followedGame.streamer_id in idToStreamer) {
@@ -131,26 +128,17 @@ const notifyUser = async (connection, idToStreamer, ids) => {
                     !recentNotification ||
                     (new Date() - recentNotification.sent_at) / 1000 > 120
                 ) {
-                    let notification = await storeNotification(
-                        followedGame.follow_id,
-                        followedGame.id
-                    );
-                    let msg = {
-                        id: notification.id,
-                        name: followedGame.streamer_name,
-                        display_name: followedGame.display_name,
-                        logo: followedGame.logo,
-                        game: followedGame.name,
-                        sent_at: new Date(),
-                    };
-                    newNotifications.push(msg);
+                    await storeNotification(followedGame.follow_id, followedGame.id);
+                    totalNotifications++;
                 }
             }
         }
     }
-    if (newNotifications.length)
+
+    if (totalNotifications) {
+        let newNotifications = await getRecentNotifications(user.id, totalNotifications);
         connection.emit("notification", newNotifications);
-    connection.emit("update", user.username + " " + new Date() + ids);
+    }
 };
 
 const getFollowedGames = async (userId) => {
@@ -186,7 +174,7 @@ const storeNotification = async (followId, gameId) => {
     return res.rows[0];
 };
 
-const getRecentNotifications = async (userId) => {
+const getRecentNotifications = async (userId, limit = 10) => {
     let query = `SELECT streamers.display_name, streamers.name, streamers.logo, games.name as game, notifications.sent_at, notifications.id
                  FROM follows
                  INNER JOIN streamers ON streamers.id = follows.streamer_id
@@ -194,8 +182,8 @@ const getRecentNotifications = async (userId) => {
                  INNER JOIN games ON games.id = notifications.game_id
                  WHERE user_id = $1 AND notifications.hidden = false
                  ORDER BY notifications.sent_at DESC
-                 LIMIT 10`;
-    let values = [userId];
+                 LIMIT $2`;
+    let values = [userId, limit];
     let res = await db.query(query, values);
     if (!res.rows.length) return [];
     return res.rows;
