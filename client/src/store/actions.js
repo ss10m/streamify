@@ -1,10 +1,9 @@
 import { batch } from "react-redux";
 import { parseResponse } from "helpers";
-import { API_URL } from "config";
 
 // Session Actions
 export const getSession = () => async (dispatch) => {
-    const response = await fetch(`${API_URL}/api/session`, { method: "GET" });
+    const response = await fetch("/api/session", { method: "GET" });
     let parsed = await parseResponse(response);
     if (!parsed) return dispatch(setError("Something went wrong"));
     let { meta, data } = parsed;
@@ -26,7 +25,7 @@ const clearSession = () => ({
 
 // Login & Registration Actions
 export const login = (userInfo) => async (dispatch) => {
-    const response = await fetch(`${API_URL}/api/session`, {
+    const response = await fetch("/api/session", {
         method: "POST",
         body: JSON.stringify(userInfo),
         headers: {
@@ -51,7 +50,7 @@ export const login = (userInfo) => async (dispatch) => {
     });
 };
 export const register = (userInfo) => async (dispatch) => {
-    const response = await fetch(`${API_URL}/api/users`, {
+    const response = await fetch("/api/users/", {
         method: "POST",
         body: JSON.stringify(userInfo),
         headers: {
@@ -75,7 +74,7 @@ export const register = (userInfo) => async (dispatch) => {
     });
 };
 export const logout = () => async (dispatch) => {
-    const response = await fetch(`${API_URL}/api/session`, { method: "DELETE" });
+    const response = await fetch("/api/session", { method: "DELETE" });
     let parsed = await parseResponse(response);
     if (!parsed) return dispatch(setError("Something went wrong"));
     let { meta } = parsed;

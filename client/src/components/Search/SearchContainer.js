@@ -5,14 +5,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { hideSearch } from "store/actions";
 
-// Helpers
-import { liveTime, parseResponse } from "helpers";
-
-// Config
-import { API_URL } from "config";
-
 // Componenets
 import Search from "./Search";
+
+// Helpers
+import { liveTime, parseResponse } from "helpers";
 
 const SEARCH_USERS = "USERS";
 const SEARCH_GAMES = "GAMES";
@@ -29,7 +26,10 @@ class SearchContainer extends Component {
     }
 
     componentDidMount() {
-        this.interval = setInterval(() => this.setState({ time: Date.now() }), 1000);
+        this.interval = setInterval(
+            () => this.setState({ time: Date.now() }),
+            1000
+        );
     }
 
     componentWillUnmount() {
@@ -67,7 +67,7 @@ class SearchContainer extends Component {
                 break;
         }
 
-        const response = await fetch(`${API_URL}/api/twitchify/search`, {
+        const response = await fetch("/api/twitchify/search", {
             method: "POST",
             body,
             headers: {

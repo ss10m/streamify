@@ -3,18 +3,11 @@ import session from "express-session";
 import pgSimpleSession from "connect-pg-simple";
 import path from "path";
 import http from "http";
-import cors from "cors";
 import ioClient from "socket.io";
 import sharedsession from "express-socket.io-session";
 
 import { SESS_NAME, SESS_SECRET, SESS_LIFETIME } from "../config.js";
-import {
-    userRoutes,
-    sessionRoutes,
-    twitchifyRoutes,
-    notificationsRoutes,
-    setupNotifications,
-} from "./routes/index.js";
+import { userRoutes, sessionRoutes, twitchifyRoutes, notificationsRoutes, setupNotifications } from "./routes/index.js";
 import { pgPool } from "./config/db.js";
 
 const PORT = 8080;
@@ -24,7 +17,6 @@ const pgSession = new pgSimpleSession(session);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
 
 const CLIENT_BUILD_PATH = path.join(path.resolve(), "../client/build");
 app.use(express.static(CLIENT_BUILD_PATH));

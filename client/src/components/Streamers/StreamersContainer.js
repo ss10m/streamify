@@ -5,14 +5,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { showLogin, showSearch } from "store/actions.js";
 
-// Helpers
-import { dateDifference, parseResponse } from "helpers";
-
-// Config
-import { API_URL } from "config";
-
 // Components
 import Streamers from "./Streamers";
+
+// Helpers
+import { dateDifference, parseResponse } from "helpers";
 
 // SCSS
 import "./Streamers.scss";
@@ -36,7 +33,7 @@ class StreamersContainer extends Component {
 
     getStreamersData = async () => {
         if (!this.props.session.user) return;
-        const response = await fetch(`${API_URL}/api/twitchify/streamers`, {});
+        const response = await fetch("/api/twitchify/streamers", {});
         let parsed = await parseResponse(response);
         if (!parsed) return;
         let { meta, data } = parsed;
