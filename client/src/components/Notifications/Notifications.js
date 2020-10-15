@@ -7,6 +7,9 @@ import { Helmet } from "react-helmet";
 import { connect } from "react-redux";
 import { addNotifications } from "store/actions.js";
 
+// Config
+import { API_URL } from "config";
+
 class Notifications extends Component {
     constructor(props) {
         super(props);
@@ -37,7 +40,7 @@ class Notifications extends Component {
     }
 
     connectSocket = () => {
-        let socket = socketIO.connect();
+        let socket = socketIO.connect(API_URL);
         socket.on("notification", this.handleNotification);
         this.setState({ socket });
     };

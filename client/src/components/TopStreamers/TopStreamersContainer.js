@@ -4,11 +4,14 @@ import React, { Component } from "react";
 // Redux
 import { connect } from "react-redux";
 
-// Components
-import TopStreamers from "./TopStreamers";
+// Config
+import { API_URL } from "config";
 
 // Helpers
 import { parseResponse } from "helpers";
+
+// Components
+import TopStreamers from "./TopStreamers";
 
 const MIN_WIN_SIZE = 992;
 
@@ -23,7 +26,7 @@ class TopStreamersContainer extends Component {
     }
 
     fetchTopStreamers = async () => {
-        const response = await fetch("/api/twitchify/top");
+        const response = await fetch(`${API_URL}/api/twitchify/top`);
         let parsed = await parseResponse(response);
         if (!parsed) return;
         let { meta, data } = parsed;

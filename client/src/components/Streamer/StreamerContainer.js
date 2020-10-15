@@ -6,11 +6,6 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { showSearchGames, showLogin, hideSearch } from "store/actions.js";
 
-// Components
-import Streamer from "./Streamer";
-import Spinner from "../Spinner/Spinner";
-import FollowModal from "./components/FollowModal/FollowModal";
-
 // Helpers
 import {
     LOGIN,
@@ -21,6 +16,14 @@ import {
     UNFOLLOW_GAME,
     parseResponse,
 } from "helpers";
+
+// Config
+import { API_URL } from "config";
+
+// Components
+import Streamer from "./Streamer";
+import Spinner from "../Spinner/Spinner";
+import FollowModal from "./components/FollowModal/FollowModal";
 
 // SCSS
 import "./Streamer.scss";
@@ -61,7 +64,7 @@ class StreamerContainer extends Component {
     }
 
     getStreamersData = async () => {
-        const url = "/api/twitchify/streamer/" + this.props.match.params.id;
+        const url = `${API_URL}/api/twitchify/streamer/${this.props.match.params.id}`;
         const response = await fetch(url, { method: "GET" });
         let parsed = await parseResponse(response);
         if (!parsed) return;
@@ -99,7 +102,7 @@ class StreamerContainer extends Component {
         }
         actionData.username = this.props.match.params.id;
 
-        const response = await fetch("/api/twitchify/follow", {
+        const response = await fetch(`${API_URL}/api/twitchify/follow`, {
             method: "POST",
             body: JSON.stringify({ action, data: actionData }),
             headers: {

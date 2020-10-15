@@ -22,11 +22,6 @@ import Error from "./Error/Error";
 import "./App.scss";
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { socket: null };
-    }
-
     componentDidMount() {
         this.props.getSession();
     }

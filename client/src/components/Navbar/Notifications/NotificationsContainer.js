@@ -10,6 +10,9 @@ import { setNotifications } from "store/actions.js";
 // Helpers
 import { parseResponse } from "helpers";
 
+// Config
+import { API_URL } from "config";
+
 // Components
 import Notifications from "./Notifications";
 
@@ -21,10 +24,7 @@ class NotificationsContainer extends Component {
 
     componentDidMount() {
         document.addEventListener("click", this.handleClickOutside, true);
-        this.interval = setInterval(
-            () => this.setState({ time: Date.now() }),
-            1000
-        );
+        this.interval = setInterval(() => this.setState({ time: Date.now() }), 1000);
     }
 
     componentWillUnmount() {
@@ -43,7 +43,7 @@ class NotificationsContainer extends Component {
         event.preventDefault();
         event.stopPropagation();
 
-        const response = await fetch("/api/notifications/", {
+        const response = await fetch(`${API_URL}/api/notifications`, {
             method: "POST",
             body: JSON.stringify({ id }),
             headers: {
