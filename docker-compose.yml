@@ -11,24 +11,24 @@ services:
             LETSENCRYPT_EMAIL: "fastf20@gmail.com"
         networks:
             - service-network
-            - twitchify-network
+            - streamify-network
         depends_on:
             - db
 
     db:
         image: postgres:11.2-alpine
         environment:
-            POSTGRES_DB: twitchify
-            POSTGRES_USER: twitchify
+            POSTGRES_DB: streamify
+            POSTGRES_USER: streamify
             POSTGRES_PASSWORD: pw
         networks:
-            - twitchify-network
+            - streamify-network
         volumes:
-            - ~/dbTwitchify:/var/lib/postgresql/data
+            - ~/db_streamify:/var/lib/postgresql/data
             - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
 networks:
     service-network:
         external: true
-    twitchify-network:
+    streamify-network:
         driver: bridge

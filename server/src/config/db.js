@@ -2,9 +2,9 @@ import Pool from "pg-pool";
 
 export const pgPool = new Pool({
     host: "db",
-    database: "twitchify",
+    database: "streamify",
     port: 5432,
-    user: "twitchify",
+    user: "streamify",
     password: "pw",
 });
 

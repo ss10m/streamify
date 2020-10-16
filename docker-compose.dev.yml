@@ -31,9 +31,9 @@ services:
     db:
         image: postgres:11.2-alpine
         environment:
-            POSTGRES_DB: twitchify
-            POSTGRES_USER: twitchify
+            POSTGRES_DB: streamify
+            POSTGRES_USER: streamify
             POSTGRES_PASSWORD: pw
         volumes:
-            - ~/dbTwitchify:/var/lib/postgresql/data
+            - ~/db_streamify:/var/lib/postgresql/data
             - ./init.sql:/docker-entrypoint-initdb.d/init.sql
