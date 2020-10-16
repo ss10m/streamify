@@ -6,8 +6,14 @@ import http from "http";
 import ioClient from "socket.io";
 import sharedsession from "express-socket.io-session";
 
-import { SESS_NAME, SESS_SECRET, SESS_LIFETIME } from "../config.js";
-import { userRoutes, sessionRoutes, twitchifyRoutes, notificationsRoutes, setupNotifications } from "./routes/index.js";
+import { SESS_NAME, SESS_SECRET, SESS_LIFETIME } from "./config/session.js";
+import {
+    userRoutes,
+    sessionRoutes,
+    twitchifyRoutes,
+    notificationsRoutes,
+    setupNotifications,
+} from "./routes/index.js";
 import { pgPool } from "./config/db.js";
 
 const PORT = 8080;
@@ -34,8 +40,8 @@ let expressSession = session({
         tableName: "session",
     }),
     cookie: {
-        sameSite: true,
-        secure: false,
+        sameSite: "strict",
+        secure: process.env.NODE_ENV === "development" ? false : true,
         maxAge: parseInt(SESS_LIFETIME),
     },
 });

@@ -3,12 +3,12 @@ import Joi from "joi";
 
 import { signIn } from "../validations/user.js";
 import { parseError, sessionizeUser, verifyPassword } from "../util/helpers.js";
-import { SESS_NAME } from "../../config.js";
+import { SESS_NAME } from "../config/session.js";
+import db from "../config/db.js";
+
 import { getRecentNotifications } from "../controllers/notifications.js";
 
 const router = express.Router();
-
-import db from "../config/db.js";
 
 router.post("", async (req, res) => {
     try {
