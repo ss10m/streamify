@@ -33,15 +33,15 @@ const io = ioClient(server);
 let expressSession = session({
     name: SESS_NAME,
     secret: SESS_SECRET,
-    saveUninitialized: false,
-    resave: true,
+    //saveUninitialized: false,
+    //resave: true,
     store: new pgSession({
         pool: pgPool,
         tableName: "session",
     }),
     cookie: {
-        httpOnly: true,
-        secure: true,
+        //httpOnly: true,
+        //secure: true,
         //sameSite: "strict",
         //secure: process.env.NODE_ENV === "development" ? false : true,
         maxAge: parseInt(SESS_LIFETIME),
