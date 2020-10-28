@@ -34,14 +34,16 @@ let expressSession = session({
     name: SESS_NAME,
     secret: SESS_SECRET,
     saveUninitialized: false,
-    resave: false,
+    resave: true,
     store: new pgSession({
         pool: pgPool,
         tableName: "session",
     }),
     cookie: {
-        sameSite: "strict",
-        secure: process.env.NODE_ENV === "development" ? false : true,
+        httpOnly: true,
+        secure: true,
+        //sameSite: "strict",
+        //secure: process.env.NODE_ENV === "development" ? false : true,
         maxAge: parseInt(SESS_LIFETIME),
     },
 });
