@@ -1,5 +1,6 @@
 // Libraries & utils
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 
 // Redux
 import { connect } from "react-redux";
@@ -20,6 +21,22 @@ class LoginPageContainer extends Component {
             confirmPassword: "",
         };
     }
+
+    componentDidMount() {
+        this.setupHistoryListener();
+    }
+
+    componentWillUnmount() {
+        this.historyListener();
+    }
+
+    setupHistoryListener = () => {
+        let { history, location } = this.props;
+        history.push(location.pathname);
+        this.historyListener = history.listen((newLocation, action) => {
+            if (action === "POP") this.props.closeLoginWindow();
+        });
+    };
 
     handleClickOutside = (event) => {
         event.preventDefault();
@@ -123,4 +140,4 @@ const mapDispatchToProps = (dispatch) => ({
     },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginPageContainer);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginPageContainer));

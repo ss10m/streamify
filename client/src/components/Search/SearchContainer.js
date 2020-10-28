@@ -1,5 +1,6 @@
 // Libraries & utils
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 
 // Redux
 import { connect } from "react-redux";
@@ -26,15 +27,22 @@ class SearchContainer extends Component {
     }
 
     componentDidMount() {
-        this.interval = setInterval(
-            () => this.setState({ time: Date.now() }),
-            1000
-        );
+        this.interval = setInterval(() => this.setState({ time: Date.now() }), 1000);
+        this.setupHistoryListener();
     }
 
     componentWillUnmount() {
         clearInterval(this.interval);
+        this.historyListener();
     }
+
+    setupHistoryListener = () => {
+        let { history, location } = this.props;
+        history.push(location.pathname);
+        this.historyListener = history.listen((newLocation, action) => {
+            if (action === "POP") this.props.hideSearch();
+        });
+    };
 
     handleChange = (event) => {
         var searchInput = event.target.value.trim();
@@ -117,4 +125,4 @@ const mapDispatchToProps = (dispatch) => ({
     },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchContainer);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SearchContainer));
