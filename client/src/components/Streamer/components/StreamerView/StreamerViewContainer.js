@@ -18,19 +18,8 @@ class StreamerViewContainer extends Component {
     };
 
     render() {
-        let { width, streamer } = this.props;
-        let { previewLoaded } = this.state;
-        let previewWidth = Math.max(280, Math.min(width - 90, 450));
-
-        return (
-            <StreamerView
-                streamer={streamer}
-                previewLoaded={previewLoaded}
-                previewWidth={previewWidth}
-                unfollowGame={this.unfollowGame}
-                onPreviewLoad={() => this.setState({ previewLoaded: true })}
-            />
-        );
+        let { streamer } = this.props;
+        return <StreamerView streamer={streamer} unfollowGame={this.unfollowGame} />;
     }
 }
 

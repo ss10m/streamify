@@ -14,7 +14,6 @@ const Streamer = (props) => {
         session,
         showLogin,
         showSearchGames,
-        windowSize,
         streamer,
         handleFollowChange,
         toggleFollowPrompt,
@@ -22,16 +21,8 @@ const Streamer = (props) => {
 
     return (
         <div className="streamer">
-            <StreamerDetails
-                streamer={streamer}
-                handleFollowChange={handleFollowChange}
-            />
-
-            <StreamerView
-                width={windowSize}
-                streamer={streamer}
-                handleFollowChange={handleFollowChange}
-            />
+            <StreamerDetails streamer={streamer} handleFollowChange={handleFollowChange} />
+            <StreamerView streamer={streamer} handleFollowChange={handleFollowChange} />
             <RecentGames
                 streamer={streamer}
                 handleFollowChange={handleFollowChange}

@@ -29,6 +29,7 @@ const RecentGames = (props) => {
                     ›
                 </div>
             </div>
+            <div className="recent-games-footer"></div>
         </div>
     );
 };
@@ -36,7 +37,7 @@ const RecentGames = (props) => {
 const Header = ({ searchBtn }) => {
     return (
         <div className="recent-games-header">
-            <div className="recent-games-title">Recent Games</div>
+            <div className="recent-games-title">RECENT GAMES</div>
             <button onClick={searchBtn}>Search Games</button>
         </div>
     );

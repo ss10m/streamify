@@ -11,54 +11,32 @@ import "./StreamerView.scss";
 import offline from "./offline.jpg";
 
 const StreamerView = (props) => {
-    let {
-        streamer,
-        previewLoaded,
-        previewWidth,
-        unfollowGame,
-        onPreviewLoad,
-    } = props;
+    let { streamer, unfollowGame } = props;
 
     return (
         <div className="streamer-view">
-            <Preview
-                streamer={streamer}
-                previewLoaded={previewLoaded}
-                previewWidth={previewWidth}
-                onPreviewLoad={onPreviewLoad}
-            />
+            <Preview streamer={streamer} />
             <FollowedGames streamer={streamer} unfollowGame={unfollowGame} />
         </div>
     );
 };
 
-const Preview = ({ streamer, previewLoaded, previewWidth, onPreviewLoad }) => {
-    let style = {
-        width: previewWidth,
-        height: previewWidth * 0.53,
-    };
+const Preview = ({ streamer }) => {
     return (
-        <div className="stream-preview" style={style}>
-            {previewLoaded ? null : <div className="loading" style={style} />}
-            <img
-                src={streamer.preview || offline}
-                alt="MISING"
-                style={previewLoaded ? style : null}
-                onLoad={onPreviewLoad}
-            />
-            {streamer.stream && (
-                <div
-                    className="icon"
-                    onClick={() => {
-                        window.open(
-                            `https://www.twitch.tv/${streamer.name}`,
-                            "_blank"
-                        );
-                    }}
-                >
-                    <FontAwesomeIcon icon="play" size="4x" />
-                </div>
-            )}
+        <div className="stream-preview">
+            <div className="img-wrapper">
+                <img src={streamer.preview || offline} alt="MISING" />
+                {streamer.stream && (
+                    <div
+                        className="icon"
+                        onClick={() => {
+                            window.open(`https://www.twitch.tv/${streamer.name}`, "_blank");
+                        }}
+                    >
+                        <FontAwesomeIcon icon="play" size="4x" />
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
@@ -79,10 +57,7 @@ const FollowedGames = ({ streamer, unfollowGame }) => {
                     {streamer.followed_games.map((game) => (
                         <div className="tag" key={game.id}>
                             <div className="name">{game.name}</div>
-                            <div
-                                className="remove"
-                                onClick={() => unfollowGame(game)}
-                            >
+                            <div className="remove" onClick={() => unfollowGame(game)}>
                                 &#x2715;
                             </div>
                         </div>

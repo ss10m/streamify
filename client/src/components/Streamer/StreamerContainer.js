@@ -160,7 +160,7 @@ class StreamerContainer extends Component {
 
     render() {
         let { isLoaded, streamer, showFollowPrompt } = this.state;
-        let { session, showLogin, showSearchGames, windowSize } = this.props;
+        let { session, showLogin, showSearchGames } = this.props;
 
         if (!isLoaded) {
             return <Spinner />;
@@ -182,7 +182,6 @@ class StreamerContainer extends Component {
                     showLogin={showLogin}
                     showSearchGames={showSearchGames}
                     toggleFollowPrompt={this.toggleFollowPrompt}
-                    windowSize={windowSize}
                 />
             </>
         );
@@ -192,7 +191,6 @@ class StreamerContainer extends Component {
 const mapStateToProps = (state) => {
     return {
         session: state.session,
-        windowSize: state.windowSize,
     };
 };
 
