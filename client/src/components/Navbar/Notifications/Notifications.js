@@ -14,12 +14,13 @@ import "./Notifications.scss";
 const Notifications = (props) => {
     let { hideNotification, toggleNotifications } = props;
     return (
-        <div className="notifications">
-            <Header
-                hideNotification={hideNotification}
-                toggleNotifications={toggleNotifications}
-            />
-            <div className="scrollable">
+        <div className="notifications-wrapper">
+            <div className="notifications">
+                <Header
+                    hideNotification={hideNotification}
+                    toggleNotifications={toggleNotifications}
+                />
+
                 <NotificationList {...props} />
             </div>
         </div>
@@ -28,7 +29,7 @@ const Notifications = (props) => {
 
 const Header = ({ hideNotification, toggleNotifications }) => {
     return (
-        <div className="header">
+        <div className="notifications-header">
             <FontAwesomeIcon
                 icon="trash"
                 size="1x"
@@ -53,22 +54,19 @@ const NotificationList = (props) => {
 
     if (!data.length) {
         return (
-            <div className="empty">
+            <div className="notifications-empty">
                 <FontAwesomeIcon icon="bell" size="5x" className="empty-icon" />
                 <p>
-                    Follow your favorite streamers to get notified when they
-                    play selected games
+                    Follow your favorite streamers to get notified when they play selected
+                    games
                 </p>
             </div>
         );
     }
-    return data.map((notification) => (
-        <Notification
-            {...props}
-            key={notification.id}
-            notification={notification}
-        />
+    let notifications = data.map((notification) => (
+        <Notification {...props} key={notification.id} notification={notification} />
     ));
+    return <div className="notifications-body">{notifications}</div>;
 };
 
 const Notification = (props) => {

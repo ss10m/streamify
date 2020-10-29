@@ -129,10 +129,11 @@ $secondary-color: #273747;
 .input {
     display: flex;
     height: 45px;
+    //background-color: orange;
 
     .icon {
         height: 100%;
-        width: 45px;
+        width: 50px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -145,20 +146,28 @@ $secondary-color: #273747;
     }
 
     .field {
+        width: 200px;
+        height: 100%;
+        border: 1px solid $primary-color;
+        border-radius: 0 5px 5px 0;
+        border-left: none;
+
         label {
             position: relative;
 
             input {
-                height: 100%;
-                width: 90%;
                 padding: 0 10px;
+                width: 180px;
+                height: 100%;
                 outline: none;
-                border: 1px solid $primary-color;
-                border-radius: 0 5px 5px 0;
-                border-left: none;
+                border: none;
                 font-size: 16px;
                 color: white;
                 background: transparent;
+
+                &[type="password"] {
+                    font: small-caption;
+                }
             }
 
             .title {

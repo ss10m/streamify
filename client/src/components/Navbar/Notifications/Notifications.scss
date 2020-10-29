@@ -6,19 +6,13 @@ $hightlight-color: #30475e;
     position: relative;
     z-index: 4;
 
-    .notifications {
+    .notifications-wrapper {
         width: 400px;
         min-width: 370px;
         height: 365px;
         position: absolute;
         top: 53px;
         left: -350px;
-        border-radius: 7px;
-        background-color: $primary-color;
-        box-shadow: 0px 0px 2px 1px black;
-        display: flex;
-        flex-direction: column;
-        z-index: 10;
 
         @media (max-width: 460px) {
             width: 100%;
@@ -27,130 +21,142 @@ $hightlight-color: #30475e;
             left: 0;
         }
 
-        .header {
-            height: 60px;
+        .notifications {
+            width: 100%;
+            height: 100%;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid black;
-            padding: 0 15px;
-            font-size: 20px;
-            font-weight: 700;
-            background-color: #121a21;
-
-            .header-icon {
-                padding: 6px 8px;
-                border-radius: 7px;
-
-                &:hover {
-                    background-color: #30475e;
-                    cursor: pointer;
-                }
-            }
-        }
-
-        .scrollable {
-            flex: 1;
             flex-direction: column;
-            overflow: auto;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-            &::-webkit-scrollbar {
-                display: none;
-            }
-            padding: 5px 0;
-        }
-
-        .empty {
-            margin: 0 30px;
-            text-align: center;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            color: whitesmoke;
-            font-weight: 500;
-            font-size: 14px;
-
-            .empty-icon {
-                color: #101317;
-                margin-bottom: 20px;
-            }
+            border-radius: 7px;
+            background-color: $primary-color;
+            box-shadow: 0px 0px 2px 1px black;
+            z-index: 10;
         }
     }
 }
 
-.scrollable .notification {
-    margin: 4px 10px;
-    height: 60px;
-    padding-right: 10px;
+.notifications-header {
+    height: 60px !important;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid black;
+    padding: 0 15px;
+    font-size: 20px;
+    font-weight: 700;
     background-color: #121a21;
-    border-radius: 7px;
-    text-decoration: none;
-    color: whitesmoke;
-    padding-right: 80px;
-    position: relative;
-    box-shadow: 0px 0px 3px 0px black;
 
-    @media (max-width: 460px) {
-        height: 80px;
-        img {
-            width: 80px;
-            height: 80px;
-        }
-    }
-    &:hover {
-        cursor: pointer;
-    }
-
-    img {
-        border-top-left-radius: 7px;
-        border-bottom-left-radius: 7px;
-    }
-
-    .info {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        p {
-            margin: 0;
-            text-align: center;
-        }
-
-        .name {
-            font-weight: 600;
-        }
-
-        .game {
-            color: grey;
-            font-size: 14px;
-        }
-    }
-
-    .close-icon {
-        position: absolute;
-        top: 5px;
-        right: 8px;
-        padding: 4px 6px;
-        border-radius: 4px;
+    .header-icon {
+        padding: 6px 8px;
+        border-radius: 7px;
 
         &:hover {
-            background-color: $hightlight-color;
+            background-color: #30475e;
+            cursor: pointer;
         }
     }
+}
 
-    .time-since {
-        font-weight: 300;
-        font-size: 13px;
-        color: grey;
-        margin: 0;
-        position: absolute;
-        right: 8px;
-        bottom: 5px;
+.notifications-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column !important;
+    overflow: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    padding: 5px 0;
+
+    .notification {
+        margin: 4px 10px;
+        height: 60px;
+        padding-right: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #121a21;
+        border-radius: 7px;
+        text-decoration: none;
+        color: whitesmoke;
+        padding-right: 80px;
+        position: relative;
+        box-shadow: 0px 0px 3px 0px black;
+
+        @media (max-width: 460px) {
+            height: 80px;
+            img {
+                width: 80px;
+                height: 80px;
+            }
+        }
+        &:hover {
+            cursor: pointer;
+        }
+
+        img {
+            border-top-left-radius: 7px;
+            border-bottom-left-radius: 7px;
+        }
+
+        .info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            p {
+                margin: 0;
+                text-align: center;
+            }
+
+            .name {
+                font-weight: 600;
+            }
+
+            .game {
+                color: grey;
+                font-size: 14px;
+            }
+        }
+
+        .close-icon {
+            position: absolute;
+            top: 5px;
+            right: 8px;
+            padding: 4px 6px;
+            border-radius: 4px;
+
+            &:hover {
+                background-color: $hightlight-color;
+            }
+        }
+
+        .time-since {
+            font-weight: 300;
+            font-size: 13px;
+            color: grey;
+            margin: 0;
+            position: absolute;
+            right: 8px;
+            bottom: 5px;
+        }
+    }
+}
+
+.notifications-empty {
+    margin: 0 30px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column !important;
+    color: whitesmoke;
+    font-weight: 500;
+    font-size: 14px;
+
+    .empty-icon {
+        color: #101317;
+        margin-bottom: 20px;
     }
 }

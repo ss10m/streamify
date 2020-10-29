@@ -4,7 +4,6 @@
     display: flex;
     flex-direction: row;
     background-color: #1c2934;
-    align-items: center;
     color: whitesmoke;
 
     .img-wrapper {
@@ -45,7 +44,6 @@
 
     .info {
         flex: 1;
-        height: 100%;
         margin-left: 15px;
         display: flex;
         flex-direction: column;
@@ -56,8 +54,8 @@
             line-height: 5vw;
             font-weight: 600;
 
-            @media (max-width: 370px) {
-                font-size: 18px;
+            @media (max-width: 400px) {
+                font-size: 20px;
                 line-height: 20px;
             }
 
@@ -81,27 +79,13 @@
             }
         }
     }
-
-    p {
-        font-size: 7vw;
-        font-weight: 600;
-        display: inline;
-        line-height: 0;
-        margin: 0;
-        padding: 0;
-        background-color: red;
-
-        @media (max-width: 900px) {
-            font-size: 50px;
-        }
-    }
 }
 
 .streamer-follow-btn {
     button {
         outline: none;
         border: none;
-        width: 175px;
+        width: 165px;
         padding: 12px 0;
         margin-top: 3px;
         border-radius: 5px;

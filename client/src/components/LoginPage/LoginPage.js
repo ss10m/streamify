@@ -79,6 +79,7 @@ const LoginView = (props) => {
                 <Input
                     title="Password"
                     icon="key"
+                    type="password"
                     value={props.password}
                     onChangeValue={props.handleInput("password")}
                     onKeyPress={props.handleKeyPress(props.login)}
@@ -116,6 +117,7 @@ const RegistrationView = (props) => {
                 <Input
                     title="Password"
                     icon="key"
+                    type="password"
                     value={props.password}
                     onChangeValue={props.handleInput("password")}
                     onKeyPress={props.handleKeyPress(props.register)}
@@ -123,6 +125,7 @@ const RegistrationView = (props) => {
                 <Input
                     title="Confirm Password"
                     icon="key"
+                    type="password"
                     value={props.confirmPassword}
                     onChangeValue={props.handleInput("confirmPassword")}
                     onKeyPress={props.handleKeyPress(props.register)}
