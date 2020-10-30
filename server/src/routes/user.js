@@ -2,7 +2,6 @@ import Joi from "joi";
 import express from "express";
 import { signUp } from "../validations/user.js";
 import { parseError, sessionizeUser, encryptPassword } from "../util/helpers.js";
-import { getRecentNotifications } from "../controllers/notifications.js";
 const userRouter = express.Router();
 
 import db from "../config/db.js";

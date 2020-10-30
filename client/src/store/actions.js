@@ -65,7 +65,6 @@ export const loginAsGuest = () => async (dispatch) => {
     batch(() => {
         dispatch(closeLoginWindow());
         dispatch(setSession(sessionState));
-        //dispatch(addNotifications(data.notifications));
     });
 };
 export const register = (userInfo) => async (dispatch) => {
