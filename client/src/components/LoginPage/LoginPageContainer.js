@@ -4,7 +4,13 @@ import { withRouter } from "react-router-dom";
 
 // Redux
 import { connect } from "react-redux";
-import { login, closeLoginWindow, register, hideLoginError } from "store/actions.js";
+import {
+    login,
+    loginAsGuest,
+    register,
+    closeLoginWindow,
+    hideLoginError,
+} from "store/actions.js";
 
 // Components
 import LoginPage from "./LoginPage";
@@ -113,6 +119,7 @@ class LoginPageContainer extends Component {
                 handleInput={this.handleInput}
                 handleKeyPress={this.handleKeyPress}
                 login={this.login}
+                loginAsGuest={this.props.loginAsGuest}
                 register={this.register}
             />
         );
@@ -128,6 +135,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
     login: (userInfo) => {
         dispatch(login(userInfo));
+    },
+    loginAsGuest: () => {
+        dispatch(loginAsGuest());
     },
     register: (userInfo) => {
         dispatch(register(userInfo));

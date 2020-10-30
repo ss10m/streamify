@@ -49,6 +49,25 @@ export const login = (userInfo) => async (dispatch) => {
         dispatch(addNotifications(data.notifications));
     });
 };
+export const loginAsGuest = () => async (dispatch) => {
+    const response = await fetch("/api/users/guest", {
+        method: "GET",
+    });
+
+    let parsed = await parseResponse(response);
+    if (!parsed) return dispatch(setError("Something went wrong"));
+    console.log(parsed);
+    let { meta, data } = parsed;
+    if (!meta.ok) {
+        return dispatch(closeLoginWindow());
+    }
+    let sessionState = { isLoaded: true, user: data.user };
+    batch(() => {
+        dispatch(closeLoginWindow());
+        dispatch(setSession(sessionState));
+        //dispatch(addNotifications(data.notifications));
+    });
+};
 export const register = (userInfo) => async (dispatch) => {
     const response = await fetch("/api/users/", {
         method: "POST",

@@ -54,7 +54,7 @@ const DefaultView = (props) => {
             <div className="btn login center" onClick={() => props.switchView("login")}>
                 LOGIN
             </div>
-            <div className="btn guest center" onClick={() => props.switchView("login")}>
+            <div className="btn guest center" onClick={props.loginAsGuest}>
                 LOGIN AS GUEST
             </div>
             <div className="btn register center" onClick={() => props.switchView("register")}>
