@@ -37,3 +37,14 @@ services:
         volumes:
             - ~/db_streamify:/var/lib/postgresql/data
             - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    test-client:
+        build:
+            context: ./client/
+        command: npm test
+        volumes:
+            - ./client/:/client
+            - /client/node_modules
+        environment:
+            - CI=true
+        stdin_open: true
