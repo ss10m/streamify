@@ -15,7 +15,7 @@ const MIN_WIN_SIZE = 992;
 class TopStreamersContainer extends Component {
     constructor(props) {
         super(props);
-        this.state = { streamers: [], isMinimized: false };
+        this.state = { streamers: [], isLoaded: false, isMinimized: false };
     }
 
     componentDidMount() {
@@ -28,7 +28,26 @@ class TopStreamersContainer extends Component {
         if (!parsed) return;
         let { meta, data } = parsed;
         if (!meta.ok) return;
-        this.setState({ streamers: data.streamers });
+        this.cacheImages(data.streamers);
+    };
+
+    cacheImages = (streamers) => {
+        let totalImages = streamers.length;
+        let cachedImages = 0;
+
+        const cacheImage = (streamer) => {
+            const image = new window.Image();
+            image.onload = () => {
+                streamer.img = image;
+                cachedImages++;
+
+                if (cachedImages === totalImages) {
+                    this.setState({ streamers, isLoaded: true });
+                }
+            };
+            image.src = streamer.logo;
+        };
+        streamers.forEach((streamer) => cacheImage(streamer));
     };
 
     toggleSideBar = () => {

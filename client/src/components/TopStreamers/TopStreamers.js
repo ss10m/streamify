@@ -1,6 +1,7 @@
 // Libraries & utils
 import React from "react";
 import { Link } from "react-router-dom";
+import classNames from "classnames";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,12 +10,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./TopStreamers.scss";
 
 const TopStreamers = (props) => {
-    let { isHidden, isMinimized, toggleSideBar, streamers } = props;
+    let { isLoaded, isHidden, isMinimized, toggleSideBar, streamers } = props;
+
     return (
         <div
-            className={
-                "top-streamers" + (isHidden || isMinimized ? " hidden" : "")
-            }
+            className={classNames("top-streamers", {
+                hidden: isHidden || isMinimized,
+            })}
         >
             <Header
                 isHidden={isHidden}
@@ -22,6 +24,7 @@ const TopStreamers = (props) => {
                 toggleSideBar={toggleSideBar}
             />
             <StreamerList
+                isLoaded={isLoaded}
                 isHidden={isHidden}
                 isMinimized={isMinimized}
                 streamers={streamers}
@@ -66,7 +69,9 @@ const Header = (props) => {
 };
 
 const StreamerList = (props) => {
-    let { isHidden, isMinimized, streamers } = props;
+    let { isLoaded, isHidden, isMinimized, streamers } = props;
+
+    if (!isLoaded) return <Loader />;
 
     return streamers.map((streamer) => (
         <Link
@@ -75,12 +80,7 @@ const StreamerList = (props) => {
             key={streamer["name"]}
         >
             <div className="logo">
-                <img
-                    src={streamer["logo"]}
-                    width="40"
-                    height="40"
-                    alt="MISSING"
-                />
+                <img src={streamer["logo"]} width="40" height="40" alt="MISSING" />
             </div>
 
             {!isHidden && !isMinimized && (
@@ -97,6 +97,18 @@ const StreamerList = (props) => {
             )}
         </Link>
     ));
+};
+
+const Loader = () => {
+    return (
+        <div className="top-streamers-loader">
+            <ul className="loader">
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </div>
+    );
 };
 
 export default TopStreamers;
