@@ -3,42 +3,15 @@ import axios from "axios";
 
 import { roundedToFixed } from "../util/helpers.js";
 
+let topStreamers = { streamers: [], latestFetch: null };
+
 export const getTopStreamers = async (cb) => {
     try {
-        let streamers = await fetchTopStreamers();
-        if (!streamers) throw new Error();
-
-        let user_ids = [];
-        let game_ids = [];
-        for (let streamer of streamers) {
-            user_ids.push(streamer.user_id);
-            game_ids.push(streamer.game_id);
-        }
-
-        let idToChannel = await fetchChannels(user_ids);
-        if (!idToChannel) throw new Error();
-        let idToGame = await fetchGames(game_ids);
-        if (!idToGame) throw new Error();
-
-        let ret = [];
-        for (let streamer of streamers) {
-            let channel = idToChannel[streamer.user_id];
-            let game = idToGame[streamer.game_id];
-
-            let data = {};
-            data.id = streamer.user_id;
-            data.viewer_count = streamer.viewer_count;
-            data.name = channel.login;
-            data.display_name = channel.display_name;
-            data.logo = channel.profile_image_url;
-            data.game = game ? game.name : "Nothing";
-
-            let viewers = streamer.viewer_count;
-            if (streamer.viewer_count >= 1000) {
-                viewers = roundedToFixed(viewers, 1);
-            }
-            data.viewer_count = viewers;
-            ret.push(data);
+        const timeSinceLatestFetch = (new Date() - topStreamers.latestFetch) / 1000;
+        if (timeSinceLatestFetch > 300) {
+            const updatedTopStreamers = await updateTopStreamers();
+            if (!updatedTopStreamers) throw new Error();
+            topStreamers = updatedTopStreamers;
         }
 
         cb({
@@ -46,7 +19,7 @@ export const getTopStreamers = async (cb) => {
                 ok: true,
                 message: "ok",
             },
-            data: { streamers: ret },
+            data: { streamers: topStreamers.streamers },
         });
     } catch (err) {
         cb({
@@ -57,6 +30,47 @@ export const getTopStreamers = async (cb) => {
             data: {},
         });
     }
+};
+
+const updateTopStreamers = async () => {
+    let streamers = await fetchTopStreamers();
+    if (!streamers) return null;
+
+    let user_ids = [];
+    let game_ids = [];
+    for (let streamer of streamers) {
+        user_ids.push(streamer.user_id);
+        game_ids.push(streamer.game_id);
+    }
+
+    const [idToChannel, idToGame] = await Promise.all([
+        fetchChannels(user_ids),
+        fetchGames(game_ids),
+    ]);
+    if (!idToChannel || !idToGame) return null;
+
+    let ret = [];
+    for (let streamer of streamers) {
+        let channel = idToChannel[streamer.user_id];
+        let game = idToGame[streamer.game_id];
+
+        let data = {};
+        data.id = streamer.user_id;
+        data.viewer_count = streamer.viewer_count;
+        data.name = channel.login;
+        data.display_name = channel.display_name;
+        data.logo = channel.profile_image_url;
+        data.game = game ? game.name : "Nothing";
+
+        let viewers = streamer.viewer_count;
+        if (streamer.viewer_count >= 1000) {
+            viewers = roundedToFixed(viewers, 1);
+        }
+        data.viewer_count = viewers;
+        ret.push(data);
+    }
+
+    return { streamers: ret, latestFetch: new Date() };
 };
 
 const fetchTopStreamers = async () => {
