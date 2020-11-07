@@ -14,52 +14,7 @@ import reducers from "./store/reducers.js";
 import App from "./components/App";
 
 // Icons
-import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-    faUserCircle,
-    faBars,
-    faEnvelope,
-    faBell,
-    faUser,
-    faKey,
-    faAt,
-    faCog,
-    faSignOutAlt,
-    faGlobeAmericas,
-    faCaretRight,
-    faCaretLeft,
-    faSearch,
-    faTimes,
-    faUsers,
-    faTrash,
-    faTrashAlt,
-    faUserPlus,
-    faPlay,
-    faEye,
-} from "@fortawesome/free-solid-svg-icons";
-
-library.add(
-    faUserCircle,
-    faBars,
-    faEnvelope,
-    faBell,
-    faUser,
-    faKey,
-    faAt,
-    faCog,
-    faSignOutAlt,
-    faGlobeAmericas,
-    faCaretRight,
-    faCaretLeft,
-    faSearch,
-    faTimes,
-    faUsers,
-    faTrash,
-    faTrashAlt,
-    faUserPlus,
-    faPlay,
-    faEye
-);
+import "./icons";
 
 const store = createStore(reducers, applyMiddleware(thunk));
 
