@@ -7,13 +7,7 @@ import classNames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // Helpers
-import {
-    liveTime,
-    SEARCH_USERS,
-    SEARCH_GAMES,
-    FOLLOW_GAME,
-    UNFOLLOW_GAME,
-} from "helpers";
+import { liveTime, SEARCH_USERS, SEARCH_GAMES, FOLLOW_GAME, UNFOLLOW_GAME } from "helpers";
 
 // Components
 import Spinner from "../Spinner/Spinner";
@@ -66,12 +60,7 @@ const Header = (props) => {
             <div className="title games">
                 <p>SEARCH GAMES FOR</p>
                 <div>
-                    <img
-                        src={user["logo"]}
-                        width="30"
-                        height="30"
-                        alt="MISSING"
-                    />
+                    <img src={user["logo"]} width="30" height="30" alt="MISSING" />
                     <p>{user.display_name}</p>
                 </div>
             </div>
@@ -91,8 +80,7 @@ const Results = (props) => {
         mode,
     } = props;
 
-    if (noResults)
-        return <p style={{ marginLeft: "10px" }}>No matches found</p>;
+    if (noResults) return <p style={{ marginLeft: "10px" }}>No matches found</p>;
     if (searchInput && results.length === 0) {
         return <Spinner />;
     }
@@ -123,36 +111,26 @@ const Results = (props) => {
 const StreamerResult = ({ result, time, closeSearch, windowSize }) => {
     return (
         <Link
-            to={"/streamer/" + result.display_name}
+            to={"/streamer/" + result.broadcaster_login}
             key={result.id}
             className="result"
             onClick={closeSearch}
         >
-            <img
-                src={result["thumbnail_url"]}
-                width="100"
-                height="100"
-                alt="MISSING"
-            />
+            <img src={result["thumbnail_url"]} width="100" height="100" alt="MISSING" />
 
             <div
                 className={classNames("info", {
                     mini: windowSize <= 500,
                 })}
             >
-                <div className="name center">
-                    {result.display_name.toUpperCase()}
-                </div>
+                <div className="name center">{result.display_name.toUpperCase()}</div>
                 <div className="options center">
                     <div className="status">
                         {result.is_live ? (
                             <>
                                 <p className="indicator">LIVE</p>
                                 <p className="time">
-                                    {liveTime(
-                                        new Date(result.started_at),
-                                        time
-                                    )}
+                                    {liveTime(new Date(result.started_at), time)}
                                 </p>
                             </>
                         ) : (
@@ -170,12 +148,7 @@ const GameResult = ({ result, mode, windowSize }) => {
 
     return (
         <div className="result" key={result.name}>
-            <img
-                src={result["box_art_url"]}
-                width="67"
-                height="100"
-                alt="MISSING"
-            />
+            <img src={result["box_art_url"]} width="67" height="100" alt="MISSING" />
             <div
                 className={classNames("info", {
                     mini: windowSize <= 500,

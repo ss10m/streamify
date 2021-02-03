@@ -56,7 +56,6 @@ export const loginAsGuest = () => async (dispatch) => {
 
     let parsed = await parseResponse(response);
     if (!parsed) return dispatch(setError("Something went wrong"));
-    console.log(parsed);
     let { meta, data } = parsed;
     if (!meta.ok) {
         return dispatch(closeLoginWindow());
