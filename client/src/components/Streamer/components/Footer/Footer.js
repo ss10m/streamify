@@ -1,5 +1,6 @@
 // Libraries & utils
 import React, { useState, useEffect, useRef } from "react";
+import { Textfit } from "react-textfit";
 
 // Hooks
 import useWindowSize from "./useWindowSize";
@@ -17,6 +18,7 @@ const negativeIndent = {
 const Footer = ({ streamer }) => {
     const size = useWindowSize();
     const [dimensions, setDimentions] = useState({ rows: 0, columns: 0 });
+    const [usernameHeight, setUsernameHeight] = useState(0);
     const fillerRef = useRef(null);
     const canvasRef = useRef(null);
 
@@ -30,10 +32,12 @@ const Footer = ({ streamer }) => {
         }
 
         const context = canvas.getContext("2d");
-        context.font = "600 40px Jost";
+        context.font = "600 45px Jost";
         const metrics = context.measureText(streamer.display_name);
         const rows = Math.round(fillerRef.current.clientHeight / 40) + 2;
         const columns = Math.round(fillerRef.current.clientWidth / metrics.width) + 2;
+
+        setUsernameHeight(fillerRef.current.clientHeight);
         setDimentions({ rows, columns });
     }, [size, streamer]);
 
@@ -41,11 +45,32 @@ const Footer = ({ streamer }) => {
 
     return (
         <div ref={fillerRef} className="streamer-footer">
-            {[...Array(dimensions.rows)].map((e, i) => (
-                <span key={i} style={{ marginLeft: negativeIndent[i % 4] }}>
-                    {names}
-                </span>
-            ))}
+            <div className="footer-bg">
+                {[...Array(dimensions.rows)].map((e, i) => (
+                    <span key={i} style={{ marginLeft: negativeIndent[i % 4] }}>
+                        {names}
+                    </span>
+                ))}
+            </div>
+
+            <div className="footer-username">
+                {usernameHeight && (
+                    <Textfit
+                        mode="single"
+                        forceSingleModeWidth={false}
+                        max={500}
+                        style={{
+                            height: usernameHeight,
+                            lineHeight: usernameHeight + "px",
+                            fontWeight: "600",
+                            textAlign: "center",
+                            padding: `0 ${size.width > 500 ? "40px" : "10px"}`,
+                        }}
+                    >
+                        {streamer.display_name.toUpperCase()}
+                    </Textfit>
+                )}
+            </div>
         </div>
     );
 };
