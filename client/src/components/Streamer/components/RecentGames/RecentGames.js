@@ -29,7 +29,6 @@ const RecentGames = (props) => {
                     ›
                 </div>
             </div>
-            <div className="recent-games-footer"></div>
         </div>
     );
 };

@@ -5,6 +5,7 @@ import React from "react";
 import StreamerDetails from "./components/StreamerDetails/StreamerDetails";
 import RecentGames from "./components/RecentGames/RecentGamesContainer";
 import StreamerView from "./components/StreamerView/StreamerViewContainer";
+import Footer from "./components/Footer/Footer";
 
 // SCSS
 import "./Streamer.scss";
@@ -31,6 +32,7 @@ const Streamer = (props) => {
                 isLoggedIn={session.user}
                 showFollowPrompt={toggleFollowPrompt}
             />
+            <Footer streamer={streamer} />
         </div>
     );
 };

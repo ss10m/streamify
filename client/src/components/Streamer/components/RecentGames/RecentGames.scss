@@ -26,6 +26,7 @@
 }
 
 .recent-games {
+    height: 370px;
     display: flex;
     justify-content: center;
     position: relative;
@@ -204,10 +205,4 @@
         right: 0;
         background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%);
     }
-}
-
-.recent-games-footer {
-    background-color: #121a21;
-    height: 30px;
-    box-shadow: 0px 0px 3px 1px black;
 }
