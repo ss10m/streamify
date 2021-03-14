@@ -10,6 +10,7 @@ const RecentGames = (props) => {
         <div>
             <Header searchBtn={searchBtn} />
             <div className="recent-games">
+                <div className="bg" />
                 <div
                     className="recent-games-controls left"
                     onClick={() => handleCarousel(false)}

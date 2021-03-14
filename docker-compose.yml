@@ -13,6 +13,8 @@ services:
         networks:
             - service-network
             - streamify-network
+        dns:
+            - 8.8.8.8
         depends_on:
             - db
 

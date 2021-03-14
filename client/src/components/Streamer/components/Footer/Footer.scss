@@ -8,6 +8,10 @@
     .footer-bg {
         height: 100%;
         position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
         overflow: hidden;
 
         span {
@@ -15,6 +19,7 @@
             color: #1c2934;
             font-size: 45px;
             font-weight: 600;
+            overflow: hidden;
             opacity: 0.3;
             white-space: nowrap;
             line-height: 40px;
